@@ -64,4 +64,4 @@ flutter {
     source '../..'
 }
 
-dependencies {}
+dependencies {implementation 'net.yslibrary.keyboardvisibilityevent:keyboardvisibilityevent:2.1.0' }
