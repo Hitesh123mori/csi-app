@@ -99,28 +99,33 @@ class _DrawerScreenState extends State<DrawerScreen> {
   Widget build(BuildContext context) {
     mq = MediaQuery.of(context).size;
     return Scaffold(
-      body: HiddenDrawerMenu(
-        isTitleCentered: true,
-        elevationAppBar: 0,
-        actionsAppBar: [
-          Padding(
-            padding: const EdgeInsets.only(right: 8.0),
-            child: CircleAvatar(
-              backgroundColor: AppColors.theme['primaryColor'],
-              child: Icon(Icons.person_outline, color: Colors.white),
-            ),
-          )
-        ],
-        disableAppBarDefault: false,
-        withAutoTittleName: true,
-        styleAutoTittleName: TextStyle(fontWeight: FontWeight.bold,color: AppColors.theme['tertiaryColor']),
-        backgroundColorAppBar: AppColors.theme['secondaryColor'],
-        leadingAppBar: Icon(Icons.menu_outlined),
-        slidePercent: 45,
-        backgroundColorContent: AppColors.theme['secondaryColor'],
-        screens: _pages,
-        backgroundColorMenu: AppColors.theme['secondaryColor'],
-        contentCornerRadius: 10,
+      body: Theme(
+        data: ThemeData(
+          primaryColor: Colors.blue,
+        ),
+        child: HiddenDrawerMenu(
+          isTitleCentered: true,
+          elevationAppBar: 0,
+          actionsAppBar: [
+            Padding(
+              padding: const EdgeInsets.only(right: 8.0),
+              child: CircleAvatar(
+                backgroundColor: AppColors.theme['primaryColor'],
+                child: Icon(Icons.person_outline, color: Colors.white),
+              ),
+            )
+          ],
+          disableAppBarDefault: false,
+          withAutoTittleName: true,
+          styleAutoTittleName: TextStyle(fontSize:18,fontWeight: FontWeight.bold,color: AppColors.theme['tertiaryColor']),
+          backgroundColorAppBar: AppColors.theme['secondaryColor'],
+          leadingAppBar: Icon(Icons.menu_outlined),
+          slidePercent: 45,
+          backgroundColorContent: AppColors.theme['secondaryColor'],
+          screens: _pages,
+          backgroundColorMenu: AppColors.theme['secondaryColor'],
+          contentCornerRadius: 10,
+        ),
       ),
     );
   }
