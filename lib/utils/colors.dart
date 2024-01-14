@@ -18,6 +18,7 @@ class AppColors {
       "primaryColor":hexStringToColors("#061D4B"),
       "secondaryColor" :hexStringToColors("#FFFFFF"),
       "tertiaryColor": hexStringToColors("#000000") ,
+      "borderColor" :Colors.black12,
     },
 
   };

@@ -1,15 +1,19 @@
 import 'package:csi_app/screens/drawer_screens/blogs_csi.dart';
+import 'package:csi_app/screens/providers/drawer_option_provider.dart';
 import 'package:csi_app/utils/colors.dart';
 import 'package:flutter/material.dart';
 import 'package:hidden_drawer_menu/hidden_drawer_menu.dart';
 import '../main.dart';
+import 'drawer_screens/about_csi.dart';
 import 'drawer_screens/board_members_csi.dart';
 import 'drawer_screens/home_screen.dart';
 import 'drawer_screens/past_events.dart';
 import 'drawer_screens/speaker_sessions.dart';
 
+
 class DrawerScreen extends StatefulWidget {
-  const DrawerScreen({super.key});
+  final DrawerOptionProvider drawerOp ;
+  const DrawerScreen({Key? key, required this.drawerOp}) : super(key: key);
 
   @override
   State<DrawerScreen> createState() => _DrawerScreenState();
@@ -18,7 +22,6 @@ class DrawerScreen extends StatefulWidget {
 class _DrawerScreenState extends State<DrawerScreen> {
   List<ScreenHiddenDrawer> _pages = [];
   FocusNode _focusNode = FocusNode();
-
 
   @override
   void initState() {
@@ -36,7 +39,7 @@ class _DrawerScreenState extends State<DrawerScreen> {
           selectedStyle: TextStyle(),
           colorLineSelected: AppColors.theme['primaryColor'],
         ),
-        HomeScreen(),
+        HomeScreen(drawerOp: widget.drawerOp,),
       ),
       ScreenHiddenDrawer(
         ItemHiddenMenu(
@@ -54,7 +57,7 @@ class _DrawerScreenState extends State<DrawerScreen> {
           selectedStyle: TextStyle(),
           colorLineSelected: AppColors.theme['primaryColor'],
         ),
-        BoardMemberCSI(),
+        BoardMemberCSI(drawerOp: widget.drawerOp,),
       ),
       ScreenHiddenDrawer(
         ItemHiddenMenu(
@@ -74,6 +77,15 @@ class _DrawerScreenState extends State<DrawerScreen> {
         ),
         SpeakerSession(),
       ),
+      ScreenHiddenDrawer(
+        ItemHiddenMenu(
+          name: 'About CSI',
+          baseStyle: TextStyle(),
+          selectedStyle: TextStyle(),
+          colorLineSelected: AppColors.theme['primaryColor'],
+        ),
+        AboutCSI(),
+      ),
     ];
   }
 
@@ -82,7 +94,6 @@ class _DrawerScreenState extends State<DrawerScreen> {
     _focusNode.dispose();
     super.dispose();
   }
-
 
   @override
   Widget build(BuildContext context) {
@@ -101,34 +112,8 @@ class _DrawerScreenState extends State<DrawerScreen> {
           )
         ],
         disableAppBarDefault: false,
-        withAutoTittleName: false,
-        tittleAppBar: Container(
-          width: mq.width * 0.5,
-          height: 45,
-          alignment: Alignment.center, // Align the child (TextField) to the center
-          decoration: BoxDecoration(
-            borderRadius: BorderRadius.circular(20),
-            border: Border.all(
-              color: AppColors.theme['primaryColor'],
-            ),
-          ),
-          child: TextFormField(
-            cursorColor: AppColors.theme['primaryColor'],
-            autofocus: true,
-            autocorrect: true,
-            focusNode: _focusNode,
-            style: TextStyle(color: Colors.black),
-            decoration: InputDecoration(
-              border: InputBorder.none,
-              hintText: 'Search Here',
-              hintStyle: TextStyle(color: Colors.black),
-              prefixIcon: Icon(
-                Icons.search,
-                color: Colors.black,
-              ),
-            ),
-          ),
-        ),
+        withAutoTittleName: true,
+        styleAutoTittleName: TextStyle(fontWeight: FontWeight.bold,color: AppColors.theme['tertiaryColor']),
         backgroundColorAppBar: AppColors.theme['secondaryColor'],
         leadingAppBar: Icon(Icons.menu_outlined),
         slidePercent: 45,
@@ -139,4 +124,6 @@ class _DrawerScreenState extends State<DrawerScreen> {
       ),
     );
   }
+
+
 }
