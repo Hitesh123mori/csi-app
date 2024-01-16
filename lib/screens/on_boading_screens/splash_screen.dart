@@ -1,14 +1,14 @@
-import 'package:csi_app/screens/providers/drawer_option_provider.dart';
 import 'package:csi_app/side_transition_effects/right_left.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import '../../main.dart';
 import '../../utils/colors.dart';
-import '../drawer.dart';
+import '../home_screens/home_screen.dart';
+import 'on_boarding_screen.dart';
+
 
 class SplashScreen extends StatefulWidget {
-  final DrawerOptionProvider drawerOp ;
-  const SplashScreen({super.key, required this.drawerOp});
+  const SplashScreen({super.key});
 
   @override
   State<SplashScreen> createState() => _SplashScreenState();
@@ -24,7 +24,7 @@ class _SplashScreenState extends State<SplashScreen> {
           statusBarColor: Colors.transparent,
           systemNavigationBarColor: Colors.transparent));
 
-      Navigator.pushReplacement(context, RightToLeft(DrawerScreen(drawerOp: widget.drawerOp,)));
+      Navigator.pushReplacement(context, RightToLeft(OnboardingScreen()));
     });
   }
 

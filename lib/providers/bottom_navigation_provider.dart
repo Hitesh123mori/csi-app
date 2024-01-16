@@ -2,13 +2,14 @@ import 'package:flutter/widgets.dart';
 
 class BottomNavigationProvider extends ChangeNotifier {
   Map<String, bool> homeScreenOptions = {
-    "isHomeTab": true,
-    "isUpcomeEventTab": false,
-    "isEventCalTab": false,
-    "isAskTab": false,
+    "Home": true,
+    "Upcoming Events": false,
+    "Calendar": false,
+    "Doubt Section": false,
+    "More Options" :false,
   };
 
-  String current = "isHomeTab";
+  String current = "Home";
 
   void updateCurrent(String option) {
     homeScreenOptions[current] = false;
