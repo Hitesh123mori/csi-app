@@ -70,7 +70,7 @@ class _HomeScreenState extends State<HomeScreen> {
                             });
                           if(index==3)
                             setState(() {
-                              value.updateCurrent('Calendar') ;
+                              value.updateCurrent('Notifications') ;
                             });
                           if(index==4)
                             setState(() {
@@ -96,16 +96,16 @@ class _HomeScreenState extends State<HomeScreen> {
                             textColor: AppColors.theme['secondaryColor'],
                           ),
                           GButton(
-                            icon: Icons.chat,
+                            icon: Icons.notifications_active_outlined,
                             iconActiveColor:AppColors.theme['secondaryColor'],
-                            text: "Doubt",
+                            text: "Notification",
                             iconColor:AppColors.theme['primaryColor'] ,
                             textColor: AppColors.theme['secondaryColor'],
                           ),
                           GButton(
-                            icon: Icons.calendar_today_sharp,
+                            icon: Icons.chat,
                             iconActiveColor:AppColors.theme['secondaryColor'],
-                            text: "Calendar",
+                            text: "Doubt",
                             iconColor:AppColors.theme['primaryColor'] ,
                             textColor: AppColors.theme['secondaryColor'],
                           ),
@@ -130,8 +130,8 @@ class _HomeScreenState extends State<HomeScreen> {
                     PostsScreen(),
                   if(value.current == 'Upcoming Events')
                     UpcomingEvents(),
-                  if(value.current == 'Calendar')
-                    EventCal(),
+                  if(value.current == 'Notifications')
+                    Notifications(),
                   if(value.current == 'Doubt Section')
                      DoubtSection(),
                   if(value.current == 'More Options')

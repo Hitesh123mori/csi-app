@@ -1,21 +1,20 @@
 import 'package:flutter/material.dart' ;
-
 import '../../main.dart';
 
-class EventCal extends StatefulWidget {
-  const EventCal({super.key});
+class Notifications extends StatefulWidget {
+  const Notifications({super.key});
 
   @override
-  State<EventCal> createState() => _EventCalState();
+  State<Notifications> createState() => _NotificationsState();
 }
 
-class _EventCalState extends State<EventCal> {
+class _NotificationsState extends State<Notifications> {
   @override
   Widget build(BuildContext context) {
     mq = MediaQuery.of(context).size ;
     return Padding(
       padding:  EdgeInsets.symmetric(vertical: mq.height*0.34,horizontal: mq.width*0.35),
-      child: Text("Event Calendar",style: TextStyle(fontWeight: FontWeight.bold),),
+      child: Text("Notifications",style: TextStyle(fontWeight: FontWeight.bold),),
     );
   }
 }
