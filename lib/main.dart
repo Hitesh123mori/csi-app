@@ -1,3 +1,4 @@
+import 'package:csi_app/screens/drawer_screens/board_members_csi.dart';
 import 'package:csi_app/screens/on_boading_screens/splash_screen.dart';
 import 'package:csi_app/screens/providers/bottom_navigation_provider.dart';
 import 'package:csi_app/screens/providers/drawer_option_provider.dart';
@@ -33,7 +34,9 @@ class _MyAppState extends State<MyApp> {
             colorScheme: ColorScheme.fromSeed(seedColor: Colors.white),
             useMaterial3: true,
           ),
-          home: SplashScreen(drawerOp: drawerOp,)),
+          // home: SplashScreen(drawerOp: drawerOp,)
+          home: BoardMemberCSI(drawerOp: drawerOp),
+      ),
     )
     ;
   }

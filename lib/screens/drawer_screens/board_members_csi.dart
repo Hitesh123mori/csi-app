@@ -1,13 +1,14 @@
+import 'package:carousel_slider/carousel_slider.dart';
 import 'package:csi_app/constants/board_member_lists.dart';
 import 'package:csi_app/screens/providers/drawer_option_provider.dart';
 import 'package:csi_app/side_transition_effects/left_right.dart';
 import 'package:csi_app/side_transition_effects/right_left.dart';
-import 'package:csi_app/utils/widgets/board_member_card.dart';
+import 'package:csi_app/utils/widgets/current_board_member.dart';
 import 'package:flutter/material.dart';
 import '../../main.dart';
 import '../../models/board_member.dart';
 import '../../utils/colors.dart';
-import '../../utils/widgets/current_board_member.dart';
+import '../../utils/widgets/board_member_card.dart';
 
 class BoardMemberCSI extends StatefulWidget {
   final DrawerOptionProvider drawerOp;
@@ -57,13 +58,22 @@ class _BoardMemberCSIState extends State<BoardMemberCSI> {
                     ],
                   ),
                 ),
-                CurrentBoardMembersRow(bmList: bm2023.sublist(0, 3)),
-                CurrentBoardMembersRow(bmList: bm2023.sublist(3, 6)),
-                CurrentBoardMembersRow(bmList: bm2023.sublist(6, 9)),
-                CurrentBoardMembersRow(bmList: bm2023.sublist(9, 12)),
-                CurrentBoardMembersRow(bmList: bm2023.sublist(12, 15)),
-                CurrentBoardMembersRow(bmList: bm2023.sublist(15, 18)),
-                CurrentBoardMembersRow(bmList: bm2023.sublist(18, 20)),
+                // CurrentBoardMembersRow(bmList: bm2023.sublist(0, 3)),
+                // CurrentBoardMembersRow(bmList: bm2023.sublist(3, 6)),
+                // CurrentBoardMembersRow(bmList: bm2023.sublist(6, 9)),
+                // CurrentBoardMembersRow(bmList: bm2023.sublist(9, 12)),
+                // CurrentBoardMembersRow(bmList: bm2023.sublist(12, 15)),
+                // CurrentBoardMembersRow(bmList: bm2023.sublist(15, 18)),
+                // CurrentBoardMembersRow(bmList: bm2023.sublist(18, 20)),
+                SizedBox(height: mq.height*0.05,),
+
+                CurrentBoardMembersRow2(boardMemberList: bm2023.sublist(0, 3)),
+                CurrentBoardMembersRow2(boardMemberList: bm2023.sublist(3, 6)),
+                CurrentBoardMembersRow2(boardMemberList: bm2023.sublist(6, 9)),
+                CurrentBoardMembersRow2(boardMemberList: bm2023.sublist(9, 12)),
+                CurrentBoardMembersRow2(boardMemberList: bm2023.sublist(12, 15)),
+                CurrentBoardMembersRow2(boardMemberList: bm2023.sublist(15, 18)),
+
               ],
             ),
           ),
@@ -72,6 +82,35 @@ class _BoardMemberCSIState extends State<BoardMemberCSI> {
     );
   }
 }
+
+class CurrentBoardMembersRow2 extends StatefulWidget {
+  List<BoardMember> boardMemberList;
+  CurrentBoardMembersRow2({super.key, required this.boardMemberList});
+
+  @override
+  State<CurrentBoardMembersRow2> createState() => _CurrentBoardMembersRow2State();
+}
+
+class _CurrentBoardMembersRow2State extends State<CurrentBoardMembersRow2> {
+  @override
+  Widget build(BuildContext context) {
+    return CarouselSlider(
+      items: List.generate(3, (index) => CurrentBoardMemberCard(bm: widget.boardMemberList[index])),
+      options: CarouselOptions(
+        autoPlay: false,
+        enlargeCenterPage: false,
+        viewportFraction: 0.35,
+        // height: mq.height*0.8,
+        pageSnapping: true,
+        aspectRatio: 2.0,
+        initialPage:1,
+        enableInfiniteScroll: false,
+
+      ),
+    );
+  }
+}
+
 
 class CurrentBoardMembersRow extends StatefulWidget {
   final List<BoardMember> bmList;

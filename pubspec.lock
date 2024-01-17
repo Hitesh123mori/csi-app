@@ -2,7 +2,7 @@
 # See https://dart.dev/tools/pub/glossary#lockfile
 packages:
   animated_text_kit:
-    dependency: "direct dev"
+    dependency: "direct main"
     description:
       name: animated_text_kit
       sha256: "37392a5376c9a1a503b02463c38bc0342ef814ddbb8f9977bc90f2a84b22fa92"
@@ -41,6 +41,14 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "2.1.1"
+  carousel_slider:
+    dependency: "direct main"
+    description:
+      name: carousel_slider
+      sha256: "9c695cc963bf1d04a47bd6021f68befce8970bcd61d24938e1fb0918cf5d9c42"
+      url: "https://pub.dev"
+    source: hosted
+    version: "4.2.1"
   characters:
     dependency: transitive
     description:
@@ -127,7 +135,7 @@ packages:
     source: hosted
     version: "1.0.1"
   flutter_launcher_icons:
-    dependency: "direct dev"
+    dependency: "direct main"
     description:
       name: flutter_launcher_icons
       sha256: "526faf84284b86a4cb36d20a5e45147747b7563d921373d4ee0559c54fcdbcea"
@@ -140,7 +148,7 @@ packages:
     source: sdk
     version: "0.0.0"
   google_nav_bar:
-    dependency: "direct dev"
+    dependency: "direct main"
     description:
       name: google_nav_bar
       sha256: "1c8e3882fa66ee7b74c24320668276ca23affbd58f0b14a24c1e5590f4d07ab0"
@@ -148,7 +156,7 @@ packages:
     source: hosted
     version: "5.0.6"
   hidden_drawer_menu:
-    dependency: "direct dev"
+    dependency: "direct main"
     description:
       name: hidden_drawer_menu
       sha256: "74ca9c4ffc45c05dec3fd4e12cd6bd0851029d909ee5531bf31244b7160f96b9"
@@ -236,7 +244,7 @@ packages:
     source: hosted
     version: "3.7.3"
   provider:
-    dependency: "direct dev"
+    dependency: "direct main"
     description:
       name: provider
       sha256: "9a96a0a19b594dbc5bf0f1f27d2bc67d5f95957359b461cd9feb44ed6ae75096"
