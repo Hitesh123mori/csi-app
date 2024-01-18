@@ -18,9 +18,7 @@ class _BoardMemberCSIState extends State<BoardMemberCSI> {
   @override
   Widget build(BuildContext context) {
     mq = MediaQuery.of(context).size;
-    return MaterialApp(
-      debugShowCheckedModeBanner: false,
-      home: Scaffold(
+    return Scaffold(
         appBar: AppBar(
           surfaceTintColor: Colors.white,
           elevation: 0,
@@ -85,8 +83,7 @@ class _BoardMemberCSIState extends State<BoardMemberCSI> {
             ),
           ),
         ),
-      ),
-    );
+      );
   }
 }
 
@@ -111,6 +108,7 @@ class _CurrentBoardMembersRowState extends State<CurrentBoardMembersRow> {
     );
   }
 }
+
 class PastBM extends StatefulWidget {
   const PastBM({super.key});
 
