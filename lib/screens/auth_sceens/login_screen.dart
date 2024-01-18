@@ -13,7 +13,6 @@ class _LoginScreenState extends State<LoginScreen> {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
       home: Scaffold(
-
       ),
     );
   }

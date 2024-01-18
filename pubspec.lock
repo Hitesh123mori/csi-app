@@ -233,7 +233,7 @@ packages:
     source: hosted
     version: "4.1.3"
   introduction_screen:
-    dependency: "direct dev"
+    dependency: "direct main"
     description:
       name: introduction_screen
       sha256: "72d25ceb71471773783f72783608e17585af93d4bc6474df577fcfe9e7842852"
