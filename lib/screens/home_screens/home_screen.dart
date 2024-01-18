@@ -26,7 +26,6 @@ class _HomeScreenState extends State<HomeScreen> {
       builder: (context,value,child){
         return Scaffold(
           appBar: AppBar(
-            surfaceTintColor: Colors.white,
             elevation: 0,
             shadowColor: AppColors.theme['primaryColor'],
             backgroundColor: AppColors.theme['secondaryColor'],
@@ -44,81 +43,75 @@ class _HomeScreenState extends State<HomeScreen> {
           ),
             backgroundColor:AppColors.theme['secondaryColor'],
             bottomNavigationBar: isKeyboardOpen ? null :Material(
-              elevation: 10,
+              elevation: 5,
               shadowColor: Colors.black,
               child: SafeArea(
-                child: Container(
-                  color: AppColors.theme['secondaryColor'],
-                  height: 80,
-                  child: Center(
-                    child: Padding(
-                      padding:  EdgeInsets.symmetric(vertical: 15,horizontal: 5),
-                      child: GNav(
-                        haptic:false,
-                        onTabChange: (index){
-                          if(index==0)
-                            setState(() {
-                              value.updateCurrent('Home') ;
-                            });
-                          if(index==1)
-                            setState(() {
-                              value.updateCurrent('Upcoming Events') ;
-                            });
-                          if(index==2)
-                            setState(() {
-                              value.updateCurrent('Doubt Section') ;
-                            });
-                          if(index==3)
-                            setState(() {
-                              value.updateCurrent('Notifications') ;
-                            });
-                          if(index==4)
-                            setState(() {
-                              value.updateCurrent('More Options') ;
-                            });
-                        },
-                        gap: 8,
-                        padding: EdgeInsets.all(12),
-                        tabBackgroundColor: AppColors.theme['primaryColor'],
-                        tabs: [
-                          GButton(
-                            icon: Icons.home,
-                            iconActiveColor:AppColors.theme['secondaryColor'],
-                            text: "Home",
-                            iconColor:AppColors.theme['primaryColor'] ,
-                            textColor: AppColors.theme['secondaryColor'],
-                          ),
-                          GButton(
-                            icon: Icons.event_available,
-                            iconActiveColor:AppColors.theme['secondaryColor'],
-                            text: "Events",
-                            iconColor:AppColors.theme['primaryColor'] ,
-                            textColor: AppColors.theme['secondaryColor'],
-                          ),
-                          GButton(
-                            icon: Icons.notifications_active_outlined,
-                            iconActiveColor:AppColors.theme['secondaryColor'],
-                            text: "Notification",
-                            iconColor:AppColors.theme['primaryColor'] ,
-                            textColor: AppColors.theme['secondaryColor'],
-                          ),
-                          GButton(
-                            icon: Icons.chat,
-                            iconActiveColor:AppColors.theme['secondaryColor'],
-                            text: "Doubt",
-                            iconColor:AppColors.theme['primaryColor'] ,
-                            textColor: AppColors.theme['secondaryColor'],
-                          ),
-                          GButton(
-                            icon: Icons.more_horiz_outlined,
-                            iconActiveColor:AppColors.theme['secondaryColor'],
-                            text: "More",
-                            iconColor:AppColors.theme['primaryColor'] ,
-                            textColor: AppColors.theme['secondaryColor'],
-                          ),
-                        ],
+                child: Padding(
+                  padding:  EdgeInsets.symmetric(vertical: 15,horizontal: 5),
+                  child: GNav(
+                    haptic:true,
+                    onTabChange: (index){
+                      if(index==0)
+                        setState(() {
+                          value.updateCurrent('Home') ;
+                        });
+                      if(index==1)
+                        setState(() {
+                          value.updateCurrent('Upcoming Events') ;
+                        });
+                      if(index==2)
+                        setState(() {
+                          value.updateCurrent('Doubt Section') ;
+                        });
+                      if(index==3)
+                        setState(() {
+                          value.updateCurrent('Notifications') ;
+                        });
+                      if(index==4)
+                        setState(() {
+                          value.updateCurrent('More Options') ;
+                        });
+                    },
+                    gap: 8,
+                    padding: EdgeInsets.all(12),
+                    tabBackgroundColor: AppColors.theme['primaryColor'],
+                    tabs: [
+                      GButton(
+                        icon: Icons.home,
+                        iconActiveColor:AppColors.theme['secondaryColor'],
+                        text: "Home",
+                        iconColor:AppColors.theme['primaryColor'] ,
+                        textColor: AppColors.theme['secondaryColor'],
                       ),
-                    ),
+                      GButton(
+                        icon: Icons.event_available,
+                        iconActiveColor:AppColors.theme['secondaryColor'],
+                        text: "Events",
+                        iconColor:AppColors.theme['primaryColor'] ,
+                        textColor: AppColors.theme['secondaryColor'],
+                      ),
+                      GButton(
+                        icon: Icons.notifications_active_outlined,
+                        iconActiveColor:AppColors.theme['secondaryColor'],
+                        text: "Notification",
+                        iconColor:AppColors.theme['primaryColor'] ,
+                        textColor: AppColors.theme['secondaryColor'],
+                      ),
+                      GButton(
+                        icon: Icons.chat,
+                        iconActiveColor:AppColors.theme['secondaryColor'],
+                        text: "Doubt",
+                        iconColor:AppColors.theme['primaryColor'] ,
+                        textColor: AppColors.theme['secondaryColor'],
+                      ),
+                      GButton(
+                        icon: Icons.more_horiz_outlined,
+                        iconActiveColor:AppColors.theme['secondaryColor'],
+                        text: "More",
+                        iconColor:AppColors.theme['primaryColor'] ,
+                        textColor: AppColors.theme['secondaryColor'],
+                      ),
+                    ],
                   ),
                 ),
               ),

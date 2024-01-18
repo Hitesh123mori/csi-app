@@ -108,6 +108,7 @@ class _CurrentBoardMembersRowState extends State<CurrentBoardMembersRow> {
     );
   }
 }
+
 class PastBM extends StatefulWidget {
   const PastBM({super.key});
 
