@@ -1,5 +1,6 @@
 import 'package:csi_app/providers/bottom_navigation_provider.dart';
 import 'package:csi_app/screens/on_boading_screens/splash_screen.dart';
+import 'package:csi_app/utils/colors.dart';
 import 'package:flutter/material.dart' ;
 import 'package:flutter_hidden_drawer/flutter_hidden_drawer.dart';
 
