@@ -3,12 +3,11 @@ import 'package:csi_app/models/event_model/sponsor.dart';
 import 'package:csi_app/models/event_model/winner_prices.dart';
 import 'package:csi_app/models/event_model/winner_team.dart';
 
-enum EventType { seminar, competition, workshop ,other}
-
 class Event {
   Event({
     required this.name,
     required this.type,
+    required this.date,
     required this.description,
     this.totalParticipants,
     this.subEvents,
@@ -16,7 +15,7 @@ class Event {
     this.sponsors,
     this.chiefGuests,
     this.imageFolderPath,
-    required this.numberOfDays,
+    this.numberOfDays,
     this.winners,
     this.prices,
     required this.year,
@@ -24,7 +23,8 @@ class Event {
   });
 
   late String name;
-  late EventType type;
+  late String date ;
+  late String type;
   late String description;
   late double? totalParticipants;
   late List<Event>? subEvents;
@@ -32,7 +32,7 @@ class Event {
   late List<EventSponser>? sponsors;
   late List<String>? chiefGuests;
   late String? imageFolderPath;
-  late double numberOfDays;
+  late double? numberOfDays;
   late List<WinnerTeam>? winners;
   late List<WinnerPrice>? prices;
   late String year;
@@ -41,7 +41,8 @@ class Event {
 
   Event.fromJson(Map<String, dynamic> json) {
     name = json['name'] ?? '';
-    type = _parseEventType(json['type']);
+    date = json['date'] ?? '' ;
+    type = json['type'] ?? '';
     description = json['description'] ?? '';
     totalParticipants = json['totalParticipants'];
     subEvents = (json['subEvents'] as List<dynamic>?)
@@ -69,7 +70,8 @@ class Event {
   Map<String, dynamic> toJson() {
     final data = <String, dynamic>{
       'name': name,
-      'type': type.toString().split('.').last,
+      'date' :date,
+      'type': type,
       'description': description,
       'totalParticipants': totalParticipants,
       'subEvents': subEvents?.map((event) => event.toJson()).toList(),
@@ -86,17 +88,5 @@ class Event {
     return data;
   }
 
-  EventType _parseEventType(String? type) {
-    switch (type?.toLowerCase()) {
-      case 'seminar':
-        return EventType.seminar;
-      case 'competition':
-        return EventType.competition;
-      case 'workshop':
-        return EventType.workshop;
-      default:
-        return EventType.other;
-    }
-  }
 }
 
