@@ -1,139 +1,182 @@
 import 'package:csi_app/screens/home_screens/more.dart';
 import 'package:csi_app/utils/colors.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_hidden_drawer/flutter_hidden_drawer.dart';
 import 'package:google_nav_bar/google_nav_bar.dart';
+import 'package:provider/provider.dart';
 import '../../main.dart';
 import '../../providers/bottom_navigation_provider.dart';
+import '../../side_transition_effects/right_left.dart';
 import 'ask_doubts.dart';
-import 'event_calendart.dart';
+import 'notifications.dart';
 import 'posts_screen.dart';
 import 'upcoming_events.dart';
 
-
 class HomeScreen extends StatefulWidget {
-  const HomeScreen({super.key,});
+  const HomeScreen({
+    super.key,
+  });
 
   @override
   State<HomeScreen> createState() => _HomeScreenState();
 }
 
 class _HomeScreenState extends State<HomeScreen> {
+  Widget screenname = PostsScreen();
+
+  final FocusNode _focusNode = FocusNode();
+
+  @override
+  void dispose() {
+    _focusNode.dispose();
+    super.dispose();
+  }
+
   @override
   Widget build(BuildContext context) {
-    mq = MediaQuery.of(context).size ;
-    return Consumer<BottomNavigationProvider>(
-      builder: (context,value,child){
-        return Scaffold(
-          appBar: AppBar(
-            elevation: 0,
-            shadowColor: AppColors.theme['primaryColor'],
-            backgroundColor: AppColors.theme['secondaryColor'],
-            centerTitle: true,
-            title: Text(value.current,style: TextStyle(color:AppColors.theme['tertiaryColor'],fontWeight: FontWeight.bold,fontSize: 18),),
-            actions: [
-              Padding(
-                padding: const EdgeInsets.only(right: 8.0),
-                child: CircleAvatar(
-                  backgroundColor: AppColors.theme['primaryColor'],
-                  child: Icon(Icons.person_outline, color:AppColors.theme['secondaryColor']),
+    mq = MediaQuery.of(context).size;
+    return Consumer<BottomNavigationProvider>(builder: (context, value, child) {
+      return Scaffold(
+        appBar: AppBar(
+          elevation: 0,
+          backgroundColor: AppColors.theme['secondaryColor'],
+          centerTitle: true,
+          title: value.current == "Home"
+              ? SafeArea(
+                  child: Container(
+                    height: 45,
+                    constraints: BoxConstraints(
+                        minWidth: 250, maxWidth: 250, maxHeight: 50),
+                    alignment: Alignment.center,
+                    decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(15),
+                      border: Border.all(
+                        color: AppColors.theme['primaryColor'],
+                      ),
+                    ),
+                    child: Center(
+                      child: TextFormField(
+                        cursorColor: AppColors.theme['primaryColor'],
+                        autocorrect: true,
+                        focusNode: _focusNode,
+                        style: TextStyle(color: Colors.black),
+                        decoration: InputDecoration(
+                          border: InputBorder.none,
+                          hintText: "Search User's posts",
+                          hintStyle: TextStyle(color: Colors.black),
+                          prefixIcon: Icon(
+                            Icons.search,
+                            color: Colors.black,
+                          ),
+                        ),
+                      ),
+                    ),
+                  ),
+                )
+              : SafeArea(
+                  child: Text(
+                    value.current,
+                    style: TextStyle(
+                        color: AppColors.theme['tertiaryColor'],
+                        fontWeight: FontWeight.bold,
+                        fontSize: 18),
+                  ),
                 ),
-              )
-            ],
+          leading: Padding(
+            padding: const EdgeInsets.only(left: 8.0),
+            child: CircleAvatar(
+              radius: 10,
+              backgroundColor: Colors.white,
+              child: Icon(Icons.person_outline,
+                  color: AppColors.theme['primaryColor'],size: 25,),
+            ),
           ),
-            backgroundColor:AppColors.theme['secondaryColor'],
-            bottomNavigationBar: isKeyboardOpen ? null :Material(
-              elevation: 5,
-              shadowColor: Colors.black,
-              child: SafeArea(
-                child: Padding(
-                  padding:  EdgeInsets.symmetric(vertical: 15,horizontal: 5),
-                  child: GNav(
-                    haptic:true,
-                    onTabChange: (index){
-                      if(index==0)
-                        setState(() {
-                          value.updateCurrent('Home') ;
-                        });
-                      if(index==1)
-                        setState(() {
-                          value.updateCurrent('Upcoming Events') ;
-                        });
-                      if(index==2)
-                        setState(() {
-                          value.updateCurrent('Doubt Section') ;
-                        });
-                      if(index==3)
-                        setState(() {
-                          value.updateCurrent('Notifications') ;
-                        });
-                      if(index==4)
-                        setState(() {
-                          value.updateCurrent('More Options') ;
-                        });
-                    },
-                    gap: 8,
-                    padding: EdgeInsets.all(12),
-                    tabBackgroundColor: AppColors.theme['primaryColor'],
-                    tabs: [
-                      GButton(
-                        icon: Icons.home,
-                        iconActiveColor:AppColors.theme['secondaryColor'],
-                        text: "Home",
-                        iconColor:AppColors.theme['primaryColor'] ,
-                        textColor: AppColors.theme['secondaryColor'],
-                      ),
-                      GButton(
-                        icon: Icons.event_available,
-                        iconActiveColor:AppColors.theme['secondaryColor'],
-                        text: "Events",
-                        iconColor:AppColors.theme['primaryColor'] ,
-                        textColor: AppColors.theme['secondaryColor'],
-                      ),
-                      GButton(
-                        icon: Icons.notifications_active_outlined,
-                        iconActiveColor:AppColors.theme['secondaryColor'],
-                        text: "Notification",
-                        iconColor:AppColors.theme['primaryColor'] ,
-                        textColor: AppColors.theme['secondaryColor'],
-                      ),
-                      GButton(
-                        icon: Icons.chat,
-                        iconActiveColor:AppColors.theme['secondaryColor'],
-                        text: "Doubt",
-                        iconColor:AppColors.theme['primaryColor'] ,
-                        textColor: AppColors.theme['secondaryColor'],
-                      ),
-                      GButton(
-                        icon: Icons.more_horiz_outlined,
-                        iconActiveColor:AppColors.theme['secondaryColor'],
-                        text: "More",
-                        iconColor:AppColors.theme['primaryColor'] ,
-                        textColor: AppColors.theme['secondaryColor'],
-                      ),
-                    ],
+          actions: [
+            Padding(
+                padding: const EdgeInsets.only(right: 8.0),
+                child: IconButton(
+                  icon: Icon(
+                    Icons.notifications_active_outlined,
+                    size: 25,
+                    color: AppColors.theme['primaryColor'],
+                  ),
+                  onPressed: () {
+                    Navigator.push(context, RightToLeft(Notifications()));
+                  },
+                ))
+          ],
+        ),
+        backgroundColor: AppColors.theme['secondaryColor'],
+        bottomNavigationBar: isKeyboardOpen
+            ? null
+            : Material(
+                elevation: 5,
+                shadowColor: Colors.black,
+                child: SafeArea(
+                  child: Padding(
+                    padding: EdgeInsets.symmetric(vertical: 15, horizontal: 5),
+                    child: GNav(
+                      haptic: true,
+                      onTabChange: (index) {
+                        if (index == 0)
+                          setState(() {
+                            value.updateCurrent('Home');
+                            screenname = PostsScreen();
+                          });
+                        if (index == 1)
+                          setState(() {
+                            value.updateCurrent('Doubt Section');
+                            screenname = DoubtSection();
+                          });
+                        if (index == 2)
+                          setState(() {
+                            value.updateCurrent('Calendar');
+                            screenname = UpcomingEvents();
+                          });
+                        if (index == 3)
+                          setState(() {
+                            value.updateCurrent('More Options');
+                            screenname = MoreScreen();
+                          });
+                      },
+                      gap: 5,
+                      padding: EdgeInsets.all(12),
+                      tabBackgroundColor: AppColors.theme['primaryColor'],
+                      tabs: [
+                        GButton(
+                          icon: Icons.home,
+                          iconActiveColor: AppColors.theme['secondaryColor'],
+                          text: "Home",
+                          iconColor: AppColors.theme['primaryColor'],
+                          textColor: AppColors.theme['secondaryColor'],
+                        ),
+                        GButton(
+                          icon: Icons.chat,
+                          iconActiveColor: AppColors.theme['secondaryColor'],
+                          text: "Doubt",
+                          iconColor: AppColors.theme['primaryColor'],
+                          textColor: AppColors.theme['secondaryColor'],
+                        ),
+                        GButton(
+                          icon: Icons.event_available_sharp,
+                          iconActiveColor: AppColors.theme['secondaryColor'],
+                          text: "Events",
+                          iconColor: AppColors.theme['primaryColor'],
+                          textColor: AppColors.theme['secondaryColor'],
+                        ),
+                        GButton(
+                          icon: Icons.more_horiz_outlined,
+                          iconActiveColor: AppColors.theme['secondaryColor'],
+                          text: "More",
+                          iconColor: AppColors.theme['primaryColor'],
+                          textColor: AppColors.theme['secondaryColor'],
+                        ),
+                      ],
+                    ),
                   ),
                 ),
               ),
-            ),
-            body: SingleChildScrollView(
-              child: Column(
-                children: [
-                  if(value.current == 'Home')
-                    PostsScreen(),
-                  if(value.current == 'Upcoming Events')
-                    UpcomingEvents(),
-                  if(value.current == 'Notifications')
-                    Notifications(),
-                  if(value.current == 'Doubt Section')
-                     DoubtSection(),
-                  if(value.current == 'More Options')
-                     MoreScreen(),
-                ],
-              ),
-            )
-        ) ;
-      }
-    );
+        body: screenname,
+      );
+    });
   }
 }

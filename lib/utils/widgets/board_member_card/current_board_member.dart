@@ -1,9 +1,9 @@
-import 'package:csi_app/utils/widgets/board_member_card.dart';
+import 'package:csi_app/utils/widgets/board_member_card/board_member_card.dart';
 import 'package:flutter/material.dart' ;
 
-import '../../main.dart';
-import '../../models/board_member.dart';
-import '../colors.dart';
+import '../../../main.dart';
+import '../../../models/board_member_model/board_member.dart';
+import '../../colors.dart';
 
 class CurrentBoardMemberCard extends StatefulWidget {
   final BoardMember bm ;

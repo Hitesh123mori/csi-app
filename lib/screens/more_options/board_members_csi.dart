@@ -1,11 +1,11 @@
 import 'package:csi_app/constants/board_member_lists.dart';
 import 'package:csi_app/side_transition_effects/right_left.dart';
-import 'package:csi_app/utils/widgets/board_member_card.dart';
+import 'package:csi_app/utils/widgets/board_member_card/board_member_card.dart';
 import 'package:flutter/material.dart';
 import '../../main.dart';
-import '../../models/board_member.dart';
+import '../../models/board_member_model/board_member.dart';
 import '../../utils/colors.dart';
-import '../../utils/widgets/current_board_member.dart';
+import '../../utils/widgets/board_member_card/current_board_member.dart';
 
 class BoardMemberCSI extends StatefulWidget {
   const BoardMemberCSI({Key? key}) : super(key: key);
@@ -20,7 +20,6 @@ class _BoardMemberCSIState extends State<BoardMemberCSI> {
     mq = MediaQuery.of(context).size;
     return Scaffold(
         appBar: AppBar(
-          surfaceTintColor: Colors.white,
           elevation: 0,
           backgroundColor: AppColors.theme['secondaryColor'],
           centerTitle: true,
@@ -122,7 +121,6 @@ class _PastBMState extends State<PastBM> {
     return Scaffold(
       backgroundColor:AppColors.theme['secondaryColor'] ,
       appBar: AppBar(
-        surfaceTintColor:  AppColors.theme['secondaryColor'],
         backgroundColor: AppColors.theme['secondaryColor'],
         title: Text("Past Board Members",style: TextStyle(fontWeight: FontWeight.bold,fontSize: 18),),
         centerTitle: true,

@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
-import '../../constants/board_member_lists.dart';
-import '../../main.dart';
-import '../../models/board_member.dart';
-import '../colors.dart';
+import '../../../constants/board_member_lists.dart';
+import '../../../main.dart';
+import '../../../models/board_member_model/board_member.dart';
+import '../../colors.dart';
 
 class BoardMemberCard extends StatelessWidget {
   final List<BoardMember> bm;
