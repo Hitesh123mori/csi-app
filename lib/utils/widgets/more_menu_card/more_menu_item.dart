@@ -1,7 +1,7 @@
 import 'package:csi_app/utils/colors.dart';
 import 'package:flutter/material.dart';
 
-import '../../main.dart';
+import '../../../main.dart';
 
 class Moremenuitems extends StatelessWidget {
   final String text ;
@@ -22,7 +22,7 @@ class Moremenuitems extends StatelessWidget {
           child: ListTile(
             leading: icon,
              trailing: Icon(Icons.keyboard_arrow_right,size: 25,),
-              title: Text(text),
+              title: Text(text,style: TextStyle(color : AppColors.theme['tertiaryColor'],),),
           ),
         ),
       ),

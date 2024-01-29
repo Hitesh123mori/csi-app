@@ -1,4 +1,4 @@
-import '../models/board_member.dart';
+import '../models/board_member_model/board_member.dart';
 
 List<String> SkillStack = [
   "Java",

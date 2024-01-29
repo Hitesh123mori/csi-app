@@ -1,12 +1,14 @@
+import 'package:csi_app/screens/home_screens/upcoming_events.dart';
 import 'package:csi_app/side_transition_effects/right_left.dart';
 import 'package:flutter/material.dart';
 
 import '../../main.dart';
-import '../../utils/widgets/more_menu_item.dart';
+import '../../utils/colors.dart';
+import '../../utils/widgets/more_menu_card/more_menu_item.dart';
 import '../more_options/about_csi.dart';
 import '../more_options/blogs_csi.dart';
 import '../more_options/board_members_csi.dart';
-import '../more_options/past_events.dart';
+import '../more_options/past_events/past_events.dart';
 
 class MoreScreen extends StatefulWidget {
   const MoreScreen({super.key});
@@ -23,10 +25,10 @@ class _MoreScreenState extends State<MoreScreen> {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Padding(
-          padding: EdgeInsets.only(left: mq.width * 0.04, top: 20, bottom: 10),
+          padding: EdgeInsets.only(left: mq.width * 0.05, top: 20, bottom: 10),
           child: Text(
             "More",
-            style: TextStyle(fontWeight: FontWeight.bold, fontSize: 20),
+            style: TextStyle(fontWeight: FontWeight.bold, fontSize: 20,color: AppColors.theme['primaryColor']),
           ),
         ),
         Moremenuitems(

@@ -1,12 +1,11 @@
-import 'package:carousel_slider/carousel_slider.dart';
 import 'package:csi_app/constants/board_member_lists.dart';
 import 'package:csi_app/side_transition_effects/right_left.dart';
-import 'package:csi_app/utils/widgets/current_board_member.dart';
+import 'package:csi_app/utils/widgets/board_member_card/board_member_card.dart';
 import 'package:flutter/material.dart';
 import '../../main.dart';
-import '../../models/board_member.dart';
+import '../../models/board_member_model/board_member.dart';
 import '../../utils/colors.dart';
-import '../../utils/widgets/board_member_card.dart';
+import '../../utils/widgets/board_member_card/current_board_member.dart';
 
 class BoardMemberCSI extends StatefulWidget {
   const BoardMemberCSI({Key? key}) : super(key: key);
@@ -21,7 +20,6 @@ class _BoardMemberCSIState extends State<BoardMemberCSI> {
     mq = MediaQuery.of(context).size;
     return Scaffold(
         appBar: AppBar(
-          surfaceTintColor: Colors.white,
           elevation: 0,
           backgroundColor: AppColors.theme['secondaryColor'],
           centerTitle: true,
@@ -73,22 +71,13 @@ class _BoardMemberCSIState extends State<BoardMemberCSI> {
                     ],
                   ),
                 ),
-                // CurrentBoardMembersRow(bmList: bm2023.sublist(0, 3)),
-                // CurrentBoardMembersRow(bmList: bm2023.sublist(3, 6)),
-                // CurrentBoardMembersRow(bmList: bm2023.sublist(6, 9)),
-                // CurrentBoardMembersRow(bmList: bm2023.sublist(9, 12)),
-                // CurrentBoardMembersRow(bmList: bm2023.sublist(12, 15)),
-                // CurrentBoardMembersRow(bmList: bm2023.sublist(15, 18)),
-                // CurrentBoardMembersRow(bmList: bm2023.sublist(18, 20)),
-                SizedBox(height: mq.height*0.05,),
-
-                CurrentBoardMembersRow2(boardMemberList: bm2023.sublist(0, 3)),
-                CurrentBoardMembersRow2(boardMemberList: bm2023.sublist(3, 6)),
-                CurrentBoardMembersRow2(boardMemberList: bm2023.sublist(6, 9)),
-                CurrentBoardMembersRow2(boardMemberList: bm2023.sublist(9, 12)),
-                CurrentBoardMembersRow2(boardMemberList: bm2023.sublist(12, 15)),
-                CurrentBoardMembersRow2(boardMemberList: bm2023.sublist(15, 18)),
-
+                CurrentBoardMembersRow(bmList: bm2023.sublist(0, 3)),
+                CurrentBoardMembersRow(bmList: bm2023.sublist(3, 6)),
+                CurrentBoardMembersRow(bmList: bm2023.sublist(6, 9)),
+                CurrentBoardMembersRow(bmList: bm2023.sublist(9, 12)),
+                CurrentBoardMembersRow(bmList: bm2023.sublist(12, 15)),
+                CurrentBoardMembersRow(bmList: bm2023.sublist(15, 18)),
+                CurrentBoardMembersRow(bmList: bm2023.sublist(18, 20)),
               ],
             ),
           ),
@@ -96,35 +85,6 @@ class _BoardMemberCSIState extends State<BoardMemberCSI> {
       );
   }
 }
-
-class CurrentBoardMembersRow2 extends StatefulWidget {
-  List<BoardMember> boardMemberList;
-  CurrentBoardMembersRow2({super.key, required this.boardMemberList});
-
-  @override
-  State<CurrentBoardMembersRow2> createState() => _CurrentBoardMembersRow2State();
-}
-
-class _CurrentBoardMembersRow2State extends State<CurrentBoardMembersRow2> {
-  @override
-  Widget build(BuildContext context) {
-    return CarouselSlider(
-      items: List.generate(3, (index) => CurrentBoardMemberCard(bm: widget.boardMemberList[index])),
-      options: CarouselOptions(
-        autoPlay: false,
-        enlargeCenterPage: false,
-        viewportFraction: 0.35,
-        // height: mq.height*0.8,
-        pageSnapping: true,
-        aspectRatio: 2.0,
-        initialPage:1,
-        enableInfiniteScroll: false,
-
-      ),
-    );
-  }
-}
-
 
 class CurrentBoardMembersRow extends StatefulWidget {
   final List<BoardMember> bmList;
@@ -161,7 +121,6 @@ class _PastBMState extends State<PastBM> {
     return Scaffold(
       backgroundColor:AppColors.theme['secondaryColor'] ,
       appBar: AppBar(
-        surfaceTintColor:  AppColors.theme['secondaryColor'],
         backgroundColor: AppColors.theme['secondaryColor'],
         title: Text("Past Board Members",style: TextStyle(fontWeight: FontWeight.bold,fontSize: 18),),
         centerTitle: true,
