@@ -62,7 +62,7 @@ class _PostCardState extends State<PostCard> {
               ),
               if (widget.post.isDescription)
                 Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 13.0),
+                  padding:  EdgeInsets.symmetric(horizontal: 13),
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
@@ -101,7 +101,7 @@ class _PostCardState extends State<PostCard> {
                                 padding: const EdgeInsets.symmetric(horizontal: 13.0),
                                 child: Text(widget.post.attachmentname!,
                                     style: TextStyle(
-                                        color: AppColors.theme['primaryColor'],fontWeight: FontWeight.bold)),
+                                        color: AppColors.theme['tertiaryColor'],fontWeight: FontWeight.bold)),
                               ),
                             ],
                           ),
@@ -137,7 +137,7 @@ class _PostCardState extends State<PostCard> {
                           padding: const EdgeInsets.symmetric(horizontal: 13.0),
                           child: Text(widget.post.attachmentname!,
                               style: TextStyle(
-                                  color: AppColors.theme['primaryColor'],fontWeight: FontWeight.bold)),
+                                  color: AppColors.theme['tertiaryColor'],fontWeight: FontWeight.bold)),
                         ),
                         Row(
                           mainAxisAlignment: MainAxisAlignment.center,
@@ -146,9 +146,9 @@ class _PostCardState extends State<PostCard> {
                               padding: const EdgeInsets.symmetric(horizontal: 13.0),
                               child: Text("Download",
                                   style: TextStyle(
-                                      color: AppColors.theme['primaryColor'],fontWeight: FontWeight.bold)),
+                                      color: AppColors.theme['tertiaryColor'],fontWeight: FontWeight.bold)),
                             ),
-                            Icon(Icons.download_rounded,size: 20,color: AppColors.theme['primaryColor'],)
+                            Icon(Icons.download_rounded,size: 20,color: AppColors.theme['tertiaryColor'],)
                           ],
                         ),
                       ],
