@@ -1,9 +1,9 @@
-import 'package:csi_app/models/board_member.dart';
 import 'package:csi_app/utils/fontStyle.dart';
 import 'package:flutter/material.dart';
 import 'package:csi_app/main.dart';
 
 import '../../constants/board_member_lists.dart';
+import '../../models/board_member_model/board_member.dart';
 import '../colors.dart';
 
 
