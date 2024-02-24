@@ -37,6 +37,7 @@ class _HomeScreenState extends State<HomeScreen> {
     return Consumer<BottomNavigationProvider>(builder: (context, value, child) {
       return Scaffold(
         appBar: AppBar(
+          surfaceTintColor: AppColors.theme['primaryColor'],
           elevation: 0,
           backgroundColor: AppColors.theme['secondaryColor'],
           centerTitle: true,
@@ -45,23 +46,22 @@ class _HomeScreenState extends State<HomeScreen> {
                   child: Container(
                     height: 45,
                     constraints: BoxConstraints(
-                        minWidth: 250, maxWidth: 250, maxHeight: 50),
+                        minWidth: 200, maxWidth: 250, maxHeight: 50),
                     alignment: Alignment.center,
                     decoration: BoxDecoration(
+                      color: AppColors.theme['backgroundColor'],
                       borderRadius: BorderRadius.circular(15),
-                      border: Border.all(
-                        color: AppColors.theme['primaryColor'],
-                      ),
                     ),
-                    child: Center(
+                    child: Align(
+                      alignment: Alignment.center,
                       child: TextFormField(
                         cursorColor: AppColors.theme['primaryColor'],
                         autocorrect: true,
                         focusNode: _focusNode,
-                        style: TextStyle(color: Colors.black),
+                        style: TextStyle(color: Colors.black,fontSize: 16),
                         decoration: InputDecoration(
                           border: InputBorder.none,
-                          hintText: "Search User's posts",
+                          hintText: "Search posts",
                           hintStyle: TextStyle(color: Colors.black),
                           prefixIcon: Icon(
                             Icons.search,

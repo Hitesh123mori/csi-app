@@ -46,6 +46,7 @@ class _PostCardState extends State<PostCard> {
           child: Stack(
             alignment: Alignment.bottomLeft,
             children: [
+
               Column(
                 children: [
                   Card(
@@ -89,6 +90,71 @@ class _PostCardState extends State<PostCard> {
                                 showMore ? 'Show Less' : 'Show More',
                                 style: TextStyle(
                                     color: AppColors.theme['primaryColor']),
+
+              Card(
+                elevation: 0,
+                surfaceTintColor: AppColors.theme['secondaryColor'],
+                color: AppColors.theme['secondaryColor'],
+                child: ListTile(
+                  title: Text("Computer Society of India",style: TextStyle(fontWeight: FontWeight.bold),),
+                  subtitle: Text(
+                    "Nirma University Club",
+                    style: TextStyle(color: AppColors.theme['tertiaryColor']),
+                  ),
+                  leading: CircleAvatar(
+                    backgroundImage: AssetImage("assets/images/csi_logo.png"),
+                    radius: 25,
+                  ),
+                  contentPadding: EdgeInsets.only(left: 1),
+                  trailing: IconButton(
+                    onPressed: () {},
+                    icon: Icon(Icons.more_vert_outlined),
+                  ),
+                ),
+              ),
+              if (widget.post.isDescription)
+                Padding(
+                  padding:  EdgeInsets.symmetric(horizontal: 13),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      showMore
+                          ? buildContent(description)
+                          : buildContent(_truncateDescription(description)),
+                      if (description.length > 100)
+                        TextButton(
+                          onPressed: () {
+                            setState(() {
+                              showMore = !showMore;
+                            });
+                          },
+                          child: Text(
+                            showMore ? 'Show Less' : 'Show More',
+                            style: TextStyle(
+                                color: AppColors.theme['primaryColor']),
+                          ),
+                        ),
+                    ],
+                  ),
+                ),
+              if (widget.post.isAnyAttachment && widget.post.images != null)
+                Container(
+                  color: AppColors.theme['backgroundColor'],
+                  child: Column(
+                    children: [
+                      Container(
+                        height: 40,
+                        child: Padding(
+                          padding: const EdgeInsets.symmetric(horizontal: 4.0),
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.start,
+                            children: [
+                              Padding(
+                                padding: const EdgeInsets.symmetric(horizontal: 13.0),
+                                child: Text(widget.post.attachmentname!,
+                                    style: TextStyle(
+                                        color: AppColors.theme['tertiaryColor'],fontWeight: FontWeight.bold)),
+
                               ),
                             ),
                         ],
@@ -132,6 +198,7 @@ class _PostCardState extends State<PostCard> {
                           ),
                         ],
                       ),
+
                     ),
                   if (widget.post.isAnyAttachment && widget.post.isPdfPost)
                     Container(
@@ -141,13 +208,36 @@ class _PostCardState extends State<PostCard> {
                         padding: const EdgeInsets.symmetric(horizontal: 4.0),
                         child: Row(
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
+
+                    ],
+                  ),
+                ),
+              if (widget.post.isAnyAttachment && widget.post.isPdfPost)
+                Container(
+                  height: 40,
+                  color: AppColors.theme['backgroundColor'],
+                  child: Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 4.0),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Padding(
+                          padding: const EdgeInsets.symmetric(horizontal: 13.0),
+                          child: Text(widget.post.attachmentname!,
+                              style: TextStyle(
+                                  color: AppColors.theme['tertiaryColor'],fontWeight: FontWeight.bold)),
+                        ),
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+
                           children: [
                             Padding(
                               padding: const EdgeInsets.symmetric(horizontal: 13.0),
                               child: Text(widget.post.attachmentname!,
                                   style: TextStyle(
-                                      color: AppColors.theme['primaryColor'],fontWeight: FontWeight.bold)),
+                                      color: AppColors.theme['tertiaryColor'],fontWeight: FontWeight.bold)),
                             ),
+
                             Row(
                               mainAxisAlignment: MainAxisAlignment.center,
                               children: [
@@ -160,6 +250,9 @@ class _PostCardState extends State<PostCard> {
                                 Icon(Icons.download_rounded,size: 20,color: AppColors.theme['primaryColor'],)
                               ],
                             ),
+
+                            Icon(Icons.download_rounded,size: 20,color: AppColors.theme['tertiaryColor'],)
+
                           ],
                         ),
                       ),
