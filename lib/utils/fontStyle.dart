@@ -1,11 +1,3 @@
-//font size
-//12
-//14
-//16
-//18
-//25
-
-// heading bold
 import 'package:flutter/material.dart';
 
 import 'colors.dart';

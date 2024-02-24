@@ -1,14 +1,8 @@
-import 'package:csi_app/screens/home_screens/upcoming_events.dart';
-import 'package:csi_app/side_transition_effects/right_left.dart';
 import 'package:flutter/material.dart';
-
+import '../../helper_functions/function.dart';
 import '../../main.dart';
 import '../../utils/colors.dart';
 import '../../utils/widgets/more_menu_card/more_menu_item.dart';
-import '../more_options/about_csi.dart';
-import '../more_options/blogs_csi.dart';
-import '../more_options/board_members_csi.dart';
-import '../more_options/past_events/past_events.dart';
 
 class MoreScreen extends StatefulWidget {
   const MoreScreen({super.key});
@@ -21,57 +15,59 @@ class _MoreScreenState extends State<MoreScreen> {
   @override
   Widget build(BuildContext context) {
     mq = MediaQuery.of(context).size;
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        Padding(
-          padding: EdgeInsets.only(left: mq.width * 0.05, top: 20, bottom: 10),
-          child: Text(
-            "More",
-            style: TextStyle(fontWeight: FontWeight.bold, fontSize: 20,color: AppColors.theme['primaryColor']),
+    return SingleChildScrollView(
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Padding(
+            padding: EdgeInsets.only(left: mq.width * 0.05, top: 20, bottom: 10),
+            child: Text(
+              "More",
+              style: TextStyle(fontWeight: FontWeight.bold, fontSize: 20,color: AppColors.theme['primaryColor']),
+            ),
           ),
-        ),
-        Moremenuitems(
-          text: 'Blogs',
-          onTap: () {
-            Navigator.push(context, RightToLeft(BlogsCSI()));
-          },
-          icon: Icon(
-            Icons.post_add_sharp,
-            size: 25,
+          Moremenuitems(
+            text: 'Blogs',
+            onTap: () {
+              Functions.launchURL('https://csi-nirma.vercel.app');
+            },
+            icon: Icon(
+              Icons.post_add_sharp,
+              size: 25,
+            ),
           ),
-        ),
-        Moremenuitems(
-          text: 'Board Members',
-          onTap: () {
-            Navigator.push(context, RightToLeft(BoardMemberCSI()));
-          },
-          icon: Icon(
-            Icons.group,
-            size: 25,
+          Moremenuitems(
+            text: 'Board Members',
+            onTap: () {
+              Functions.launchURL('https://csi-nirma.vercel.app/board');
+            },
+            icon: Icon(
+              Icons.group,
+              size: 25,
+            ),
           ),
-        ),
-        Moremenuitems(
-          text: 'Past Events and sessions',
-          onTap: () {
-            Navigator.push(context, RightToLeft(PastEvent()));
-          },
-          icon: Icon(
-            Icons.event_note_sharp,
-            size: 25,
+          Moremenuitems(
+            text: 'Past Events and sessions',
+            onTap: () {
+              Functions.launchURL('https://csi-nirma.vercel.app/');
+            },
+            icon: Icon(
+              Icons.event_note_sharp,
+              size: 25,
+            ),
           ),
-        ),
-        Moremenuitems(
-          text: 'About Us',
-          onTap: () {
-            Navigator.push(context, RightToLeft(AboutCSI()));
-          },
-          icon: Icon(
-            Icons.info_outline_rounded,
-            size: 25,
+          Moremenuitems(
+            text: 'Contributers',
+            onTap: () {
+              Functions.launchURL('https://csi-nirma.vercel.app/board');
+            },
+            icon: Icon(
+              Icons.people_rounded,
+              size: 25,
+            ),
           ),
-        ),
-      ],
+        ],
+      ),
     );
   }
 }

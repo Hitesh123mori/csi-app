@@ -6,7 +6,8 @@ import 'package:provider/provider.dart';
 import '../../main.dart';
 import '../../providers/bottom_navigation_provider.dart';
 import '../../side_transition_effects/right_left.dart';
-import 'ask_doubts.dart';
+import 'calendar.dart';
+import 'upcoming_events.dart';
 import 'notifications.dart';
 import 'posts_screen.dart';
 import 'upcoming_events.dart';
@@ -124,13 +125,13 @@ class _HomeScreenState extends State<HomeScreen> {
                           });
                         if (index == 1)
                           setState(() {
-                            value.updateCurrent('Doubt Section');
-                            screenname = DoubtSection();
+                            value.updateCurrent('Upcoming');
+                            screenname = UpcomingEvents();
                           });
                         if (index == 2)
                           setState(() {
                             value.updateCurrent('Calendar');
-                            screenname = UpcomingEvents();
+                            screenname = AcadCalendar();
                           });
                         if (index == 3)
                           setState(() {
@@ -152,14 +153,14 @@ class _HomeScreenState extends State<HomeScreen> {
                         GButton(
                           icon: Icons.chat,
                           iconActiveColor: AppColors.theme['secondaryColor'],
-                          text: "Doubt",
+                          text: "Upcoming",
                           iconColor: AppColors.theme['primaryColor'],
                           textColor: AppColors.theme['secondaryColor'],
                         ),
                         GButton(
                           icon: Icons.event_available_sharp,
                           iconActiveColor: AppColors.theme['secondaryColor'],
-                          text: "Events",
+                          text: "Calendar",
                           iconColor: AppColors.theme['primaryColor'],
                           textColor: AppColors.theme['secondaryColor'],
                         ),
