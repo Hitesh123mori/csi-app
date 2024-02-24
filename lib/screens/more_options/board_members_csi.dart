@@ -78,6 +78,7 @@ class _BoardMemberCSIState extends State<BoardMemberCSI> {
                 CurrentBoardMembersRow(bmList: bm2023.sublist(12, 15)),
                 CurrentBoardMembersRow(bmList: bm2023.sublist(15, 18)),
                 CurrentBoardMembersRow(bmList: bm2023.sublist(18, 20)),
+                SizedBox(height: mq.height*0.05,),
               ],
             ),
           ),

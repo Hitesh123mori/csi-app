@@ -1,4 +1,5 @@
 import 'package:csi_app/providers/bottom_navigation_provider.dart';
+import 'package:csi_app/screens/home_screens/home_screen.dart';
 import 'package:csi_app/screens/on_boading_screens/splash_screen.dart';
 import 'package:csi_app/utils/colors.dart';
 import 'package:flutter/material.dart' ;
@@ -31,7 +32,9 @@ class _MyAppState extends State<MyApp> {
           colorScheme: ColorScheme.fromSeed(seedColor: Colors.white),
           useMaterial3: true,
         ),
-        home: SplashScreen())
+        // home: SplashScreen()
+        home: HomeScreen(),
+    )
     ;
   }
 }
