@@ -1,16 +1,23 @@
 import '../models/board_member_model/board_member.dart';
 
+List<String> SkillStack = [
+  "Java",
+  "Python",
+  "MERN dev",
+  "something"
+];
+
 List<BoardMember> bm2023 = [
   BoardMember(
       name: 'Mohit Jethwani',
       imagePath: '',
-      position: 'Precident',
+      position: 'President',
       placementPlace: '',
       socialMediaLink: []),
   BoardMember(
       name: 'Manav Pandya',
       imagePath: '',
-      position: 'Vice Precident',
+      position: 'Vice President',
       placementPlace: '',
       socialMediaLink: []),
   BoardMember(

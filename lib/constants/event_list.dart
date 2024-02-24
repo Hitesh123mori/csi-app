@@ -2,7 +2,6 @@ import 'package:csi_app/models/event_model/event_yearwise.dart';
 import '../models/event_model/event.dart';
 
 List<EventYear> eventyearwise = [
-
   EventYear(year: '2023', events: [
     Event(
         name: "Know your domains",
@@ -83,6 +82,5 @@ List<EventYear> eventyearwise = [
     Event(name: "Ai Series", type: "Event Series", date: "Sep 2021", description: "", year: "2021", id: ""),
     Event(name: "Logout-Cyber Awareness", type: "Seminar", date: "Oct 2021", description: "", year: "2021", id: ""),
     Event(name: "Codigo 1", type: "Competition", date: "Dec 2021", description: "", year: "2021", id: ""),
-
   ])
 ];
