@@ -8,6 +8,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_emoji/flutter_emoji.dart';
 import 'package:flutter_polls/flutter_polls.dart';
 import 'package:url_launcher/url_launcher.dart';
+import 'package:http/http.dart' as http;
 import '../../../helper_functions/function.dart';
 import '../../../main.dart';
 import 'package:syncfusion_flutter_pdfviewer/pdfviewer.dart';
@@ -26,7 +27,9 @@ class _PostCardState extends State<PostCard> {
   final GlobalKey<SfPdfViewerState> _pdfViewerKey = GlobalKey();
   var parser = EmojiParser();
   var coffee = Emoji('coffee', '☕');
-  var heart = Emoji('heart', '❤️');
+  var heart = Emoji('heart', '❤');
+  final CarouselController _controller = CarouselController();
+  int _current = 0;
 
   @override
   Widget build(BuildContext context) {
@@ -56,11 +59,11 @@ class _PostCardState extends State<PostCard> {
                       subtitle: Text(
                         "Nirma University Club",
                         style:
-                            TextStyle(color: AppColors.theme['tertiaryColor']),
+                        TextStyle(color: AppColors.theme['tertiaryColor']),
                       ),
                       leading: CircleAvatar(
                         backgroundImage:
-                            AssetImage("assets/images/csi_logo.png"),
+                        AssetImage("assets/images/csi_logo.png"),
                         radius: 25,
                       ),
                       contentPadding: EdgeInsets.only(left: 1),
@@ -76,13 +79,13 @@ class _PostCardState extends State<PostCard> {
                       children: [
                         showMore
                             ? Padding(
-                              padding: const EdgeInsets.symmetric(horizontal: 8.0),
-                              child: buildContent(description),
-                            )
+                          padding: const EdgeInsets.symmetric(horizontal: 8.0),
+                          child: buildContent(description),
+                        )
                             : Padding(
-                              padding: const EdgeInsets.symmetric(horizontal: 8.0),
-                              child: buildContent(_truncateDescription(description)),
-                            ),
+                          padding: const EdgeInsets.symmetric(horizontal: 8.0),
+                          child: buildContent(_truncateDescription(description)),
+                        ),
                         if (description.length > 100)
                           TextButton(
                             onPressed: () {
@@ -137,20 +140,50 @@ class _PostCardState extends State<PostCard> {
                               ],
                             ),
                           ),
-                          CarouselSlider.builder(
-                            itemCount: widget.post.images!.length,
-                            itemBuilder: (BuildContext context,
-                                int itemIndex, int pageViewIndex) =>
-                                Image.asset(
-                                    widget.post.images![itemIndex]),
-                            options: CarouselOptions(
-                              scrollDirection: Axis.horizontal,
-                              autoPlay: widget.post.images!.length != 1,
-                              enlargeCenterPage: true,
-                              viewportFraction: 1,
-                              aspectRatio: 1.0,
-                              initialPage: 0,
-                            ),
+                          Column(
+                            children: [
+                              CarouselSlider.builder(
+                                itemCount: widget.post.images!.length,
+                                carouselController: _controller,
+                                itemBuilder: (BuildContext context,
+                                    int itemIndex, int pageViewIndex) =>
+                                    Image.asset(
+                                        widget.post.images![itemIndex]),
+                                options: CarouselOptions(
+                                  scrollDirection: Axis.horizontal,
+                                  autoPlay: widget.post.images!.length != 1,
+                                  enlargeCenterPage: true,
+                                  viewportFraction: 1,
+                                  aspectRatio: 1.0,
+                                  initialPage: 0,
+                                  onPageChanged: (index, reason) {
+                                      setState(() {
+                                        _current = index;
+                                      });
+                                    },
+                                ),
+                              ),
+
+                              Row(
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                children: widget.post.images!.asMap().entries.map((entry) {
+                                  return GestureDetector(
+                                    onTap: () => _controller.animateToPage(entry.key),
+                                    child: Container(
+                                      width: 8.0,
+                                      height: 8.0,
+                                      margin: EdgeInsets.symmetric(vertical: 8.0, horizontal: 4.0),
+                                      decoration: BoxDecoration(
+                                          shape: BoxShape.circle,
+                                          color: (Theme.of(context).brightness == Brightness.dark
+                                              ? Colors.white
+                                              : Colors.black)
+                                              .withOpacity(_current == entry.key ? 0.9 : 0.4)),
+                                    ),
+                                  );
+                                }).toList(),
+                              )
+                            ],
                           ),
                         ],
                       ),
@@ -160,37 +193,43 @@ class _PostCardState extends State<PostCard> {
                       height: 40,
                       color: AppColors.theme['backgroundColor'],
                       child: Row(
-                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                              children: [
-                                Padding(
-                                  padding: const EdgeInsets.symmetric(
-                                      horizontal: 13.0),
-                                  child: Text(widget.post.attachmentname!,
-                                      style: TextStyle(
-                                          color: AppColors
-                                              .theme['tertiaryColor'],
-                                          fontWeight: FontWeight.bold)),
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            Padding(
+                              padding: const EdgeInsets.symmetric(
+                                  horizontal: 13.0),
+                              child: Text(widget.post.attachmentname!,
+                                  style: TextStyle(
+                                      color: AppColors
+                                          .theme['tertiaryColor'],
+                                      fontWeight: FontWeight.bold)),
+                            ),
+                            Padding(
+                              padding: const EdgeInsets.symmetric(
+                                  horizontal: 13.0),
+                              child: InkWell(
+                                onTap: () async {
+                                  print("#download");
+                                  await http.get(Uri.parse(widget.post.pdflink!));
+                                },
+                                child: Row(
+                                  mainAxisAlignment: MainAxisAlignment.center,
+                                  children: [
+                                    Text("Download",
+                                        style: TextStyle(
+                                            color: AppColors
+                                                .theme['tertiaryColor'],
+                                            fontWeight: FontWeight.bold)),
+                                    SizedBox(width: 3,),
+                                    Icon(
+                                      Icons.download_rounded,
+                                      size: 20,
+                                      color: AppColors.theme['tertiaryColor'],
+                                    )
+                                  ],
                                 ),
-                                Padding(
-                                  padding: const EdgeInsets.symmetric(
-                                      horizontal: 13.0),
-                                  child: Row(
-                                    mainAxisAlignment: MainAxisAlignment.center,
-                                    children: [
-                                      Text("Download",
-                                          style: TextStyle(
-                                              color: AppColors
-                                                  .theme['tertiaryColor'],
-                                              fontWeight: FontWeight.bold)),
-                                      SizedBox(width: 3,),
-                                      Icon(
-                                        Icons.download_rounded,
-                                        size: 20,
-                                        color: AppColors.theme['tertiaryColor'],
-                                      )
-                                    ],
-                                                              ),
-                                ),
+                              ),
+                            ),
                           ]),
                     ),
                   if (widget.post.isAnyAttachment && widget.post.isPdfPost)
@@ -212,6 +251,7 @@ class _PostCardState extends State<PostCard> {
                       padding: const EdgeInsets.symmetric(horizontal: 8.0),
                       child: Container(
                         child: FlutterPolls(
+                          loadingWidget: SizedBox(width: 15, height:15, child: CircularProgressIndicator(color: Colors.blue, strokeWidth: 2,)),
                           leadingVotedProgessColor: Colors.grey,
                           votedBackgroundColor: Colors.black12,
                           votedProgressColor: Colors.grey,
@@ -234,7 +274,7 @@ class _PostCardState extends State<PostCard> {
                           ),
                           pollOptions: List<PollOption>.from(
                             widget.post.poll!.options.map(
-                              (option) {
+                                  (option) {
                                 var a = PollOption(
                                   id: option.id,
                                   title: Text(
@@ -308,8 +348,8 @@ class _PostCardState extends State<PostCard> {
 
     return RichText(
         text: TextSpan(
-      children: children,
-      style: TextStyle(color: AppColors.theme['tertiaryColor'], fontSize: 15),
-    ));
+          children: children,
+          style: TextStyle(color: AppColors.theme['tertiaryColor'], fontSize: 15),
+        ));
   }
 }
