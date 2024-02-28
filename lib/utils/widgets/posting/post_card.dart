@@ -48,7 +48,6 @@ class _PostCardState extends State<PostCard> {
             children: [
               Column(
                 children: [
-
                   // post header
                   Card(
                     elevation: 0,
@@ -78,21 +77,23 @@ class _PostCardState extends State<PostCard> {
                     ),
                   ),
 
-
-                 // only description post
+                  // only description post
                   if (widget.post.isDescription)
                     Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         showMore
                             ? Padding(
-                              padding: const EdgeInsets.symmetric(horizontal: 8.0),
-                              child: buildContent(description),
-                            )
+                                padding:
+                                    const EdgeInsets.symmetric(horizontal: 8.0),
+                                child: buildContent(description),
+                              )
                             : Padding(
-                              padding: const EdgeInsets.symmetric(horizontal: 8.0),
-                              child: buildContent(_truncateDescription(description)),
-                            ),
+                                padding:
+                                    const EdgeInsets.symmetric(horizontal: 8.0),
+                                child: buildContent(
+                                    _truncateDescription(description)),
+                              ),
                         if (description.length > 100)
                           TextButton(
                             onPressed: () {
@@ -106,14 +107,11 @@ class _PostCardState extends State<PostCard> {
                                   color: AppColors.theme['tertiaryColor']),
                             ),
                           ),
-
                       ],
                     ),
 
-
                   // post with images
-                  if (widget.post.isAnyAttachment &&
-                      widget.post.images != null)
+                  if (widget.post.isAnyAttachment && widget.post.images != null)
                     Padding(
                       padding: const EdgeInsets.symmetric(horizontal: 5.0),
                       child: Container(
@@ -127,31 +125,29 @@ class _PostCardState extends State<PostCard> {
                               height: 40,
                               child: Row(
                                 mainAxisAlignment:
-                                MainAxisAlignment.spaceBetween,
+                                    MainAxisAlignment.spaceBetween,
                                 children: [
                                   Padding(
                                     padding: const EdgeInsets.symmetric(
                                         horizontal: 13.0),
-                                    child: Text(
-                                        widget.post.attachmentname!,
+                                    child: Text(widget.post.attachmentname!,
                                         style: TextStyle(
                                             color: AppColors
                                                 .theme['tertiaryColor'],
-                                            fontWeight:
-                                            FontWeight.bold)),
+                                            fontWeight: FontWeight.bold)),
                                   ),
                                   Padding(
                                     padding: const EdgeInsets.symmetric(
                                         horizontal: 13.0),
                                     child: Text(
-                                      widget.post.images!.length.toString() + " Images",
+                                      widget.post.images!.length.toString() +
+                                          " Images",
                                       style: TextStyle(
-                                          color: AppColors.theme['tertiaryColor'],
-                                          fontWeight: FontWeight.bold
-                                      ),
+                                          color:
+                                              AppColors.theme['tertiaryColor'],
+                                          fontWeight: FontWeight.bold),
                                     ),
                                   ),
-
                                 ],
                               ),
                             ),
@@ -160,9 +156,8 @@ class _PostCardState extends State<PostCard> {
                               child: CarouselSlider.builder(
                                 itemCount: widget.post.images!.length,
                                 itemBuilder: (BuildContext context,
-                                    int itemIndex, int pageViewIndex) =>
-                                    Image.asset(
-                                        widget.post.images![itemIndex]),
+                                        int itemIndex, int pageViewIndex) =>
+                                    Image.asset(widget.post.images![itemIndex]),
                                 options: CarouselOptions(
                                   scrollDirection: Axis.horizontal,
                                   autoPlay: widget.post.images!.length != 1,
@@ -178,7 +173,6 @@ class _PostCardState extends State<PostCard> {
                       ),
                     ),
 
-
                   // post with pdf
                   if (widget.post.isAnyAttachment && widget.post.isPdfPost)
                     Padding(
@@ -188,44 +182,44 @@ class _PostCardState extends State<PostCard> {
                       child: Container(
                         decoration: BoxDecoration(
                             color: AppColors.theme['secondaryBgColor'],
-                          borderRadius: BorderRadius.circular(2).copyWith(
-                            bottomLeft: Radius.circular(0),
-                            bottomRight: Radius.circular(0),
-                          )
-                        ),
+                            borderRadius: BorderRadius.circular(2).copyWith(
+                              bottomLeft: Radius.circular(0),
+                              bottomRight: Radius.circular(0),
+                            )),
                         height: 40,
                         child: Row(
-                                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                children: [
-                                  Padding(
-                                    padding: const EdgeInsets.symmetric(
-                                        horizontal: 13.0),
-                                    child: Text(widget.post.attachmentname!,
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              Padding(
+                                padding: const EdgeInsets.symmetric(
+                                    horizontal: 13.0),
+                                child: Text(widget.post.attachmentname!,
+                                    style: TextStyle(
+                                        color: AppColors.theme['tertiaryColor'],
+                                        fontWeight: FontWeight.bold)),
+                              ),
+                              Padding(
+                                padding: const EdgeInsets.symmetric(
+                                    horizontal: 13.0),
+                                child: Row(
+                                  mainAxisAlignment: MainAxisAlignment.center,
+                                  children: [
+                                    Text("Download",
                                         style: TextStyle(
                                             color: AppColors
                                                 .theme['tertiaryColor'],
                                             fontWeight: FontWeight.bold)),
-                                  ),
-                                  Padding(
-                                    padding: const EdgeInsets.symmetric(
-                                        horizontal: 13.0),
-                                    child: Row(
-                                      mainAxisAlignment: MainAxisAlignment.center,
-                                      children: [
-                                        Text("Download",
-                                            style: TextStyle(
-                                                color: AppColors
-                                                    .theme['tertiaryColor'],
-                                                fontWeight: FontWeight.bold)),
-                                        SizedBox(width: 3,),
-                                        Icon(
-                                          Icons.download_rounded,
-                                          size: 20,
-                                          color: AppColors.theme['tertiaryColor'],
-                                        )
-                                      ],
-                                                                ),
-                                  ),
+                                    SizedBox(
+                                      width: 3,
+                                    ),
+                                    Icon(
+                                      Icons.download_rounded,
+                                      size: 20,
+                                      color: AppColors.theme['tertiaryColor'],
+                                    )
+                                  ],
+                                ),
+                              ),
                             ]),
                       ),
                     ),
@@ -237,16 +231,16 @@ class _PostCardState extends State<PostCard> {
                       child: Container(
                         height: 400,
                         decoration: BoxDecoration(
-                            color: AppColors.theme['secondaryBgColor'],
+                          color: AppColors.theme['secondaryBgColor'],
                         ),
                         //todo: can't view on app release
                         child: Padding(
                           padding: const EdgeInsets.all(8.0),
                           child: SfPdfViewer.network(
                             pageLayoutMode: PdfPageLayoutMode.continuous,
-                            canShowScrollHead:false,
+                            canShowScrollHead: false,
                             pageSpacing: 2,
-                            canShowPageLoadingIndicator:false,
+                            canShowPageLoadingIndicator: false,
                             widget.post.pdflink!,
                             key: _pdfViewerKey,
                             scrollDirection: PdfScrollDirection.horizontal,
@@ -255,18 +249,28 @@ class _PostCardState extends State<PostCard> {
                       ),
                     ),
 
-
-
                   // post with poll
                   if (widget.post.isPoll)
                     Padding(
                       padding: const EdgeInsets.symmetric(horizontal: 8.0),
                       child: Container(
                         child: FlutterPolls(
-                          leadingVotedProgessColor:  AppColors.theme['secondaryBgColor'],
-                          votedBackgroundColor: AppColors.theme['secondaryColor'],
-                          votedProgressColor: AppColors.theme['secondaryBgColor'],
-                          pollOptionsSplashColor: AppColors.theme['secondaryBgColor'],
+                          loadingWidget: SizedBox(
+                            height: 15,
+                            width: 15,
+                            child: CircularProgressIndicator(
+                              color: AppColors.theme['primaryColor'],
+                              strokeWidth: 2,
+                            ),
+                          ),
+                          leadingVotedProgessColor:
+                              AppColors.theme['secondaryBgColor'],
+                          votedBackgroundColor:
+                              AppColors.theme['secondaryColor'],
+                          votedProgressColor:
+                              AppColors.theme['secondaryBgColor'],
+                          pollOptionsSplashColor:
+                              AppColors.theme['secondaryBgColor'],
                           createdBy: "CSI",
                           pollId: widget.post.poll?.id,
                           onVoted:
@@ -292,7 +296,8 @@ class _PostCardState extends State<PostCard> {
                                   title: Text(
                                     option.title,
                                     style: TextStyle(
-                                        color: AppColors.theme['tertiaryColor']),
+                                        color:
+                                            AppColors.theme['tertiaryColor']),
                                   ),
                                   votes: option.votes,
                                 );
@@ -307,10 +312,6 @@ class _PostCardState extends State<PostCard> {
                         ),
                       ),
                     ),
-
-
-
-
 
                   SizedBox(
                     height: 58,
