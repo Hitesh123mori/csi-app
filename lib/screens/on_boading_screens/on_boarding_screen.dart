@@ -18,7 +18,7 @@ class _IntroState extends State<OnboardingScreen> {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
       home: Scaffold(
-        backgroundColor: Colors.white,
+        backgroundColor: AppColors.theme['secondaryBgColor'],
         body: SafeArea(
           child: IntroductionScreen(
             dotsDecorator: DotsDecorator(
@@ -47,7 +47,7 @@ class _IntroState extends State<OnboardingScreen> {
                 title: "Screen 1",
                 // image: Transform.scale(scale:2,child: Image.asset('')),
                 body: "Introduction Screen 1",
-                // footer: Container(color: Colors.white,height: 600,width: 200,),
+                footer: Container(color: Colors.white,height: 600,width: 200,),
               ),
               PageViewModel(
                 title: "Screen 2",

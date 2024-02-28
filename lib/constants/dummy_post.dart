@@ -11,9 +11,6 @@ List<Post> posts = [
     isAnyAttachment: true,
     isPdfPost: false,
     likecount: 10,
-    clapcount: 5,
-    heartcount: 8,
-    funnycount: 3,
     commentcount: 15,
     attachmentname: "Contest Poster",
     posttime: DateTime.now().millisecondsSinceEpoch.toString(),
@@ -53,9 +50,7 @@ Happy coding 🤩
     isAnyAttachment: false,
     isPdfPost: false,
     likecount: 15,
-    clapcount: 3,
-    heartcount: 10,
-    funnycount: 5,
+
     commentcount: 20,
     isPoll: false,
     posttime: DateTime.now().millisecondsSinceEpoch.toString(),
@@ -106,9 +101,7 @@ Join the CSI family—let's make tech magic together! 🎊🤩
       isPdfPost: true,
       likecount: 12,
       isPoll: false,
-      clapcount: 12,
-      heartcount: 12,
-      funnycount: 12,
+
       commentcount: 12,
       posttime: DateTime.now().millisecondsSinceEpoch.toString(),
       description:
@@ -130,9 +123,7 @@ Quisque id nunc ut libero varius pharetra. Nam in leo vitae tortor interdum bibe
       isAnyAttachment: false,
       isPdfPost: false,
       likecount: 12,
-      clapcount: 12,
-      heartcount: 12,
-      funnycount: 12,
+
       commentcount: 12,
       posttime: DateTime.now().millisecondsSinceEpoch.toString(),
       isPoll: true,

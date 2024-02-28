@@ -21,7 +21,7 @@ class Moremenuitems extends StatelessWidget {
           color: AppColors.theme['secondaryColor'],
           child: ListTile(
             leading: icon,
-             trailing: Icon(Icons.keyboard_arrow_right,size: 25,),
+             trailing: Icon(Icons.keyboard_arrow_right,size: 25,color:AppColors.theme['primaryColor'] ,),
               title: Text(text,style: TextStyle(color : AppColors.theme['tertiaryColor'],),),
           ),
         ),

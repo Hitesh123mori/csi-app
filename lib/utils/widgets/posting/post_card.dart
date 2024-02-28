@@ -39,18 +39,25 @@ class _PostCardState extends State<PostCard> {
       padding: const EdgeInsets.symmetric(vertical: 5, horizontal: 5),
       child: Material(
         elevation: 0.2,
+        borderRadius: BorderRadius.circular(4),
         child: Container(
+          decoration: BoxDecoration(
+            borderRadius: BorderRadius.circular(4),
+            color: AppColors.theme['secondaryColor'],
+          ),
           width: mq.width,
-          color: AppColors.theme['secondaryColor'],
           child: Stack(
             alignment: Alignment.bottomLeft,
             children: [
               Column(
                 children: [
+
+                  // post header
                   Card(
                     elevation: 0,
                     surfaceTintColor: AppColors.theme['secondaryColor'],
                     color: AppColors.theme['secondaryColor'],
+                    // color: AppColors.theme['secondaryBgColor'],
                     child: ListTile(
                       title: Text(
                         "Computer Society of India",
@@ -73,6 +80,9 @@ class _PostCardState extends State<PostCard> {
                       ),
                     ),
                   ),
+
+
+                 // only description post
                   if (widget.post.isDescription)
                     Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
@@ -102,49 +112,56 @@ class _PostCardState extends State<PostCard> {
 
                       ],
                     ),
+
+
+                  // post with images
                   if (widget.post.isAnyAttachment &&
                       widget.post.images != null)
-                    Container(
-                      color: AppColors.theme['backgroundColor'],
-                      child: Column(
-                        children: [
-                          Container(
-                            height: 40,
-                            child: Row(
-                              mainAxisAlignment:
-                              MainAxisAlignment.spaceBetween,
-                              children: [
-                                Padding(
-                                  padding: const EdgeInsets.symmetric(
-                                      horizontal: 13.0),
-                                  child: Text(
-                                      widget.post.attachmentname!,
+                    Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 5.0),
+                      child: Container(
+                        decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(2),
+                          color: AppColors.theme['secondaryBgColor'],
+                        ),
+                        child: Column(
+                          children: [
+                            Container(
+                              height: 40,
+                              child: Row(
+                                mainAxisAlignment:
+                                MainAxisAlignment.spaceBetween,
+                                children: [
+                                  Padding(
+                                    padding: const EdgeInsets.symmetric(
+                                        horizontal: 13.0),
+                                    child: Text(
+                                        widget.post.attachmentname!,
+                                        style: TextStyle(
+                                            color: AppColors
+                                                .theme['tertiaryColor'],
+                                            fontWeight:
+                                            FontWeight.bold)),
+                                  ),
+                                  Padding(
+                                    padding: const EdgeInsets.symmetric(
+                                        horizontal: 13.0),
+                                    child: Text(
+                                      widget.post.images!.length.toString() + " Images",
                                       style: TextStyle(
-                                          color: AppColors
-                                              .theme['tertiaryColor'],
-                                          fontWeight:
-                                          FontWeight.bold)),
-                                ),
-                                Padding(
-                                  padding: const EdgeInsets.symmetric(
-                                      horizontal: 13.0),
-                                  child: Text(
-                                    widget.post.images!.length.toString() + " Images",
-                                    style: TextStyle(
-                                        color: AppColors.theme['tertiaryColor'],
-                                        fontWeight: FontWeight.bold
+                                          color: AppColors.theme['tertiaryColor'],
+                                          fontWeight: FontWeight.bold
+                                      ),
                                     ),
                                   ),
-                                ),
 
-                              ],
+                                ],
+                              ),
                             ),
-                          ),
-                          Column(
-                            children: [
-                              CarouselSlider.builder(
+                            Padding(
+                              padding: const EdgeInsets.all(8.0),
+                              child: CarouselSlider.builder(
                                 itemCount: widget.post.images!.length,
-                                carouselController: _controller,
                                 itemBuilder: (BuildContext context,
                                     int itemIndex, int pageViewIndex) =>
                                     Image.asset(
@@ -156,105 +173,103 @@ class _PostCardState extends State<PostCard> {
                                   viewportFraction: 1,
                                   aspectRatio: 1.0,
                                   initialPage: 0,
-                                  onPageChanged: (index, reason) {
-                                      setState(() {
-                                        _current = index;
-                                      });
-                                    },
                                 ),
                               ),
-
-                              Row(
-                                mainAxisAlignment: MainAxisAlignment.center,
-                                children: widget.post.images!.asMap().entries.map((entry) {
-                                  return GestureDetector(
-                                    onTap: () => _controller.animateToPage(entry.key),
-                                    child: Container(
-                                      width: 8.0,
-                                      height: 8.0,
-                                      margin: EdgeInsets.symmetric(vertical: 8.0, horizontal: 4.0),
-                                      decoration: BoxDecoration(
-                                          shape: BoxShape.circle,
-                                          color: (Theme.of(context).brightness == Brightness.dark
-                                              ? Colors.white
-                                              : Colors.black)
-                                              .withOpacity(_current == entry.key ? 0.9 : 0.4)),
-                                    ),
-                                  );
-                                }).toList(),
-                              )
-                            ],
-                          ),
-                        ],
+                            ),
+                          ],
+                        ),
                       ),
                     ),
+
+
+                  // post with pdf
                   if (widget.post.isAnyAttachment && widget.post.isPdfPost)
-                    Container(
-                      height: 40,
-                      color: AppColors.theme['backgroundColor'],
-                      child: Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: [
-                            Padding(
-                              padding: const EdgeInsets.symmetric(
-                                  horizontal: 13.0),
-                              child: Text(widget.post.attachmentname!,
-                                  style: TextStyle(
-                                      color: AppColors
-                                          .theme['tertiaryColor'],
-                                      fontWeight: FontWeight.bold)),
-                            ),
-                            Padding(
-                              padding: const EdgeInsets.symmetric(
-                                  horizontal: 13.0),
-                              child: InkWell(
-                                onTap: () async {
-                                  print("#download");
-                                  await http.get(Uri.parse(widget.post.pdflink!));
-                                },
-                                child: Row(
-                                  mainAxisAlignment: MainAxisAlignment.center,
-                                  children: [
-                                    Text("Download",
+                    Padding(
+                      padding: const EdgeInsets.all(8.0).copyWith(
+                        bottom: 0,
+                      ),
+                      child: Container(
+                        decoration: BoxDecoration(
+                            color: AppColors.theme['secondaryBgColor'],
+                          borderRadius: BorderRadius.circular(2).copyWith(
+                            bottomLeft: Radius.circular(0),
+                            bottomRight: Radius.circular(0),
+                          )
+                        ),
+                        height: 40,
+                        child: Row(
+                                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                children: [
+                                  Padding(
+                                    padding: const EdgeInsets.symmetric(
+                                        horizontal: 13.0),
+                                    child: Text(widget.post.attachmentname!,
                                         style: TextStyle(
                                             color: AppColors
                                                 .theme['tertiaryColor'],
                                             fontWeight: FontWeight.bold)),
-                                    SizedBox(width: 3,),
-                                    Icon(
-                                      Icons.download_rounded,
-                                      size: 20,
-                                      color: AppColors.theme['tertiaryColor'],
-                                    )
-                                  ],
-                                ),
-                              ),
-                            ),
-                          ]),
-                    ),
-                  if (widget.post.isAnyAttachment && widget.post.isPdfPost)
-                    Container(
-                      color: AppColors.theme['backgroundColor'],
-                      height: 400,
-                      //todo: can't view on app release
-                      child: SfPdfViewer.network(
-                        canShowScrollHead:false,
-                        pageSpacing: 2,
-                        canShowPageLoadingIndicator:false,
-                        widget.post.pdflink!,
-                        key: _pdfViewerKey,
-                        scrollDirection: PdfScrollDirection.horizontal,
+                                  ),
+                                  Padding(
+                                    padding: const EdgeInsets.symmetric(
+                                        horizontal: 13.0),
+                                    child: Row(
+                                      mainAxisAlignment: MainAxisAlignment.center,
+                                      children: [
+                                        Text("Download",
+                                            style: TextStyle(
+                                                color: AppColors
+                                                    .theme['tertiaryColor'],
+                                                fontWeight: FontWeight.bold)),
+                                        SizedBox(width: 3,),
+                                        Icon(
+                                          Icons.download_rounded,
+                                          size: 20,
+                                          color: AppColors.theme['tertiaryColor'],
+                                        )
+                                      ],
+                                                                ),
+                                  ),
+                            ]),
                       ),
                     ),
+                  if (widget.post.isAnyAttachment && widget.post.isPdfPost)
+                    Padding(
+                      padding: const EdgeInsets.all(8.0).copyWith(
+                        top: 0,
+                      ),
+                      child: Container(
+                        height: 400,
+                        decoration: BoxDecoration(
+                            color: AppColors.theme['secondaryBgColor'],
+                        ),
+                        //todo: can't view on app release
+                        child: Padding(
+                          padding: const EdgeInsets.all(8.0),
+                          child: SfPdfViewer.network(
+                            pageLayoutMode: PdfPageLayoutMode.continuous,
+                            canShowScrollHead:false,
+                            pageSpacing: 2,
+                            canShowPageLoadingIndicator:false,
+                            widget.post.pdflink!,
+                            key: _pdfViewerKey,
+                            scrollDirection: PdfScrollDirection.horizontal,
+                          ),
+                        ),
+                      ),
+                    ),
+
+
+
+                  // post with poll
                   if (widget.post.isPoll)
                     Padding(
                       padding: const EdgeInsets.symmetric(horizontal: 8.0),
                       child: Container(
                         child: FlutterPolls(
-                          loadingWidget: SizedBox(width: 15, height:15, child: CircularProgressIndicator(color: Colors.blue, strokeWidth: 2,)),
-                          leadingVotedProgessColor: Colors.grey,
-                          votedBackgroundColor: Colors.black12,
-                          votedProgressColor: Colors.grey,
+                          leadingVotedProgessColor:  AppColors.theme['secondaryBgColor'],
+                          votedBackgroundColor: AppColors.theme['secondaryColor'],
+                          votedProgressColor: AppColors.theme['secondaryBgColor'],
+                          pollOptionsSplashColor: AppColors.theme['secondaryBgColor'],
                           createdBy: "CSI",
                           pollId: widget.post.poll?.id,
                           onVoted:
@@ -295,6 +310,11 @@ class _PostCardState extends State<PostCard> {
                         ),
                       ),
                     ),
+
+
+
+
+
                   SizedBox(
                     height: 58,
                   )
