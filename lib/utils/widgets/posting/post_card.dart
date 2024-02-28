@@ -8,6 +8,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_emoji/flutter_emoji.dart';
 import 'package:flutter_polls/flutter_polls.dart';
 import 'package:url_launcher/url_launcher.dart';
+import 'package:http/http.dart' as http;
 import '../../../helper_functions/function.dart';
 import '../../../main.dart';
 import 'package:syncfusion_flutter_pdfviewer/pdfviewer.dart';
@@ -27,6 +28,9 @@ class _PostCardState extends State<PostCard> {
   var parser = EmojiParser();
   var coffee = Emoji('coffee', '☕');
   var heart = Emoji('heart', '❤️');
+
+  int _current = 0;
+  final CarouselController _controller = CarouselController();
 
   @override
   Widget build(BuildContext context) {
@@ -84,16 +88,13 @@ class _PostCardState extends State<PostCard> {
                       children: [
                         showMore
                             ? Padding(
-                                padding:
-                                    const EdgeInsets.symmetric(horizontal: 8.0),
-                                child: buildContent(description),
-                              )
+                              padding: const EdgeInsets.symmetric(horizontal: 8.0),
+                              child: buildContent(description),
+                            )
                             : Padding(
-                                padding:
-                                    const EdgeInsets.symmetric(horizontal: 8.0),
-                                child: buildContent(
-                                    _truncateDescription(description)),
-                              ),
+                              padding: const EdgeInsets.symmetric(horizontal: 8.0),
+                              child: buildContent(_truncateDescription(description)),
+                            ),
                         if (description.length > 100)
                           TextButton(
                             onPressed: () {
@@ -151,22 +152,52 @@ class _PostCardState extends State<PostCard> {
                                 ],
                               ),
                             ),
-                            Padding(
-                              padding: const EdgeInsets.all(8.0),
-                              child: CarouselSlider.builder(
-                                itemCount: widget.post.images!.length,
-                                itemBuilder: (BuildContext context,
-                                        int itemIndex, int pageViewIndex) =>
-                                    Image.asset(widget.post.images![itemIndex]),
-                                options: CarouselOptions(
-                                  scrollDirection: Axis.horizontal,
-                                  autoPlay: widget.post.images!.length != 1,
-                                  enlargeCenterPage: true,
-                                  viewportFraction: 1,
-                                  aspectRatio: 1.0,
-                                  initialPage: 0,
+
+                            Column(
+                              children: [
+                                Padding(
+                                  padding: const EdgeInsets.all(8.0),
+                                  child: CarouselSlider.builder(
+                                    itemCount: widget.post.images!.length,
+                                    itemBuilder: (BuildContext context,
+                                            int itemIndex, int pageViewIndex) =>
+                                        Image.asset(widget.post.images![itemIndex]),
+                                    options: CarouselOptions(
+                                      scrollDirection: Axis.horizontal,
+                                      autoPlay: widget.post.images!.length != 1,
+                                      enlargeCenterPage: true,
+                                      viewportFraction: 1,
+                                      aspectRatio: 1.0,
+                                      initialPage: 0,
+                                      onPageChanged: (index, reason) {
+                                          setState(() {
+                                            _current = index;
+                                          });
+                                        }
+                                    ),
+                                  ),
                                 ),
-                              ),
+
+                                Row(
+                                  mainAxisAlignment: MainAxisAlignment.center,
+                                  children:  widget.post.images!.asMap().entries.map((entry) {
+                                    return GestureDetector(
+                                      onTap: () => _controller.animateToPage(entry.key),
+                                      child: Container(
+                                        width: 12.0,
+                                        height: 12.0,
+                                        margin: EdgeInsets.symmetric(vertical: 8.0, horizontal: 4.0),
+                                        decoration: BoxDecoration(
+                                            shape: BoxShape.circle,
+                                            color: (Theme.of(context).brightness == Brightness.dark
+                                                ? AppColors.theme['secondaryColor']
+                                                : AppColors.theme['primaryColor'])
+                                                .withOpacity(_current == entry.key ? 0.9 : 0.4)),
+                                      ),
+                                    );
+                                  }).toList(),
+                                ),
+                              ],
                             ),
                           ],
                         ),

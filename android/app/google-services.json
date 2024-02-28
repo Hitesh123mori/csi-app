@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "88721675181",
+    "project_id": "csi-app-2024",
+    "storage_bucket": "csi-app-2024.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:88721675181:android:366f79865c2aac9e710724",
+        "android_client_info": {
+          "package_name": "com.example.csi_app"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCTqCSdTpBTjQrs2Wxhd4RlqCGMwsaY7H0"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
