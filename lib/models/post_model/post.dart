@@ -6,9 +6,6 @@ class Post {
   final bool isDescription;
   final bool isPdfPost;
   final int likecount;
-  final int clapcount;
-  final int heartcount;
-  final int funnycount;
   final int commentcount;
   final String posttime;
   final String? description;
@@ -24,9 +21,6 @@ class Post {
     required this.isAnyAttachment,
     required this.isPdfPost,
     required this.likecount,
-    required this.clapcount,
-    required this.heartcount,
-    required this.funnycount,
     required this.commentcount,
     required this.posttime,
     this.description,
@@ -44,9 +38,6 @@ class Post {
         isPoll = json['isPoll'] ?? false,
         isPdfPost = json['isPdfPost'] ?? false,
         likecount = json['likecount'] ?? 0,
-        clapcount = json['clapcount'] ?? 0,
-        heartcount = json['heartcount'] ?? 0,
-        funnycount = json['funnycount'] ?? 0,
         commentcount = json['commentcount'] ?? 0,
         description = json['description'] ?? '',
         attachmentname = json['attachmentname'] ?? '',
@@ -63,9 +54,6 @@ class Post {
       'isPoll': isPoll,
       'isPdfPost': isPdfPost,
       'likecount': likecount,
-      'clapcount': clapcount,
-      'heartcount': heartcount,
-      'funnycount': funnycount,
       'commentcount': commentcount,
       'description': description,
       'attachmentname': attachmentname,

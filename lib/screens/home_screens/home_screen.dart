@@ -38,7 +38,7 @@ class _HomeScreenState extends State<HomeScreen> {
     return Consumer<BottomNavigationProvider>(builder: (context, value, child) {
       return Scaffold(
         appBar: AppBar(
-          surfaceTintColor: AppColors.theme['primaryColor'],
+          surfaceTintColor: AppColors.theme['secondaryColor'],
           elevation: 0,
           backgroundColor: AppColors.theme['secondaryColor'],
           centerTitle: true,
@@ -50,13 +50,13 @@ class _HomeScreenState extends State<HomeScreen> {
                         minWidth: 200, maxWidth: 250, maxHeight: 50),
                     alignment: Alignment.center,
                     decoration: BoxDecoration(
-                      color: AppColors.theme['backgroundColor'],
+                      color: AppColors.theme['secondaryBgColor'],
                       borderRadius: BorderRadius.circular(15),
                     ),
                     child: Align(
                       alignment: Alignment.center,
                       child: TextFormField(
-                        cursorColor: AppColors.theme['primaryColor'],
+                        cursorColor: AppColors.theme['tertiaryColor'],
                         autocorrect: true,
                         focusNode: _focusNode,
                         style: TextStyle(color: Colors.black,fontSize: 16),
@@ -88,7 +88,7 @@ class _HomeScreenState extends State<HomeScreen> {
               radius: 10,
               backgroundColor: Colors.white,
               child: Icon(Icons.person_outline,
-                  color: AppColors.theme['primaryColor'],size: 25,),
+                  color: AppColors.theme['tertiaryColor'],size: 25,),
             ),
           ),
           actions: [
@@ -98,7 +98,7 @@ class _HomeScreenState extends State<HomeScreen> {
                   icon: Icon(
                     Icons.notifications_active_outlined,
                     size: 25,
-                    color: AppColors.theme['primaryColor'],
+                    color: AppColors.theme['tertiaryColor'],
                   ),
                   onPressed: () {
                     Navigator.push(context, RightToLeft(Notifications()));
@@ -106,10 +106,11 @@ class _HomeScreenState extends State<HomeScreen> {
                 ))
           ],
         ),
-        backgroundColor: AppColors.theme['secondaryColor'],
+        backgroundColor: AppColors.theme['backgroundColor'],
         bottomNavigationBar: isKeyboardOpen
             ? null
             : Material(
+               color: AppColors.theme['secondaryColor'],
                 elevation: 5,
                 shadowColor: Colors.black,
                 child: SafeArea(
@@ -141,6 +142,7 @@ class _HomeScreenState extends State<HomeScreen> {
                       },
                       gap: 5,
                       padding: EdgeInsets.all(12),
+                      backgroundColor:AppColors.theme['secondaryColor'] ,
                       tabBackgroundColor: AppColors.theme['primaryColor'],
                       tabs: [
                         GButton(
