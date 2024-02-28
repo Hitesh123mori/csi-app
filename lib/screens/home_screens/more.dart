@@ -34,6 +34,7 @@ class _MoreScreenState extends State<MoreScreen> {
             icon: Icon(
               Icons.post_add_sharp,
               size: 25,
+              color: AppColors.theme['primaryColor'],
             ),
           ),
           Moremenuitems(
@@ -44,6 +45,7 @@ class _MoreScreenState extends State<MoreScreen> {
             icon: Icon(
               Icons.group,
               size: 25,
+              color: AppColors.theme['primaryColor'],
             ),
           ),
           Moremenuitems(
@@ -54,6 +56,7 @@ class _MoreScreenState extends State<MoreScreen> {
             icon: Icon(
               Icons.event_note_sharp,
               size: 25,
+              color: AppColors.theme['primaryColor'],
             ),
           ),
           Moremenuitems(
@@ -64,6 +67,7 @@ class _MoreScreenState extends State<MoreScreen> {
             icon: Icon(
               Icons.people_rounded,
               size: 25,
+              color: AppColors.theme['primaryColor'],
             ),
           ),
         ],
