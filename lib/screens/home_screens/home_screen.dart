@@ -9,7 +9,7 @@ import '../../side_transition_effects/right_left.dart';
 import 'calendar.dart';
 import 'upcoming_events.dart';
 import 'notifications.dart';
-import 'posts_screen.dart';
+import 'posting/posts_screen.dart';
 import 'upcoming_events.dart';
 
 class HomeScreen extends StatefulWidget {

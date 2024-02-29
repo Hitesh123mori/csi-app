@@ -1,3 +1,5 @@
+import 'package:csi_app/screens/home_screens/home_screen.dart';
+import 'package:csi_app/side_transition_effects/left_right.dart';
 import 'package:flutter/material.dart';
 import 'package:csi_app/screens/auth_sceens/login_screen.dart';
 import 'package:csi_app/side_transition_effects/right_left.dart';
@@ -213,7 +215,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                                   ? () {
                                       FocusScope.of(context).unfocus();
                                       if (_formKey.currentState!.validate()) {
-                                        // Handle sign-up logic here
+                                        Navigator.pushReplacement(context, LeftToRight(HomeScreen()));
                                       }
                                     }
                                   : () {
