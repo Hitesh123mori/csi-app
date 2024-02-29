@@ -1,5 +1,5 @@
+import 'package:csi_app/utils/helper_functions/function.dart';
 import 'package:flutter/material.dart';
-import '../../helper_functions/function.dart';
 import '../../main.dart';
 import '../../utils/colors.dart';
 import '../../utils/widgets/more_menu_card/more_menu_item.dart';
@@ -29,7 +29,7 @@ class _MoreScreenState extends State<MoreScreen> {
           Moremenuitems(
             text: 'Blogs',
             onTap: () {
-              Functions.launchURL('https://csi-nirma.vercel.app');
+              HelperFunctions.launchURL('https://csi-nirma.vercel.app');
             },
             icon: Icon(
               Icons.post_add_sharp,
@@ -40,7 +40,7 @@ class _MoreScreenState extends State<MoreScreen> {
           Moremenuitems(
             text: 'Board Members',
             onTap: () {
-              Functions.launchURL('https://csi-nirma.vercel.app/board');
+              HelperFunctions.launchURL('https://csi-nirma.vercel.app/board');
             },
             icon: Icon(
               Icons.group,
@@ -51,7 +51,7 @@ class _MoreScreenState extends State<MoreScreen> {
           Moremenuitems(
             text: 'Past Events and sessions',
             onTap: () {
-              Functions.launchURL('https://csi-nirma.vercel.app/');
+              HelperFunctions.launchURL('https://csi-nirma.vercel.app/');
             },
             icon: Icon(
               Icons.event_note_sharp,
@@ -62,7 +62,7 @@ class _MoreScreenState extends State<MoreScreen> {
           Moremenuitems(
             text: 'Contributers',
             onTap: () {
-              Functions.launchURL('https://csi-nirma.vercel.app/board');
+              HelperFunctions.launchURL('https://csi-nirma.vercel.app/board');
             },
             icon: Icon(
               Icons.people_rounded,

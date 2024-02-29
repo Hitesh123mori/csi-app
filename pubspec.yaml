@@ -37,8 +37,11 @@ dependencies:
   provider: ^6.1.1
   introduction_screen: ^3.1.12
   carousel_slider: ^4.2.1
-  syncfusion_flutter_pdfviewer: ^24.1.47
+
+  syncfusion_flutter_pdfviewer: ^24.2.8
   flutter_polls: ^0.1.5
+  like_button: ^2.0.5
+  shared_preferences:
 #  fluttertoast: ^8.2.4
   url_launcher: ^6.2.4
   flutter_emoji: ^2.5.1
@@ -48,6 +51,17 @@ dependencies:
   cupertino_icons: ^1.0.2
   http:
   firebase_core: ^2.25.5
+  firebase_storage:
+  flutter_notification_channel: ^2.0.0
+  firebase_messaging: ^14.7.4
+  firebase_auth: ^4.10.1
+  cloud_firestore: ^4.9.3
+  firebase_database: ^10.4.7
+
+  mailer: ^6.1.0
+  otp: ^3.1.4
+  uuid: ^4.3.3
+
 
 
 dev_dependencies:

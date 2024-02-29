@@ -49,6 +49,7 @@ class DefaultFirebaseOptions {
     messagingSenderId: '88721675181',
     projectId: 'csi-app-2024',
     authDomain: 'csi-app-2024.firebaseapp.com',
+    databaseURL: 'https://csi-app-2024-default-rtdb.asia-southeast1.firebasedatabase.app',
     storageBucket: 'csi-app-2024.appspot.com',
     measurementId: 'G-9LMC9Q5Z86',
   );
@@ -58,6 +59,7 @@ class DefaultFirebaseOptions {
     appId: '1:88721675181:android:366f79865c2aac9e710724',
     messagingSenderId: '88721675181',
     projectId: 'csi-app-2024',
+    databaseURL: 'https://csi-app-2024-default-rtdb.asia-southeast1.firebasedatabase.app',
     storageBucket: 'csi-app-2024.appspot.com',
   );
 
@@ -66,7 +68,9 @@ class DefaultFirebaseOptions {
     appId: '1:88721675181:ios:8e420f9c5be9793b710724',
     messagingSenderId: '88721675181',
     projectId: 'csi-app-2024',
+    databaseURL: 'https://csi-app-2024-default-rtdb.asia-southeast1.firebasedatabase.app',
     storageBucket: 'csi-app-2024.appspot.com',
+    iosClientId: '88721675181-vub3eafn8ul6f31qrno7i1mslcqn1omi.apps.googleusercontent.com',
     iosBundleId: 'com.example.csiApp',
   );
 
@@ -75,7 +79,9 @@ class DefaultFirebaseOptions {
     appId: '1:88721675181:ios:04d7b1156e5fec5c710724',
     messagingSenderId: '88721675181',
     projectId: 'csi-app-2024',
+    databaseURL: 'https://csi-app-2024-default-rtdb.asia-southeast1.firebasedatabase.app',
     storageBucket: 'csi-app-2024.appspot.com',
+    iosClientId: '88721675181-7uc7bo0vag6ukc58qi4foh1e183u1g48.apps.googleusercontent.com',
     iosBundleId: 'com.example.csiApp.RunnerTests',
   );
 }

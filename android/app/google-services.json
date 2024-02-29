@@ -1,6 +1,7 @@
 {
   "project_info": {
     "project_number": "88721675181",
+    "firebase_url": "https://csi-app-2024-default-rtdb.asia-southeast1.firebasedatabase.app",
     "project_id": "csi-app-2024",
     "storage_bucket": "csi-app-2024.appspot.com"
   },
@@ -12,7 +13,12 @@
           "package_name": "com.example.csi_app"
         }
       },
-      "oauth_client": [],
+      "oauth_client": [
+        {
+          "client_id": "88721675181-seftncb0mdqp5rf7ki6in7sab9365437.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
       "api_key": [
         {
           "current_key": "AIzaSyCTqCSdTpBTjQrs2Wxhd4RlqCGMwsaY7H0"
@@ -20,7 +26,19 @@
       ],
       "services": {
         "appinvite_service": {
-          "other_platform_oauth_client": []
+          "other_platform_oauth_client": [
+            {
+              "client_id": "88721675181-seftncb0mdqp5rf7ki6in7sab9365437.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "88721675181-7uc7bo0vag6ukc58qi4foh1e183u1g48.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.example.csiApp.RunnerTests"
+              }
+            }
+          ]
         }
       }
     }
