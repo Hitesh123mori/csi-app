@@ -33,7 +33,7 @@ class CustomAuthTextField extends StatelessWidget {
       padding: const EdgeInsets.symmetric(vertical: 5),
       child: Center(
         child: TextFormField(
-          cursorColor: AppColors.theme['primarColors'],
+          cursorColor: AppColors.theme['primaryColor'],
           onSaved: onSaved,
           onChanged: onChange,
           obscureText: obsecuretext,
