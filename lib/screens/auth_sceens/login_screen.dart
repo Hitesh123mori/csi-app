@@ -1,5 +1,6 @@
 import 'package:csi_app/screens/auth_sceens/otp_screen.dart';
 import 'package:csi_app/screens/auth_sceens/register_screen.dart';
+import 'package:csi_app/screens/home_screens/home_screen.dart';
 import 'package:csi_app/side_transition_effects/left_right.dart';
 import 'package:flutter/material.dart';
 
@@ -180,7 +181,7 @@ class _LoginScreenState extends State<LoginScreen> {
                                   ? () {
                                        FocusScope.of(context).unfocus();
                                        if(_formKey.currentState!.validate()) {
-
+                                            Navigator.pushReplacement(context, LeftToRight(HomeScreen()));
                                        }
                                     }
                                   : () {
