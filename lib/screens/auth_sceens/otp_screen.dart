@@ -159,6 +159,9 @@ class _OtpScreenState extends State<OtpScreen> {
                                   "Please check your email. We have sent you an OTP to ${_emailController.text}.",
                                 style: TextStyle(fontWeight: FontWeight.bold,fontSize: 16),
                               ),
+                            if (isButtonClicked &&
+                                isButtonEnabled &&
+                                enablePinput)
                             SizedBox(
                               height: 20,
                             ),
