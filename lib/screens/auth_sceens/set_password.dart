@@ -3,22 +3,25 @@ import 'package:csi_app/screens/auth_sceens/register_screen.dart';
 import 'package:csi_app/side_transition_effects/left_right.dart';
 import 'package:flutter/material.dart';
 
+import '../../side_transition_effects/right_left.dart';
 import '../../utils/colors.dart';
 import '../../utils/widgets/buttons/auth_button.dart';
 import '../../utils/widgets/text_feilds/auth_text_feild.dart';
+import 'login_screen.dart';
 
-class LoginScreen extends StatefulWidget {
-  const LoginScreen({Key? key}) : super(key: key);
+class SetPassword extends StatefulWidget {
+  const SetPassword({Key? key}) : super(key: key);
 
   @override
-  State<LoginScreen> createState() => _LoginScreenState();
+  State<SetPassword> createState() => _SetPasswordState();
 }
 
-class _LoginScreenState extends State<LoginScreen> {
+class _SetPasswordState extends State<SetPassword> {
   // textfields controllers
-  TextEditingController _emailController = TextEditingController();
   TextEditingController _passController = TextEditingController();
+  TextEditingController _confirmPassController = TextEditingController();
   bool _isPasswordHidden = true;
+  bool _isConfirmPasswordHidden = true;
 
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
 
@@ -27,47 +30,33 @@ class _LoginScreenState extends State<LoginScreen> {
   @override
   void initState() {
     super.initState();
-    _emailController.addListener(updateButtonState);
     _passController.addListener(updateButtonState);
+    _confirmPassController.addListener(updateButtonState);
   }
 
   void updateButtonState() {
     setState(() {
       isButtonEnabled =
-          _emailController.text.isNotEmpty && _passController.text.isNotEmpty;
+          _passController.text.isNotEmpty && _confirmPassController.text.isNotEmpty;
     });
   }
 
   @override
   void dispose() {
-    _emailController.removeListener(updateButtonState);
+    _confirmPassController.removeListener(updateButtonState);
     _passController.removeListener(updateButtonState);
     super.dispose();
   }
 
-  // validation of email
-  // validation of email
-  String? _validateEmail(String? value) {
-    if (value == null || value.trim().isEmpty) {
-      return 'Please enter your email';
-    } else {
-      value = value.trim();
-      if (!value.endsWith('@nirmauni.ac.in')) {
-        return 'Invalid email domain';
-      }
-    }
-    return null;
-  }
 
-  // validation of password
   String? _validatePassword(String? value) {
     if (value == null || value.isEmpty) {
       return 'Please enter your password';
     } else if (value.length < 8) {
       return 'Password must be at least 8 characters long';
-    } else if (!value.contains(new RegExp(r'[A-Z]'))) {
+    } else if (!value.contains(RegExp(r'[A-Z]'))) {
       return 'Password must contain at least one uppercase letter';
-    } else if (!value.contains(new RegExp(r'[!@#$%^&*(),.?":{}|<>]'))) {
+    } else if (!value.contains(RegExp(r'[!@#$%^&*(),.?":{}|<>]'))) {
       return 'Password must contain at least one special character';
     }
     return null;
@@ -87,12 +76,12 @@ class _LoginScreenState extends State<LoginScreen> {
               child: SingleChildScrollView(
                 physics: BouncingScrollPhysics(),
                 child: Padding(
-                  padding: const EdgeInsets.only(top: 30),
+                  padding: const EdgeInsets.only(top: 30.0),
                   child: Column(
                     children: [
                       Center(
                         child: Container(
-                          child: Image.asset("assets/images/auth_images/login.png"),
+                          child: Image.asset("assets/images/auth_images/password.png"),
                           height: 250,
                           width: 250,
                         ),
@@ -103,44 +92,15 @@ class _LoginScreenState extends State<LoginScreen> {
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
                             Text(
-                              "Log in to your account",
+                              "Set your password",
                               style: TextStyle(
                                 color: AppColors.theme['primaryColor'],
-                                fontSize: 20,
+                                fontSize: 22,
                                 fontWeight: FontWeight.bold,
                               ),
                             ),
                             SizedBox(
-                              height: 3,
-                            ),
-                            Text(
-                              "Welcome back! Please enter your details.",
-                              style: TextStyle(
-                                color: AppColors.theme['tertiaryColor'],
-                                fontSize: 16,
-                              ),
-                            ),
-                            SizedBox(
                               height: 20,
-                            ),
-                            Text(
-                              "Email",
-                              style: TextStyle(
-                                  fontSize: 16, fontWeight: FontWeight.bold),
-                            ),
-                            SizedBox(
-                              height: 5,
-                            ),
-                            CustomAuthTextField(
-                              hintText: 'Example@nirmauni.ac.in',
-                              isNumber: false,
-                              prefixicon: Icon(Icons.email),
-                              controller: _emailController,
-                              obsecuretext: false,
-                              validator: _validateEmail,
-                            ),
-                            SizedBox(
-                              height: 5,
                             ),
                             Text(
                               "Password",
@@ -173,56 +133,73 @@ class _LoginScreenState extends State<LoginScreen> {
                               validator: _validatePassword,
                             ),
                             SizedBox(
+                              height: 5,
+                            ),
+                            Text(
+                              "Confirm Password",
+                              style: TextStyle(
+                                  fontSize: 16,
+                                  fontWeight: FontWeight.bold,
+                                  color: AppColors.theme['tertiaryColor']),
+                            ),
+                            SizedBox(
+                              height: 5,
+                            ),
+                            CustomAuthTextField(
+                              hintText: 'Re-enter your password',
+                              isNumber: false,
+                              prefixicon: Icon(Icons.lock),
+                              controller: _confirmPassController,
+                              obsecuretext: _isConfirmPasswordHidden,
+                              suffix: IconButton(
+                                icon: Icon(
+                                  _isConfirmPasswordHidden
+                                      ? (Icons.visibility_off)
+                                      : (Icons.visibility),
+                                ),
+                                onPressed: () {
+                                  setState(() {
+                                    _isConfirmPasswordHidden =
+                                    !_isConfirmPasswordHidden;
+                                  });
+                                },
+                              ),
+                              validator: (value) {
+                                if (value == null || value.isEmpty) {
+                                  return 'Please confirm your password';
+                                } else if (value != _passController.text) {
+                                  return 'Passwords do not match';
+                                }
+                                return null;
+                              },
+                            ),
+                            SizedBox(
                               height: 20,
                             ),
                             AuthButton(
                               onpressed: isButtonEnabled
                                   ? () {
-                                       FocusScope.of(context).unfocus();
-                                       if(_formKey.currentState!.validate()) {
-
-                                       }
-                                    }
+                                FocusScope.of(context).unfocus();
+                                if (_formKey.currentState!.validate()) {
+                                  Navigator.pushReplacement(context, LeftToRight(RegisterScreen()));
+                                }
+                              }
                                   : () {
-                                     FocusScope.of(context).unfocus();
-                                    },
-                              name: 'Log In',
+                                FocusScope.of(context).unfocus();
+                              },
+                              name: 'Set Password',
                               bcolor: isButtonEnabled
                                   ? AppColors.theme['primaryColor']
                                   : AppColors.theme['disableButtonColor']
-                                      .withOpacity(0.4),
+                                  .withOpacity(0.4),
                               tcolor: isButtonEnabled
                                   ? AppColors.theme['secondaryColor']
                                   : AppColors.theme['tertiaryColor']
-                                      .withOpacity(0.5),
+                                  .withOpacity(0.5),
                             ),
                           ],
                         ),
                       ),
-                      Padding(
-                        padding: const EdgeInsets.symmetric(vertical: 20.0),
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: [
-                            Text(
-                              "Don't have an account ?",
-                              style: TextStyle(
-                                  color: AppColors.theme['tertiaryColor'],fontSize: 16,fontWeight: FontWeight.bold),
-                            ),
-                            TextButton(
-                                onPressed: () {
-                                  Navigator.push(context, LeftToRight(OtpScreen()));
-                                },
-                                child: Text(
-                                  "Sign Up",
-                                  style: TextStyle(
-                                      color: AppColors.theme['primaryColor'],
-                                      fontWeight: FontWeight.bold,
-                                      fontSize: 18),
-                                ))
-                          ],
-                        ),
-                      )
                     ],
                   ),
                 ),

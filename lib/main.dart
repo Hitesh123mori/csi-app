@@ -1,7 +1,5 @@
 import 'package:csi_app/providers/bottom_navigation_provider.dart';
-import 'package:csi_app/screens/home_screens/home_screen.dart';
 import 'package:csi_app/screens/on_boading_screens/splash_screen.dart';
-import 'package:csi_app/utils/colors.dart';
 import 'package:flutter/material.dart' ;
 import 'package:provider/provider.dart';
 import 'package:firebase_core/firebase_core.dart';
@@ -44,4 +42,3 @@ class _MyAppState extends State<MyApp> {
     ;
   }
 }
-
