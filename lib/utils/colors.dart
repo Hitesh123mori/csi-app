@@ -20,7 +20,9 @@ class AppColors {
       "tertiaryColor": hexStringToColors("#000012"),
       "secondaryBgColor":hexStringToColors("#F3F8FF"),
       "borderColor" :hexStringToColors("#EFEFEF"),
-      "backgroundColor":hexStringToColors("#F5F5F5")
+      "backgroundColor":hexStringToColors("#F5F5F5"),
+      "disableButtonColor":hexStringToColors("#c5d5f5"),
+      // 8FA2C4
     },
 
   };

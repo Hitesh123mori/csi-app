@@ -1,3 +1,4 @@
+import 'package:csi_app/screens/auth_sceens/login_screen.dart';
 import 'package:csi_app/screens/home_screens/home_screen.dart';
 import 'package:flutter/material.dart' ;
 import 'package:introduction_screen/introduction_screen.dart';
@@ -37,10 +38,10 @@ class _IntroState extends State<OnboardingScreen> {
             freeze: false,
             animationDuration: 10,
             onSkip: (){
-              Navigator.pushReplacement(context, MaterialPageRoute(builder: (context)=>HomeScreen(),)) ;
+              Navigator.pushReplacement(context, MaterialPageRoute(builder: (context)=>LoginScreen(),)) ;
             },
             onDone: (){
-              Navigator.pushReplacement(context, MaterialPageRoute(builder: (context)=>HomeScreen(),) ) ;
+              Navigator.pushReplacement(context, MaterialPageRoute(builder: (context)=>LoginScreen(),) ) ;
             },
             pages: [
               PageViewModel(
