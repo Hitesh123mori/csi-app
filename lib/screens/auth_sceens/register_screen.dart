@@ -1,3 +1,5 @@
+import 'package:csi_app/apis/FireStoreAPIs/UserProfileAPI.dart';
+import 'package:csi_app/apis/FirebaseAuth/FirebaseAuth.dart';
 import 'package:csi_app/screens/home_screens/home_screen.dart';
 import 'package:csi_app/side_transition_effects/left_right.dart';
 import 'package:flutter/material.dart';
@@ -8,7 +10,9 @@ import 'package:csi_app/utils/widgets/buttons/auth_button.dart';
 import 'package:csi_app/utils/widgets/text_feilds/auth_text_feild.dart';
 
 class RegisterScreen extends StatefulWidget {
-  const RegisterScreen({Key? key});
+  String email;
+  String password;
+  RegisterScreen({required this.email, required this.password, Key? key});
 
   @override
   State<RegisterScreen> createState() => _RegisterScreenState();
@@ -212,10 +216,20 @@ class _RegisterScreenState extends State<RegisterScreen> {
                             ),
                             AuthButton(
                               onpressed: isButtonEnabled
-                                  ? () {
+                                  ? () async {
                                       FocusScope.of(context).unfocus();
                                       if (_formKey.currentState!.validate()) {
-                                        Navigator.pushReplacement(context, LeftToRight(HomeScreen()));
+                                        // for signup
+                                        final res = await FirebaseAuth.signUp(widget.email, widget.password);
+                                        print("#res-signup: $res");
+
+                                        // for database
+                                        final res2 =  await UserProfile.signupUser(_nameController.text, _yearController.text, _codeforcesController.text);
+                                        print("#res2-signup: $res2");
+
+                                        if(res == 'Registered' && res2 == 'ok' && res2 !=null)
+                                          Navigator.pushReplacement(context, LeftToRight(HomeScreen()));
+
                                       }
                                     }
                                   : () {

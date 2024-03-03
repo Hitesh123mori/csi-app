@@ -7,6 +7,9 @@ import 'package:csi_app/utils/helper_functions/function.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_polls/flutter_polls.dart';
 import 'package:like_button/like_button.dart';
+import 'package:syncfusion_flutter_pdfviewer/pdfviewer.dart';
+
+
 
 class PostCard extends StatefulWidget {
   final Post post;
@@ -24,6 +27,9 @@ class _PostCardState extends State<PostCard> {
   List<String> imageUrls = [];
   int _current = 0;
   final CarouselController _controller = CarouselController();
+
+  //for pdf viewer
+  final GlobalKey<SfPdfViewerState> _pdfViewerKey = GlobalKey();
 
   @override
   void initState() {
@@ -236,6 +242,15 @@ class _PostCardState extends State<PostCard> {
                       child: Padding(
                         padding: const EdgeInsets.all(8.0),
                         // todo add pdf viewer
+                        child: SfPdfViewer.network(
+                          pageLayoutMode: PdfPageLayoutMode.continuous,
+                          canShowScrollHead: false,
+                          pageSpacing: 2,
+                          canShowPageLoadingIndicator: false,
+                          widget.post.pdfLink!,
+                          key: _pdfViewerKey,
+                          scrollDirection: PdfScrollDirection.horizontal,
+                        ),
                       ),
                     ),
                   ),

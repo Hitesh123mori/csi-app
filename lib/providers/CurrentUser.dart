@@ -1,37 +1,29 @@
+import 'package:csi_app/apis/FireStoreAPIs/UserProfileAPI.dart';
+import 'package:csi_app/apis/FirebaseAPIs.dart';
+import 'package:csi_app/models/user_model/AppUser.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 // import 'package:csi_app/screens/auth_sceens/.dart';
 
 class AppUserProvider extends ChangeNotifier{
-  String? name;
-  String? userType;
-  String? gender;
+  AppUser? user;
 
-  void edit(){
-    name = name ?? ""+" 1";
+  void notify(){
     notifyListeners();
   }
 
-  Future<void> create(String name) async {
-    this.name = name;
-    final SharedPreferences pref = await SharedPreferences.getInstance();
-    pref.setString("authToken", this.name!);
+  Future initUser() async {
+    String? uid = FirebaseAPIs.auth.currentUser?.uid;
+    print("#authId: $uid");
+    if(uid != null)
+      user = AppUser.fromJson(await UserProfile.getUser(uid));
     notifyListeners();
   }
 
-  // Future<bool> isAuthenticUser() async {
-  //   return false
-  // }
-
-
-  void logOut(context) async {
-    this.name = null;
-
-    final SharedPreferences pref = await SharedPreferences.getInstance();
-    pref.remove("authToken");
-
-    // Navigator.pushReplacement(context, MaterialPageRoute(builder: (context)=>Auth()));
+  void logOut() {
+    user = null;
     notifyListeners();
   }
 

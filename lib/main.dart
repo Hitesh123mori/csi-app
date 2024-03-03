@@ -1,3 +1,4 @@
+import 'package:csi_app/providers/CurrentUser.dart';
 import 'package:csi_app/providers/bottom_navigation_provider.dart';
 import 'package:csi_app/screens/on_boading_screens/splash_screen.dart';
 import 'package:flutter/material.dart' ;
@@ -16,6 +17,7 @@ void main() async {
   runApp(MultiProvider(
       providers: [
         ChangeNotifierProvider(create: (context)=>BottomNavigationProvider()),
+        ChangeNotifierProvider(create: (context)=>AppUserProvider()),
       ],
       child: MyApp()));
 }

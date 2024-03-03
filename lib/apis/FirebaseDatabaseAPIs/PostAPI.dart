@@ -15,5 +15,10 @@ class PostAPI {
   }
 
 
+  static Future updateVote() async {
+
+  }
+
+
 
 }

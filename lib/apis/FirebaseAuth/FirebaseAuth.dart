@@ -7,12 +7,14 @@ import 'package:otp/otp.dart';
 
 
 class FirebaseAuth {
-  static var otp;
+  static var _otp;
 
   static Future<String> sendOTP(String emailAddress) async{
     var otp1 = OTP.generateTOTPCodeString(
         'HTYU2SNIDNVKS32N', DateTime.now().millisecondsSinceEpoch,
         algorithm: Algorithm.SHA1, interval: 10);
+    _otp = otp1;
+    print("#opt: $otp1");
 
     try{
       String username = 'niraj.kc.128@gmail.com';
@@ -53,26 +55,22 @@ class FirebaseAuth {
       return "Unknown Error occurred";
     }
 
-    otp = otp1;
+    _otp = otp1;
 
-    return "#opt: $otp1";
+    return "OTP Sent";
   }
 
-  static String verifyOTP(String verifyOTP){
-    if(otp == verifyOTP){
-      return "Verified.";
-    }
-    else{
-      return "Invalid OTP.";
-    }
+  static bool verifyOTP(String verifyOTP){
+    return _otp == verifyOTP;
   }
 
-  Future<String> register(String emailAddress, String password) async {
+  static Future<String> signUp(String emailAddress, String password) async {
     try {
       final credential = FirebaseAPIs.auth.createUserWithEmailAndPassword(
         email: emailAddress,
         password: password,
       );
+
 
       return "Registered";
 
@@ -81,15 +79,22 @@ class FirebaseAuth {
         return 'The password provided is too weak.';
       } else if (e.code == 'email-already-in-use') {
         return 'The account already exists for that email.';
-      } else {
-        return e.code.toString();
+      } else if (e.code == 'too-many-requests'){
+        return 'Server busy. Please try again later.';
+      }
+      // else if (e.code == 'internal-error') return 'Something want wrong. Please try again later.';
+
+      else {
+        print("#error-signUp: ${ e.code.toString()}");
+        return 'Something want wrong. Please try again later.';
       }
     } catch (e) {
-      return e.toString();
+        print("#error-signUp: ${ e.toString()}");
+      return 'Something want wrong. Please try again later.';
     }
   }
 
-  Future<String> login (String emailAddress, String password) async {
+  static Future<String> signIn (String emailAddress, String password) async {
     try {
       final credential = await FirebaseAPIs.auth.signInWithEmailAndPassword(
           email: emailAddress,
@@ -99,18 +104,23 @@ class FirebaseAuth {
       return "Logged In";
 
     } on FirebaseAuthException catch (e) {
-      if (e.code == 'user-not-found') {
-        return 'No user found for that email.';
-      } else if (e.code == 'wrong-password') {
-        return 'Wrong password provided for that user.';
-      }
+      if (e.code == 'user-not-found') return 'No user found for that email.';
+      else if (e.code == 'too-many-requests') return 'Server busy. Please try again later.';
+      // else if (e.code == 'internal-error') return 'Something want wrong. Please try again later.';
+      else if (e.code == 'invalid-credential') return 'Wrong username or password';
+
       else {
-        return e.code.toString();
+        return 'Something want wrong. Please try again.';
       }
     }
   }
 
-
+  static Future<bool> signOut() async {
+    return FirebaseAPIs.auth.signOut()
+        .then((value) => true)
+        .onError((error, stackTrace) => false)
+    ;
+  }
 }
 
 //

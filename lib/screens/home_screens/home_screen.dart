@@ -1,3 +1,4 @@
+import 'package:csi_app/providers/CurrentUser.dart';
 import 'package:csi_app/screens/home_screens/more.dart';
 import 'package:csi_app/utils/colors.dart';
 import 'package:flutter/material.dart';
@@ -23,7 +24,7 @@ class HomeScreen extends StatefulWidget {
 
 class _HomeScreenState extends State<HomeScreen> {
   Widget screenname = PostsScreen();
-
+  bool isFirstTime = true;
   final FocusNode _focusNode = FocusNode();
 
   @override
@@ -35,7 +36,12 @@ class _HomeScreenState extends State<HomeScreen> {
   @override
   Widget build(BuildContext context) {
     mq = MediaQuery.of(context).size;
-    return Consumer<BottomNavigationProvider>(builder: (context, value, child) {
+    return Consumer2<BottomNavigationProvider, AppUserProvider>(
+        builder: (context, value, appUser, child) {
+          if(isFirstTime){
+            appUser.initUser();
+            isFirstTime = false;
+          }
       return Scaffold(
         appBar: AppBar(
           surfaceTintColor: AppColors.theme['secondaryColor'],

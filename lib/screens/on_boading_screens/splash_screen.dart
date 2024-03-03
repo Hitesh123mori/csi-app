@@ -1,7 +1,9 @@
+import 'package:csi_app/apis/FirebaseAPIs.dart';
 import 'package:csi_app/side_transition_effects/right_left.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import '../../main.dart';
+import '../../side_transition_effects/left_right.dart';
 import '../../utils/colors.dart';
 import '../home_screens/home_screen.dart';
 import 'on_boarding_screen.dart';
@@ -26,8 +28,12 @@ class _SplashScreenState extends State<SplashScreen> {
         systemNavigationBarColor: Colors.black,
         systemNavigationBarIconBrightness: Brightness.dark,
       ));
-
-      Navigator.pushReplacement(context, RightToLeft(OnboardingScreen()));
+      if(FirebaseAPIs.auth.currentUser != null) {
+        print("#hhhh");
+        Navigator.pushReplacement(context, LeftToRight(HomeScreen()));
+      }
+      else
+        Navigator.pushReplacement(context, RightToLeft(OnboardingScreen()));
     });
   }
 
