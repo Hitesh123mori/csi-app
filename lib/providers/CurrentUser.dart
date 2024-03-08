@@ -1,11 +1,8 @@
 import 'package:csi_app/apis/FireStoreAPIs/UserProfileAPI.dart';
 import 'package:csi_app/apis/FirebaseAPIs.dart';
 import 'package:csi_app/models/user_model/AppUser.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:shared_preferences/shared_preferences.dart';
-// import 'package:csi_app/screens/auth_sceens/.dart';
 
 class AppUserProvider extends ChangeNotifier{
   AppUser? user;
