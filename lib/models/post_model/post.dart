@@ -1,33 +1,33 @@
 import 'package:csi_app/models/post_model/poll_model.dart';
 
 class Post {
-  final String fromid;
-  final bool isAnyAttachment;
-  final bool isDescription;
-  final bool isPdfPost;
-  final int likecount;
-  final int commentcount;
-  final String posttime;
-  final String? description;
-  final String? attachmentname;
-  final List<String>? images;
-  final String? pdflink;
-  final bool isPoll;
-  final Poll? poll;
+  String? fromid;
+  bool? isAnyAttachment;
+  bool? isDescription;
+  bool? isPdfPost;
+  int? likecount;
+  int? commentcount;
+  String? posttime;
+  String? description;
+  String? attachmentname;
+  List<String>? images;
+  String? pdflink;
+  bool? isPoll;
+  Poll? poll;
 
   Post({
-    required this.fromid,
-    required this.isDescription,
-    required this.isAnyAttachment,
-    required this.isPdfPost,
-    required this.likecount,
-    required this.commentcount,
-    required this.posttime,
+    this.fromid,
+    this.isDescription,
+    this.isAnyAttachment,
+    this.isPdfPost,
+    this.likecount,
+    this.commentcount,
+    this.posttime,
     this.description,
     this.pdflink,
     this.poll,
     this.attachmentname,
-    required this.isPoll,
+    this.isPoll,
     this.images,
   });
 
