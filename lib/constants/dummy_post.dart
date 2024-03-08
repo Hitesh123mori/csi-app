@@ -1,12 +1,20 @@
+import 'package:csi_app/models/post_model/poll_model.dart';
+
 import '../models/post_model/post.dart';
 
 List<Post> posts = [
   Post(
-    createBy: 'user123',
-    isThereImage: true,
-    likeCount: 10,
-    attachmentName: "Contest Poster",
-    createTime: DateTime.now().millisecondsSinceEpoch.toString(),
+    fromid: 'user123',
+    pdflink: '',
+    images: ['assets/images/dp_img1.jpg', 'assets/images/dp_img2.jpg'],
+    isDescription: true,
+    isAnyAttachment: true,
+    isPdfPost: false,
+    likecount: 10,
+    commentcount: 15,
+    attachmentname: "Contest Poster",
+    posttime: DateTime.now().millisecondsSinceEpoch.toString(),
+    isPoll: false,
     description: '''Hello everyone!!
 CSI is back with another round of the contest series ‘CodeQuest’!!
 
@@ -36,12 +44,16 @@ Happy coding 🤩
 
     ''',
   ),
-
-
   Post(
-    createBy: 'user456',
-    likeCount: 15,
-    createTime: DateTime.now().millisecondsSinceEpoch.toString(),
+    isDescription: true,
+    fromid: 'user456',
+    isAnyAttachment: false,
+    isPdfPost: false,
+    likecount: 15,
+
+    commentcount: 20,
+    isPoll: false,
+    posttime: DateTime.now().millisecondsSinceEpoch.toString(),
     description: '''Hola Nirmaites!✨
 
 Ready for an electrifying journey with the tech pros at Nirma University? 🥳
@@ -62,7 +74,7 @@ Act fast, valid until  13th January 2024
 Fill out the membership form pronto: https://forms.gle/x6U6g46W6meJv296A
 
 Here's what you get:
-🔸 Chance to interact with fabulous and experienced seniors and alumni network 
+🔸 Chance to interact with fabulous and experienced seniors and alumni network
 🔸 Free entry to all Cubix events 🎉
 🔸 Your CSI I-card 📇
 🔸 Potential executive and board membership 🤝
@@ -80,17 +92,20 @@ Join the CSI family—let's make tech magic together! 🎊🤩
 
     ''',
   ),
-
   Post(
-      createBy: "user123",
-      pdfLink:
-      'https://drive.usercontent.google.com/u/0/uc?id=1UDvG0vMZUncEBU820ubJxr8mOmfvCNjU&export=download',
+      fromid: "user123",
+      isDescription: true,
+      pdflink:
+          'https://drive.usercontent.google.com/u/0/uc?id=1UDvG0vMZUncEBU820ubJxr8mOmfvCNjU&export=download',
+      isAnyAttachment: true,
+      isPdfPost: true,
+      likecount: 12,
+      isPoll: false,
 
-      likeCount: 12,
-      createTime: DateTime.now().millisecondsSinceEpoch.toString(),
-      attachmentName: "Sample.pdf",
+      commentcount: 12,
+      posttime: DateTime.now().millisecondsSinceEpoch.toString(),
       description:
-      '''Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed et nisl et mi ultrices ultrices. Proin ac ex eu turpis malesuada rhoncus. Quisque vel justo eu urna consequat euismod. Integer euismod neque vitae lacus luctus, in fermentum turpis ultrices. Vivamus convallis justo sit amet nunc fringilla, vel rhoncus dolor ultrices.
+          '''Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed et nisl et mi ultrices ultrices. Proin ac ex eu turpis malesuada rhoncus. Quisque vel justo eu urna consequat euismod. Integer euismod neque vitae lacus luctus, in fermentum turpis ultrices. Vivamus convallis justo sit amet nunc fringilla, vel rhoncus dolor ultrices.
 
 Pellentesque habitant morbi tristique senectus et netus et malesuada fames ac turpis egestas. Ut hendrerit, nulla eu fermentum iaculis, enim orci fringilla risus, non venenatis risus neque sit amet turpis. Fusce nec dolor nec elit laoreet tristique. Sed vel urna vel elit scelerisque venenatis vel non libero.
 
@@ -99,19 +114,27 @@ Donec dapibus, dolor nec accumsan iaculis, elit leo tempor sapien, vel fringilla
 Quisque id nunc ut libero varius pharetra. Nam in leo vitae tortor interdum bibendum. Integer bibendum sem vel lectus tempor, vel efficitur justo cursus. Sed eget augue ut odio bibendum scelerisque. Nullam fringilla tellus et varius feugiat. Duis non nibh at nunc cursus lacinia.
 
       
+ 
       ''',
-),
-
+      attachmentname: "Sample.pdf"),
   Post(
-      createBy: "user234",
-      likeCount: 12,
-      createTime: DateTime.now().millisecondsSinceEpoch.toString(),
+      fromid: "user234",
+      isDescription: false,
+      isAnyAttachment: false,
+      isPdfPost: false,
+      likecount: 12,
+
+      commentcount: 12,
+      posttime: DateTime.now().millisecondsSinceEpoch.toString(),
+      isPoll: true,
       poll: Poll(
+          fromid: 'user123',
+          id: 'sdfsdf',
           question: "Tommorow's meeting at...",
-          endTime: DateTime.monday.toString(),
+          end_date: DateTime.monday.toString(),
           options: [
-            Options(title: "Meeting at 9:00 PM", votes: 12),
-            Options(title: "Meeting at 10:00 PM", votes: 2),
+             Options(id: '1', title: "Meeting at 9:00 PM", votes: 12),
+             Options(id: '2', title: "Meeting at 10:00 PM", votes: 2),
           ]
       )
   ),
