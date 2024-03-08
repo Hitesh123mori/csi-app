@@ -40,6 +40,7 @@ dependencies:
   syncfusion_flutter_pdfviewer: ^24.1.47
   pinput: ^4.0.0
   flutter_polls: ^0.1.5
+  image_picker: ^1.0.7
 #  fluttertoast: ^8.2.4
   url_launcher: ^6.2.4
   flutter_emoji: ^2.5.1

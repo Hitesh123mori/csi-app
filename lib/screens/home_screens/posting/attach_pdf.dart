@@ -127,42 +127,37 @@ class _AttachPdfState extends State<AttachPdf> {
                 SizedBox(
                   height: 20,
                 ),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.start,
-                  children: [
-                    OutlinedButton(
-                      onPressed: () {
+                OutlinedButton(
+                  onPressed: () {
 
 
-                        //todo : add upload/choose pdf logic here
+                    //todo : add upload/choose pdf logic here
 
 
 
 
-                      },
-                      style: ButtonStyle(
-                        shape:
-                        MaterialStateProperty.all<RoundedRectangleBorder>(
-                          RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(10.0),
-                            side: BorderSide(
-                                color: AppColors.theme['primaryColor']),
-                          ),
-                        ),
-                        backgroundColor: MaterialStateProperty.all<Color>(
-                            Colors.transparent),
-                        surfaceTintColor: MaterialStateProperty.all<Color>(
-                            AppColors.theme['primaryColor']),
-                      ),
-                      child: Text(
-                        'Choose Pdf',
-                        style: TextStyle(
-                          fontWeight: FontWeight.bold,
-                          color: AppColors.theme['tertiaryColor'],
-                        ),
+                  },
+                  style: ButtonStyle(
+                    shape:
+                    MaterialStateProperty.all<RoundedRectangleBorder>(
+                      RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(10.0),
+                        side: BorderSide(
+                            color: AppColors.theme['primaryColor']),
                       ),
                     ),
-                  ],
+                    backgroundColor: MaterialStateProperty.all<Color>(
+                        Colors.transparent),
+                    surfaceTintColor: MaterialStateProperty.all<Color>(
+                        AppColors.theme['primaryColor']),
+                  ),
+                  child: Text(
+                    'Choose Pdf',
+                    style: TextStyle(
+                      fontWeight: FontWeight.bold,
+                      color: AppColors.theme['tertiaryColor'],
+                    ),
+                  ),
                 ),
               ],
             ),
