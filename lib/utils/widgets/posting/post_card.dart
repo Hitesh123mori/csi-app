@@ -82,7 +82,7 @@ class _PostCardState extends State<PostCard> {
                   ),
 
                   // only description post
-                  if (widget.post.isDescription)
+                  if (widget.post.isDescription ?? false)
                     Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
@@ -112,7 +112,7 @@ class _PostCardState extends State<PostCard> {
                     ),
 
                   // post with images
-                  if (widget.post.isAnyAttachment && widget.post.images != null)
+                  if (widget.post.isAnyAttachment?? false && widget.post.images != null)
                     Padding(
                       padding: const EdgeInsets.symmetric(horizontal: 5.0),
                       child: Container(
@@ -205,7 +205,7 @@ class _PostCardState extends State<PostCard> {
                     ),
 
                   // post with pdf
-                  if (widget.post.isAnyAttachment && widget.post.isPdfPost)
+                  if ((widget.post.isAnyAttachment ?? false ) && (widget.post.isPdfPost ?? false))
                     Padding(
                       padding: const EdgeInsets.all(8.0).copyWith(
                         bottom: 0,
@@ -254,7 +254,7 @@ class _PostCardState extends State<PostCard> {
                             ]),
                       ),
                     ),
-                  if (widget.post.isAnyAttachment && widget.post.isPdfPost)
+                  if ((widget.post.isAnyAttachment ?? false ) && (widget.post.isPdfPost ?? false))
                     Padding(
                       padding: const EdgeInsets.all(8.0).copyWith(
                         top: 0,
@@ -281,7 +281,7 @@ class _PostCardState extends State<PostCard> {
                     ),
 
                   // post with poll
-                  if (widget.post.isPoll)
+                  if (widget.post.isPoll ?? false)
                     Padding(
                       padding: const EdgeInsets.symmetric(horizontal: 8.0),
                       child: Container(
@@ -321,14 +321,13 @@ class _PostCardState extends State<PostCard> {
                           ),
                           pollOptions: List<PollOption>.from(
                             widget.post.poll!.options.map(
-                              (option) {
+                                  (option) {
                                 var a = PollOption(
-                                  id: option.id,
+                                  id: option.id, // Ensure this id is unique for each option
                                   title: Text(
                                     option.title,
                                     style: TextStyle(
-                                        color:
-                                            AppColors.theme['tertiaryColor']),
+                                        color: AppColors.theme['tertiaryColor']),
                                   ),
                                   votes: option.votes,
                                 );

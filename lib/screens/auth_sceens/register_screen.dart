@@ -87,6 +87,15 @@ class _RegisterScreenState extends State<RegisterScreen> {
     return GestureDetector(
       onTap: () => FocusScope.of(context).unfocus(),
       child: MaterialApp(
+        theme: ThemeData(
+            colorScheme: ColorScheme.fromSeed(seedColor: Colors.white),
+            useMaterial3: true,
+            textSelectionTheme: TextSelectionThemeData(
+              cursorColor: AppColors.theme['primaryColor'],
+              selectionColor: AppColors.theme['primaryColor'].withOpacity(0.2),
+              selectionHandleColor: AppColors.theme['secondaryBgColor'].withOpacity(0.2),
+            )
+        ),
         debugShowCheckedModeBanner: false,
         home: Scaffold(
           backgroundColor: AppColors.theme['secondaryBgColor'],
