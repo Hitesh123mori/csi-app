@@ -1,3 +1,4 @@
+import 'package:csi_app/apis/FirebaseAuth/FirebaseAuth.dart';
 import 'package:csi_app/screens/auth_sceens/otp_screen.dart';
 import 'package:csi_app/screens/auth_sceens/register_screen.dart';
 import 'package:csi_app/side_transition_effects/left_right.dart';
@@ -10,7 +11,8 @@ import '../../utils/widgets/text_feilds/auth_text_feild.dart';
 import 'login_screen.dart';
 
 class SetPassword extends StatefulWidget {
-  const SetPassword({Key? key}) : super(key: key);
+  String emailAddress;
+   SetPassword({required this.emailAddress, Key? key}) : super(key: key);
 
   @override
   State<SetPassword> createState() => _SetPasswordState();
@@ -187,10 +189,12 @@ class _SetPasswordState extends State<SetPassword> {
                             ),
                             AuthButton(
                               onpressed: isButtonEnabled
-                                  ? () {
+                                  ? () async {
                                 FocusScope.of(context).unfocus();
                                 if (_formKey.currentState!.validate()) {
-                                  Navigator.pushReplacement(context, LeftToRight(RegisterScreen()));
+
+                                    Navigator.pushReplacement(context, LeftToRight(RegisterScreen(email: widget.emailAddress, password: _passController.text,)));
+
                                 }
                               }
                                   : () {

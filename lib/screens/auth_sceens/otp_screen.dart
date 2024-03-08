@@ -1,12 +1,13 @@
+import 'package:csi_app/apis/FirebaseAuth/FirebaseAuth.dart';
 import 'package:csi_app/screens/auth_sceens/set_password.dart';
 import 'package:flutter/material.dart';
 import 'package:pinput/pinput.dart';
 
-import '../../side_transition_effects/left_right.dart';
-import '../../side_transition_effects/right_left.dart';
-import '../../utils/colors.dart';
-import '../../utils/widgets/buttons/auth_button.dart';
-import '../../utils/widgets/text_feilds/auth_text_feild.dart';
+import 'package:csi_app/side_transition_effects/left_right.dart';
+import 'package:csi_app/side_transition_effects/right_left.dart';
+import 'package:csi_app/utils/colors.dart';
+import 'package:csi_app/utils/widgets/buttons/auth_button.dart';
+import 'package:csi_app/utils/widgets/text_feilds/auth_text_feild.dart';
 import 'login_screen.dart';
 
 class OtpScreen extends StatefulWidget {
@@ -18,7 +19,7 @@ class OtpScreen extends StatefulWidget {
 
 class _OtpScreenState extends State<OtpScreen> {
   TextEditingController _emailController = TextEditingController();
-
+  String _verifyOTP = "";
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
 
   bool isButtonEnabled = false;
@@ -195,6 +196,7 @@ class _OtpScreenState extends State<OtpScreen> {
                                     updateButtonState();
                                   });
                                   print(pin);
+                                  _verifyOTP = pin;
                                 },
                               ),
                             SizedBox(
@@ -204,8 +206,13 @@ class _OtpScreenState extends State<OtpScreen> {
                                 ? AuthButton(
                                     onpressed: () {
                                       if (isPinFilled) {
-                                        Navigator.pushReplacement(context,
-                                            LeftToRight(SetPassword()));
+                                        bool isValid = FirebaseAuth.verifyOTP(_verifyOTP);
+                                        print("#val ${isValid}") ;
+                                        if (isValid){
+                                          Navigator.pushReplacement(context,
+                                              LeftToRight(SetPassword(emailAddress: _emailController.text,)));
+                                        }
+
                                       }
                                     },
                                     name: 'Verify',
@@ -219,10 +226,13 @@ class _OtpScreenState extends State<OtpScreen> {
                                             .withOpacity(0.5),
                                   )
                                 : AuthButton(
-                                    onpressed: () {
+                                    onpressed: () async {
                                       if (isButtonEnabled) {
                                         FocusScope.of(context).unfocus();
                                         if (_formKey.currentState!.validate()) {
+                                          var res = await FirebaseAuth.sendOTP(_emailController.text);
+                                          print("#res-otp-screen: $res");
+
                                           setState(() {
                                             isButtonClicked = true;
                                             enablePinput = true;

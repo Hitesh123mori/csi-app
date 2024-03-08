@@ -1,3 +1,4 @@
+import 'package:csi_app/apis/FirebaseAuth/FirebaseAuth.dart';
 import 'package:csi_app/screens/auth_sceens/otp_screen.dart';
 import 'package:csi_app/screens/auth_sceens/register_screen.dart';
 import 'package:csi_app/screens/home_screens/home_screen.dart';
@@ -187,9 +188,12 @@ class _LoginScreenState extends State<LoginScreen> {
                             ),
                             AuthButton(
                               onpressed: isButtonEnabled
-                                  ? () {
+                                  ? () async {
                                        FocusScope.of(context).unfocus();
                                        if(_formKey.currentState!.validate()) {
+                                         String res = await FirebaseAuth.signIn(_emailController.text, _passController.text);
+                                         print("res-logIN: $res");
+                                         if(res == 'Logged In')
                                             Navigator.pushReplacement(context, LeftToRight(HomeScreen()));
                                        }
                                     }
