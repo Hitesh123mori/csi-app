@@ -1,3 +1,4 @@
+import 'package:csi_app/providers/CurrentUser.dart';
 import 'package:csi_app/providers/bottom_navigation_provider.dart';
 import 'package:csi_app/providers/post_provider.dart';
 import 'package:csi_app/screens/home_screens/home_screen.dart';
@@ -18,6 +19,7 @@ void main() async {
   );
   runApp(MultiProvider(
       providers: [
+        ChangeNotifierProvider(create: (context)=>AppUserProvider()),
         ChangeNotifierProvider(create: (context)=>BottomNavigationProvider()),
         ChangeNotifierProvider(create: (context)=>PostProvider()) ,
       ],

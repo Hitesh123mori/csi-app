@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:csi_app/utils/colors.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
@@ -56,4 +58,17 @@ class HelperFunctions{
         ));
   }
 
+
+  //for encodeing
+  static String stringToBase64(String text){
+    return base64.encode(utf8.encode(text));
+  }
+  static String base64ToString(String encodeText){
+    return utf8.decode(base64.decode(encodeText));
+  }
+
+}
+
+main (){
+  print("#e ${HelperFunctions.stringToBase64("https://drive.usercontent.google.com/u/0/uc?id=1UDvG0vMZUncEBU820ubJxr8mOmfvCNjU&export=download")}");
 }

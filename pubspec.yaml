@@ -37,6 +37,7 @@ dependencies:
   provider: ^6.1.1
   introduction_screen: ^3.1.12
   carousel_slider: ^4.2.1
+  flutter_downloader: ^1.11.6
 
   syncfusion_flutter_pdfviewer: 24.2.3
   flutter_polls: ^0.1.5
@@ -62,10 +63,11 @@ dependencies:
   googleapis: ^13.0.0
   googleapis_auth: ^1.5.0
 
-  flutter_secure_storage:
   path_provider:
   file_picker:
 
+  image_picker: ^1.0.7
+  flutter_speed_dial: ^7.0.0
 
   mailer: ^6.1.0
   otp: ^3.1.4

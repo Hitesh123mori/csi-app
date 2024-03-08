@@ -23,7 +23,8 @@ class _PostsScreenState extends State<PostsScreen> {
     return Scaffold(
         backgroundColor: AppColors.theme['backgroundColor'],
         floatingActionButton: FloatingActionButton(
-          onPressed: (){},
+          onPressed: (){
+          },
           child: Icon(Icons.add,color: AppColors.theme['secondaryColor'],),
           backgroundColor: AppColors.theme['primaryColor'],
         ),
@@ -50,16 +51,17 @@ class _PostsScreenState extends State<PostsScreen> {
                 List<Post> posts = [];
 
                 val.forEach((key, value) {
-                  print("$key: $value");
+                  print("#kv $key: $value");
                   posts.add(Post.fromJson(value));
                 });
+
                 print("#val: $val");
                 return ListView.builder(
                     physics: BouncingScrollPhysics(),
                     shrinkWrap: true,
                     itemCount: posts.length,
                     itemBuilder: (context, index) {
-                      print("#idx-$index: ${posts[index].poll?.options?.first.title}");
+                      print("#idx-$index: ${posts[index].pdfLink}");
                       return PostCard(
                         post: posts[index],
                       );
