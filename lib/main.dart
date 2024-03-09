@@ -36,19 +36,21 @@ class MyApp extends StatefulWidget {
 class _MyAppState extends State<MyApp> {
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      debugShowCheckedModeBanner: false,
-        theme: ThemeData(
-          colorScheme: ColorScheme.fromSeed(seedColor: Colors.white),
-          useMaterial3: true,
-            textSelectionTheme: TextSelectionThemeData(
-              cursorColor: AppColors.theme['primaryColor'],
-              selectionColor: AppColors.theme['primaryColor'].withOpacity(0.2),
-              selectionHandleColor: AppColors.theme['secondaryBgColor'].withOpacity(0.2),
-            )
-        ),
-        // home: SplashScreen()
-        home: HomeScreen(),
-    );
+    return Consumer<AppUserProvider>(builder: (context,appUserProvider,child){
+      return MaterialApp(
+          debugShowCheckedModeBanner: false,
+          theme: ThemeData(
+              colorScheme: ColorScheme.fromSeed(seedColor: Colors.white),
+              useMaterial3: true,
+              textSelectionTheme: TextSelectionThemeData(
+                cursorColor: AppColors.theme['primaryColor'],
+                selectionColor: AppColors.theme['primaryColor'].withOpacity(0.2),
+                selectionHandleColor: AppColors.theme['secondaryBgColor'].withOpacity(0.2),
+              )
+          ),
+          home: SplashScreen(appUser: appUserProvider,)
+        // home: HomeScreen(),
+      );
+    }) ;
   }
 }

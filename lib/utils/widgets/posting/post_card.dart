@@ -7,7 +7,7 @@ import 'package:csi_app/models/post_model/post.dart';
 import 'package:csi_app/models/user_model/AppUser.dart';
 import 'package:csi_app/providers/CurrentUser.dart';
 import 'package:csi_app/providers/post_provider.dart';
-import 'package:csi_app/screens/home_screens/posting/comment_screens/CommentScreen.dart';
+import 'package:csi_app/screens/home_screens/posting/comment_screens/comment_screens.dart';
 import 'package:csi_app/side_transition_effects/left_right.dart';
 import 'package:csi_app/utils/colors.dart';
 import 'package:csi_app/utils/helper_functions/function.dart';
@@ -99,12 +99,17 @@ class _PostCardState extends State<PostCard> {
                         children: [
                           showMore
                               ? Padding(
-                                  padding: const EdgeInsets.symmetric(horizontal: 8.0),
-                                  child: HelperFunctions.buildContent(widget.post.description ?? ""),
+                                  padding: const EdgeInsets.symmetric(
+                                      horizontal: 8.0),
+                                  child: HelperFunctions.buildContent(
+                                      widget.post.description ?? ""),
                                 )
                               : Padding(
-                                  padding: const EdgeInsets.symmetric(horizontal: 8.0),
-                                  child: HelperFunctions.buildContent(HelperFunctions.truncateDescription(widget.post.description ?? "")),
+                                  padding: const EdgeInsets.symmetric(
+                                      horizontal: 8.0),
+                                  child: HelperFunctions.buildContent(
+                                      HelperFunctions.truncateDescription(
+                                          widget.post.description ?? "")),
                                 ),
                           if (widget.post.description!.length > 100)
                             TextButton(
@@ -320,7 +325,7 @@ class _PostCardState extends State<PostCard> {
                             ),
                             pollOptions: List<PollOption>.from(
                               widget.post.poll!.options!.map(
-                                (option) {
+                                    (option) {
                                   var a = PollOption(
                                     id: option.optionId,
                                     title: Text(
@@ -350,14 +355,8 @@ class _PostCardState extends State<PostCard> {
                             likeCount: widget.post.like?.length ?? 0,
                             likeBuilder: (bool isLiked) {
                               return isLiked
-                                  ? Icon(
-                                      Icons.thumb_up,
-                                      color: AppColors.theme["primaryColor"],
-                                    )
-                                  : Icon(
-                                      Icons.thumb_up_alt_outlined,
-                                      color: AppColors.theme["primaryColor"],
-                                    );
+                                  ? Icon(Icons.thumb_up, color: AppColors.theme["primaryColor"],)
+                                  : Icon(Icons.thumb_up_alt_outlined, color: AppColors.theme["primaryColor"],);
                             },
                             bubblesColor: BubblesColor(
                               dotPrimaryColor: AppColors.theme["primaryColor"],
@@ -365,6 +364,7 @@ class _PostCardState extends State<PostCard> {
                             ),
                             circleColor: CircleColor(start: AppColors.theme["primaryColor"], end: AppColors.theme["secondaryBgColor"]),
                             onTap: (bool isLiked) async {
+                              
                               print("#likeList: ${widget.post.like}");
 
                               bool successful = await PostAPI.onLikeButtonTap(widget.post.postId, appUserProvider.user?.userID ?? "noUser", isLiked);
@@ -377,15 +377,17 @@ class _PostCardState extends State<PostCard> {
                               print("#succ: $successful");
 
                               return successful ? !isLiked : isLiked;
-                            },
+                              },
                           ),
                         ),
+
 
                         //comment button
                         Padding(
                           padding: EdgeInsets.all(8),
+
                           child: InkWell(
-                            onTap: () {
+                            onTap: (){
                               postProvider.post = widget.post;
                               Navigator.push(context, LeftToRight(CommentScreen()));
                             },
@@ -408,6 +410,8 @@ class _PostCardState extends State<PostCard> {
                               ),
                             ),
                           ),
+
+
                         )
                       ],
                     )
@@ -416,6 +420,7 @@ class _PostCardState extends State<PostCard> {
           ),
         );
       },
+
     );
   }
 }

@@ -1,7 +1,8 @@
 class AppUser {
   AppUser({
       this.userID, 
-      this.name, 
+      this.name,
+      this.about,
       this.email, 
       this.nuRoll, 
       this.csiRoll, 
@@ -17,6 +18,7 @@ class AppUser {
   AppUser.fromJson(dynamic json) {
     userID = json['userID'];
     name = json['name'];
+    about = json['about'];
     email = json['email'];
     nuRoll = json['nu_roll'];
     csiRoll = json['csi_roll'];
@@ -31,6 +33,7 @@ class AppUser {
   }
   String? userID;
   String? name;
+  String?about ;
   String? email;
   String? nuRoll;
   String? csiRoll;
@@ -47,6 +50,7 @@ class AppUser {
     final map = <String, dynamic>{};
     map['userID'] = userID;
     map['name'] = name;
+    map['about']  = about ;
     map['email'] = email;
     map['nu_roll'] = nuRoll;
     map['csi_roll'] = csiRoll;
