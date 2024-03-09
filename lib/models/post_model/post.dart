@@ -26,14 +26,15 @@ class Post {
     this.images,
   }) {
     this.postId = FirebaseAPIs.uuid.v1();
-    this.like = {};
+    // this.like = {};
   }
 
   Post.fromJson(dynamic json) {
     postId = json['postId'];
     createBy = json['createBy'];
     createTime = json['createTime'];
-    like = json['like'] ?? {};
+    print("#like = : ${json['like']}");
+    like = json['like'];
     description = HelperFunctions.base64ToString(json['description']??"");
     attachmentName = json['attachmentName'];
     pdfLink = HelperFunctions.base64ToString(json['pdfLink']??"");
@@ -56,7 +57,7 @@ class Post {
   String? pdfLink;
   late bool isThereImage;
   Poll? poll;
-  Map<String, dynamic>? like;
+  Map<dynamic, dynamic>? like;
   List<Comment>? comment;
   List<String>? images;
 
@@ -65,7 +66,7 @@ class Post {
     map['postId'] = postId;
     map['createBy'] = createBy;
     map['createTime'] = createTime;
-    map['like'] = like ?? {};
+    map['like'] = like;
     map['description'] = HelperFunctions.stringToBase64(description??"");
     map['attachmentName'] = attachmentName;
     map['pdfLink'] = HelperFunctions.stringToBase64(pdfLink??"");
@@ -99,13 +100,13 @@ class Comment {
   Comment.fromJson(dynamic json) {
     commentId = json['commentId'];
     message = json['message'];
-    like = json['likecount'];
+    like = json['like'];
     userId = json['userId'];
     createdTime = json['createdTime'];
   }
   String? commentId;
   String? message;
-  Map<String, bool>? like;
+  Map<String, dynamic>? like;
   String? userId;
   String? createdTime;
 
@@ -113,7 +114,7 @@ class Comment {
     final map = <String, dynamic>{};
     map['commentId'] = commentId;
     map['message'] = message;
-    map['likeCount'] = like;
+    map['like'] = like;
     map['userId'] = userId;
     map['createdTime'] = createdTime;
     return map;
