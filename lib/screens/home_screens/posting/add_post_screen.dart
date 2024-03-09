@@ -1,15 +1,23 @@
+import 'dart:typed_data';
+
 import 'package:carousel_slider/carousel_slider.dart';
+import 'package:csi_app/apis/FirebaseDatabaseAPIs/PostAPI.dart';
+import 'package:csi_app/models/post_model/post.dart';
 import 'package:csi_app/providers/post_provider.dart';
 import 'package:csi_app/screens/home_screens/home_screen.dart';
 import 'package:csi_app/screens/home_screens/posting/attach_pdf.dart';
 import 'package:csi_app/screens/home_screens/posting/poll%20screen.dart';
 import 'package:csi_app/side_transition_effects/bottom_top.dart';
+import 'package:csi_app/side_transition_effects/right_left.dart';
 import 'package:csi_app/utils/colors.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_polls/flutter_polls.dart';
 import 'package:flutter_speed_dial/flutter_speed_dial.dart';
+import 'package:image_picker/image_picker.dart';
 import 'package:provider/provider.dart';
 import 'package:syncfusion_flutter_pdfviewer/pdfviewer.dart';
 import 'dart:io';
+import '../../../apis/StorageAPIs/StorageAPI.dart';
 import '../../../main.dart';
 import '../../../side_transition_effects/TopToBottom.dart';
 import '../../../utils/widgets/dialog_box.dart';
@@ -62,7 +70,11 @@ class _AddPostScreenState extends State<AddPostScreen> {
   Widget build(BuildContext context) {
     mq = MediaQuery.of(context).size;
     return Consumer<PostProvider>(builder: (context, value, child) {
+      if(value.post == null){
+        value.post = Post();
+      }
       if (value.post != null && isFirst) {
+
         _descriptionController.text = value.post?.description ?? "";
         isFirst = false;
       }
@@ -104,9 +116,17 @@ class _AddPostScreenState extends State<AddPostScreen> {
                   Padding(
                     padding: const EdgeInsets.symmetric(horizontal: 10.0),
                     child: InkWell(
-                      onTap: () {
+                      onTap: () async {
                         if (_formKey.currentState!.validate()) {
                           //todo : add post logic here
+                          value.post?.isThereImage = value.post?.images?.isNotEmpty ?? false;
+
+                          value.post?.images?.forEach((element) async {
+                            await StorageAPI.uploadPostImg(value.post!.postId, await element.readAsBytes());
+                          });
+                          PostAPI.postUpload(value.post!);
+                          Navigator.push(context, RightToLeft(HomeScreen()));
+                          value.post = null;
                         }
                       },
                       child: Container(
@@ -154,10 +174,11 @@ class _AddPostScreenState extends State<AddPostScreen> {
                       label: "Image",
                       onTap: () {
                         final post = value.post;
-                        final hasImage = post?.isThereImage ?? false;
+                        final hasImage = post?.images?.isNotEmpty ?? false;
+
                         final hasPdf = (post?.pdfLink ?? "") != "";
 
-                        if (!hasImage && !hasPdf) {
+                        if (!hasPdf) {
                           post?.description = _descriptionController.text;
                           value.notify();
                           Navigator.push(context, BottomToTop(AddImage()));
@@ -294,9 +315,28 @@ class _AddPostScreenState extends State<AddPostScreen> {
                                         color:
                                             AppColors.theme['backgroundColor'],
                                       ),
-                                      child: Image.file(
-                                        File(image),
-                                        fit: BoxFit.cover,
+                                      child: Column(
+
+                                        children: [
+                                          IconButton(
+                                              onPressed: () {
+                                                value.post?.images?.remove(image);
+                                                value.notify();
+                                              },
+                                              icon: Icon(Icons.close)),
+
+                                          StreamBuilder(stream: image.readAsBytes().asStream(),
+                                              builder: (context, snapshot){
+                                                  if(snapshot.hasError) return Text("Error");
+                                                  else if (snapshot.hasData) {
+                                                    Uint8List bytes = Uint8List(0);
+                                                    return Image.memory(snapshot.data ?? bytes);
+                                                  }
+                                                  else{
+                                                    return CircularProgressIndicator();
+                                                  }
+                                              })
+                                        ],
                                       ),
                                     );
                                   },
@@ -340,6 +380,83 @@ class _AddPostScreenState extends State<AddPostScreen> {
                               ),
                             ),
                           ],
+                        ),
+
+                      if(value.post?.poll != null)
+                        Container(
+                          decoration: BoxDecoration(
+                              border: Border.all(color: AppColors.theme["tertiaryColor"]),
+                              borderRadius: BorderRadius.circular(10),
+                          ),
+
+                          child: Padding(
+                            padding: const EdgeInsets.symmetric(horizontal: 8.0),
+                            child: Container(
+                              child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.end,
+                                children: [
+                                  IconButton(
+                                      onPressed: (){
+                                        value.post?.poll = null;
+                                        setState(() {});
+                                      },
+                                      icon: Icon(Icons.close, size: 20,),
+                                  ),
+
+                                  FlutterPolls(
+                                    pollEnded: true,
+                                    loadingWidget: SizedBox(
+                                      height: 15,
+                                      width: 15,
+                                      child: CircularProgressIndicator(
+                                        color: AppColors.theme['primaryColor'],
+                                        strokeWidth: 2,
+                                      ),
+                                    ),
+                                    leadingVotedProgessColor: AppColors.theme['secondaryBgColor'],
+                                    votedBackgroundColor: AppColors.theme['secondaryColor'],
+                                    votedProgressColor: AppColors.theme['secondaryBgColor'],
+                                    pollOptionsSplashColor: AppColors.theme['secondaryBgColor'],
+                                    createdBy: "CSI",
+                                    pollId: value.post?.poll?.pollId,
+                                    onVoted: (PollOption pollOption, int newTotalVotes) async {
+                                      await Future.delayed(const Duration(seconds: 2));
+                                      return true;
+                                    },
+                                    pollTitle: Align(
+                                      alignment: Alignment.centerLeft,
+                                      child: Text(
+                                        value.post?.poll!.question ?? "",
+                                        style: const TextStyle(
+                                          fontSize: 14,
+                                          fontWeight: FontWeight.w600,
+                                        ),
+                                      ),
+                                    ),
+                                    pollOptions: List<PollOption>.from(
+                                      value.post!.poll!.options!.map(
+                                            (option) {
+                                          var a = PollOption(
+                                            id: option.optionId,
+                                            title: Text(
+                                              option.title ?? "",
+                                              style: TextStyle(color: AppColors.theme['tertiaryColor']),
+                                            ),
+                                            votes: option.votes,
+                                          );
+                                          return a;
+                                        },
+                                      ),
+                                    ),
+                                    votedPercentageTextStyle: const TextStyle(
+                                      fontSize: 14,
+                                      fontWeight: FontWeight.w600,
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            ),
+                          ),
                         ),
                     ],
                   ),

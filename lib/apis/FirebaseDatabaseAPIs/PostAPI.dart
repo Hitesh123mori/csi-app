@@ -3,9 +3,13 @@ import 'package:csi_app/models/post_model/post.dart';
 import 'package:firebase_database/firebase_database.dart';
 
 class PostAPI {
+
   static Future<String> postUpload(Post post) async {
+    print("#post: ${post.toJson()}");
+
       return FirebaseAPIs.rtdbRef.child("post/${post.postId.toString()}").set(post.toJson())
           .then((value) {
+
             return "Posted";
           })
           .onError((error, stackTrace) {

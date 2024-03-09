@@ -1,37 +1,35 @@
-
 import 'package:csi_app/apis/FirebaseAPIs.dart';
 import 'package:csi_app/models/post_model/post.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 
-class StorageAPI{
+import '../../models/post_model/image_model.dart';
+
+class StorageAPI {
   static final _postFolder = FirebaseAPIs.storage.child("post");
 
-  Future uploadPostImg(String postId, var img) async {
+  static Future uploadPostImg(String postId, var img) async {
     final imgRef = _postFolder.child("${postId}/${FirebaseAPIs.uuid.v1()}");
 
-    await imgRef.putData(img)
-    .then((p0) {
-      
+    await imgRef.putData(img).then((p0) {
+      print("#upload: ${p0.toString()}");
       return null;
-    })
-    .onError((error, stackTrace) => null)
-    ;
-
+    }).onError((error, stackTrace) {
+      print("#upload E: ${error}, \n $stackTrace");
+      return null;
+    });
   }
 
-  static List<String> getImg(String postId){
-    return ['assets/images/dp_img1.jpg', 'assets/images/dp_img2.jpg'];
-  }
 
-  static Future<List<String>> gi(String postId) async {
-    var imgDirRef = await _postFolder.child("${postId.toString()}");
-    return await imgDirRef.list()
-        .then((value) {
+  static Future<dynamic> getImage(String postId)async {
+    final imgRef = _postFolder.child("${postId.toString()}");
+
+    return imgRef.list().then((value) {
       List<Reference> refs = value.items;
-      print("#res: ${refs.map((e) => e.name)}");
-      return refs.map((e) => e.getDownloadURL().toString()).toList();
-    })
-        .onError((error, stackTrace) => []);
-  }
 
+      print("#res: ${refs.map((e) => e.name)}");
+      print("#");
+      return refs.map((e) => ImageModel(fullPath: e.fullPath, uri: e.getDownloadURL(), callback: () => (){})).toList();
+    });
+
+  }
 }

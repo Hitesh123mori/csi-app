@@ -1,4 +1,5 @@
 import 'package:csi_app/apis/FirebaseAPIs.dart';
+import 'package:csi_app/apis/StorageAPIs/StorageAPI.dart';
 // import 'package:csi_app/apis/FirebaseDatabaseAPIs/PostAPI.dart';
 import 'package:csi_app/models/post_model/post.dart';
 import 'package:csi_app/side_transition_effects/bottom_top.dart';
@@ -54,9 +55,15 @@ class _PostsScreenState extends State<PostsScreen> {
                 Map<dynamic, dynamic> val = snap.data?.snapshot.value as Map<dynamic, dynamic>;
                 List<Post> posts = [];
 
-                val.forEach((key, value) {
+                val.forEach((key, value) async {
                   print("#kv $key: $value");
+
                   posts.add(Post.fromJson(value));
+                  // if (posts.last.isThereImage) {
+                  //   posts.last.imageModelList = await StorageAPI.getImage(posts.last.postId);
+                  //   print("#pi ${posts.last.imageModelList?.last.uri}");
+                  // }
+
                 });
 
                 print("#val: $val");
