@@ -1,3 +1,4 @@
+import 'package:carousel_slider/carousel_slider.dart';
 import 'package:csi_app/providers/post_provider.dart';
 import 'package:csi_app/screens/home_screens/home_screen.dart';
 import 'package:csi_app/screens/home_screens/posting/attach_pdf.dart';
@@ -7,7 +8,8 @@ import 'package:csi_app/utils/colors.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_speed_dial/flutter_speed_dial.dart';
 import 'package:provider/provider.dart';
-
+import 'package:syncfusion_flutter_pdfviewer/pdfviewer.dart';
+import 'dart:io';
 import '../../../main.dart';
 import '../../../side_transition_effects/TopToBottom.dart';
 import '../../../utils/widgets/posting/poll_text_field.dart';
@@ -22,34 +24,30 @@ class AddPostScreen extends StatefulWidget {
 }
 
 class _AddPostScreenState extends State<AddPostScreen> {
-  
   // form key
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
-  
+
   //for post description
   TextEditingController _descriptionController = TextEditingController();
 
-
   bool isFirst = true;
 
-
+  int _current = 0;
   bool isButtonEnabled = false;
 
-
+  final GlobalKey<SfPdfViewerState> _pdfViewerKey = GlobalKey();
 
   @override
   void initState() {
     super.initState();
     _descriptionController.addListener(updateButtonState);
-
   }
 
   void updateButtonState() {
-
-    if(!isFirst)
-    setState(() {
-      isButtonEnabled = _descriptionController.text.isNotEmpty;
-    });
+    if (!isFirst)
+      setState(() {
+        isButtonEnabled = _descriptionController.text.isNotEmpty;
+      });
   }
 
   @override
@@ -62,8 +60,8 @@ class _AddPostScreenState extends State<AddPostScreen> {
   @override
   Widget build(BuildContext context) {
     mq = MediaQuery.of(context).size;
-    return Consumer<PostProvider>(builder: (context,value,child){
-      if(value.post != null && isFirst){
+    return Consumer<PostProvider>(builder: (context, value, child) {
+      if (value.post != null && isFirst) {
         _descriptionController.text = value.post?.description ?? "";
         isFirst = false;
       }
@@ -78,9 +76,9 @@ class _AddPostScreenState extends State<AddPostScreen> {
                 textSelectionTheme: TextSelectionThemeData(
                   cursorColor: AppColors.theme['primaryColor'],
                   selectionColor:
-                  AppColors.theme['primaryColor'].withOpacity(0.2),
+                      AppColors.theme['primaryColor'].withOpacity(0.2),
                   selectionHandleColor:
-                  AppColors.theme['secondaryBgColor'].withOpacity(0.2),
+                      AppColors.theme['secondaryBgColor'].withOpacity(0.2),
                 )),
             debugShowCheckedModeBanner: false,
             home: Scaffold(
@@ -105,12 +103,9 @@ class _AddPostScreenState extends State<AddPostScreen> {
                   Padding(
                     padding: const EdgeInsets.symmetric(horizontal: 10.0),
                     child: InkWell(
-                      onTap: (){
-                        if(_formKey.currentState!.validate()){
-
-                          //todo : add post login here
-
-
+                      onTap: () {
+                        if (_formKey.currentState!.validate()) {
+                          //todo : add post logic here
                         }
                       },
                       child: Container(
@@ -118,13 +113,14 @@ class _AddPostScreenState extends State<AddPostScreen> {
                         width: 100,
                         child: Center(
                             child: Text(
-                              "Post",
-                              style: TextStyle(
-                                color: isButtonEnabled
-                                    ? AppColors.theme['secondaryColor']
-                                    : AppColors.theme['tertiaryColor'].withOpacity(0.5),
-                              ),
-                            )),
+                          "Post",
+                          style: TextStyle(
+                            color: isButtonEnabled
+                                ? AppColors.theme['secondaryColor']
+                                : AppColors.theme['tertiaryColor']
+                                    .withOpacity(0.5),
+                          ),
+                        )),
                         decoration: BoxDecoration(
                           color: isButtonEnabled
                               ? AppColors.theme['primaryColor']
@@ -155,56 +151,120 @@ class _AddPostScreenState extends State<AddPostScreen> {
                       backgroundColor: AppColors.theme['disableButtonColor'],
                       child: Icon(Icons.image_outlined),
                       label: "Image",
-                      onTap: (){
+                      onTap: () {
                         value.post?.description = _descriptionController.text;
                         value.notify();
-                        Navigator.push(context, BottomToTop(AddImage())) ;
+                        Navigator.push(context, BottomToTop(AddImage()));
                       },
                     ),
                     SpeedDialChild(
                       backgroundColor: AppColors.theme['disableButtonColor'],
                       child: Icon(Icons.picture_as_pdf_outlined),
                       label: "Pdf",
-                      onTap: (){
+                      onTap: () {
                         value.post?.description = _descriptionController.text;
                         value.notify();
-                        Navigator.push(context, BottomToTop(AttachPdf())) ;
+                        Navigator.push(context, BottomToTop(AttachPdf()));
                       },
                     ),
                     SpeedDialChild(
                       backgroundColor: AppColors.theme['disableButtonColor'],
                       child: Icon(Icons.poll_outlined),
                       label: "Poll",
-                      onTap: (){
+                      onTap: () {
                         value.post?.description = _descriptionController.text;
                         value.notify();
-                        Navigator.push(context, BottomToTop(PollScreen())) ;
+                        Navigator.push(context, BottomToTop(PollScreen()));
                       },
                     )
                   ],
                 ),
               ),
-              body: Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 10.0),
-                child: Container(
-                  child: TextFormField(
-                    onChanged: (_){
-                      value.post?.description = _descriptionController.text;
-                      value.notify();
-                    },
-                    controller: _descriptionController,
-                    cursorColor: AppColors.theme['primaryColor'],
-                    maxLines: null,
-                    decoration: InputDecoration(
-                        hintText: 'Start writing your description here',
-                        border: InputBorder.none),
-                  ),
+              body: SingleChildScrollView(
+                child: Column(
+                  children: [
+                    Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 10.0),
+                      child: Container(
+                        child: TextFormField(
+                          onChanged: (_) {
+                            value.post?.description = _descriptionController.text;
+                            value.notify();
+                          },
+                          controller: _descriptionController,
+                          cursorColor: AppColors.theme['primaryColor'],
+                          maxLines: null,
+                          decoration: InputDecoration(
+                              hintText: 'Start writing your description here',
+                              border: InputBorder.none),
+                        ),
+                      ),
+                    ),
+
+                    if (value.post?.images?.isNotEmpty?? false)
+                      CarouselSlider(
+                        options: CarouselOptions(
+                          height: 400.0,
+                          enlargeCenterPage: true,
+                          autoPlay: true,
+                          aspectRatio: 16 / 9,
+                          autoPlayCurve: Curves.fastOutSlowIn,
+                          enableInfiniteScroll: true,
+                          autoPlayAnimationDuration: Duration(milliseconds: 800),
+                          viewportFraction: 0.8,
+                        ),
+                        items: value.post?.images!.map((image) {
+                          return Builder(
+                            builder: (BuildContext context) {
+                              return Container(
+                                width: MediaQuery.of(context).size.width,
+                                margin: EdgeInsets.symmetric(horizontal: 5.0),
+                                decoration: BoxDecoration(
+                                  color:AppColors.theme['backgroundColor'],
+                                ),
+                                child: Image.file(
+                                  File(image),
+                                  fit: BoxFit.cover,
+                                ),
+                              );
+                            },
+                          );
+                        }).toList(),
+                      ),
+
+                    if (value.post?.pdfLink?.isNotEmpty?? false)
+                      Padding(
+                        padding: const EdgeInsets.all(8.0).copyWith(
+                          top: 0,
+                        ),
+                        child: Container(
+                          height: 500,
+                          width: mq.width*1,
+                          decoration: BoxDecoration(
+                            color: AppColors.theme['secondaryBgColor'],
+                          ),
+                          child: Padding(
+                            padding: const EdgeInsets.all(8.0),
+                            child: SfPdfViewer.network(
+                              pageLayoutMode: PdfPageLayoutMode.continuous,
+                              canShowScrollHead: false,
+                              pageSpacing: 2,
+                              canShowPageLoadingIndicator: false,
+                              value.post!.pdfLink!,
+                              key: _pdfViewerKey,
+                              scrollDirection: PdfScrollDirection.horizontal,
+                            ),
+                          ),
+                        ),
+                      ),
+
+                  ],
                 ),
               ),
             ),
           ),
         ),
       );
-    }) ;
+    });
   }
 }

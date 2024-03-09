@@ -12,6 +12,7 @@ class CustomAuthTextField extends StatelessWidget {
   final IconButton? suffix;
   final void Function(String?)? onSaved;
   final void Function(String?)? onChange;
+  final FocusNode? focusNode;
 
   const CustomAuthTextField({
     Key? key,
@@ -23,7 +24,7 @@ class CustomAuthTextField extends StatelessWidget {
     this.onSaved,
     required this.prefixicon,
     required this.obsecuretext,
-    this.suffix, this.onChange,
+    this.suffix, this.onChange, this.focusNode,
   }) : super(key: key);
 
   @override
@@ -35,6 +36,7 @@ class CustomAuthTextField extends StatelessWidget {
         child: TextFormField(
           cursorColor: AppColors.theme['primaryColor'],
           onSaved: onSaved,
+          focusNode: focusNode,
           onChanged: onChange,
           obscureText: obsecuretext,
           initialValue: initialText,
