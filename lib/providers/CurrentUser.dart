@@ -17,10 +17,12 @@ class AppUserProvider extends ChangeNotifier{
     if(uid != null)
       user = AppUser.fromJson(await UserProfile.getUser(uid));
     notifyListeners();
+    print("#initUser complete");
   }
 
-  void logOut() {
-    user = null;
+  Future logOut() async {
+    await FirebaseAPIs.auth.signOut();
+    user  = null ;
     notifyListeners();
   }
 
