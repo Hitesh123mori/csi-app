@@ -2,6 +2,7 @@ import 'package:carousel_slider/carousel_slider.dart';
 import 'package:csi_app/apis/FirebaseDatabaseAPIs/PostAPI.dart';
 import 'package:csi_app/apis/StorageAPIs/StorageAPI.dart';
 import 'package:csi_app/main.dart';
+import 'package:csi_app/models/post_model/image_model.dart';
 import 'package:csi_app/models/post_model/post.dart';
 import 'package:csi_app/models/user_model/AppUser.dart';
 import 'package:csi_app/providers/CurrentUser.dart';
@@ -16,6 +17,8 @@ import 'package:like_button/like_button.dart';
 import 'package:provider/provider.dart';
 import 'package:syncfusion_flutter_pdfviewer/pdfviewer.dart';
 
+import 'image_frame.dart';
+
 class PostCard extends StatefulWidget {
   final Post post;
   const PostCard({required this.post, super.key});
@@ -29,7 +32,6 @@ class _PostCardState extends State<PostCard> {
   bool showMore = false;
 
   // for carousel slider
-  List<String> imageUrls = [];
   int _current = 0;
   final CarouselController _controller = CarouselController();
   final GlobalKey<SfPdfViewerState> _pdfViewerKey = GlobalKey();
@@ -38,20 +40,15 @@ class _PostCardState extends State<PostCard> {
   @override
   void initState() {
     super.initState();
-
-    if (widget.post.isThereImage) {
-      imageUrls = StorageAPI.getImg(widget.post.postId);
-    }
   }
 
   @override
   Widget build(BuildContext context) {
     mq = MediaQuery.of(context).size;
     return Consumer2<PostProvider, AppUserProvider>(
-      builder: (context, postProvider, appUserProvider, child){
-
+      builder: (context, postProvider, appUserProvider, child) {
         //todo remove default user
-        if(isFirst){
+        if (isFirst) {
           appUserProvider.user = AppUser(userID: "e5b6c220-b816-1ee5-867c-d719914989a5");
           isFirst = false;
         }
@@ -102,13 +99,13 @@ class _PostCardState extends State<PostCard> {
                         children: [
                           showMore
                               ? Padding(
-                            padding: const EdgeInsets.symmetric(horizontal: 8.0),
-                            child: HelperFunctions.buildContent(widget.post.description ?? ""),
-                          )
+                                  padding: const EdgeInsets.symmetric(horizontal: 8.0),
+                                  child: HelperFunctions.buildContent(widget.post.description ?? ""),
+                                )
                               : Padding(
-                            padding: const EdgeInsets.symmetric(horizontal: 8.0),
-                            child: HelperFunctions.buildContent(HelperFunctions.truncateDescription(widget.post.description ?? "")),
-                          ),
+                                  padding: const EdgeInsets.symmetric(horizontal: 8.0),
+                                  child: HelperFunctions.buildContent(HelperFunctions.truncateDescription(widget.post.description ?? "")),
+                                ),
                           if (widget.post.description!.length > 100)
                             TextButton(
                               onPressed: () {
@@ -147,54 +144,76 @@ class _PostCardState extends State<PostCard> {
                                     Padding(
                                       padding: const EdgeInsets.symmetric(horizontal: 13.0),
                                       child: Text(
-                                        imageUrls.length.toString() + " Images",
+                                        (widget.post.imageModelList?.length.toString() ?? "0") + " Images",
                                         style: TextStyle(color: AppColors.theme['tertiaryColor'], fontWeight: FontWeight.bold),
                                       ),
                                     ),
                                   ],
                                 ),
                               ),
-                              Column(
-                                children: [
-                                  Padding(
-                                    padding: const EdgeInsets.all(8.0),
-                                    child: CarouselSlider.builder(
-                                      itemCount: imageUrls.length,
-                                      itemBuilder: (BuildContext context, int itemIndex, int pageViewIndex) => Image.asset(imageUrls[itemIndex]),
-                                      options: CarouselOptions(
-                                          scrollDirection: Axis.horizontal,
-                                          autoPlay: imageUrls.length != 1,
-                                          enlargeCenterPage: true,
-                                          viewportFraction: 1,
-                                          aspectRatio: 1.0,
-                                          initialPage: 0,
-                                          onPageChanged: (index, reason) {
-                                            setState(() {
-                                              _current = index;
-                                            });
-                                          }),
-                                    ),
-                                  ),
-                                  Row(
-                                    mainAxisAlignment: MainAxisAlignment.center,
-                                    children: imageUrls.asMap().entries.map((entry) {
-                                      return GestureDetector(
-                                        onTap: () => _controller.animateToPage(entry.key),
-                                        child: Container(
-                                          width: 12.0,
-                                          height: 12.0,
-                                          margin: EdgeInsets.symmetric(vertical: 8.0, horizontal: 4.0),
-                                          decoration: BoxDecoration(
-                                              shape: BoxShape.circle,
-                                              color: (Theme.of(context).brightness == Brightness.dark
-                                                  ? AppColors.theme['secondaryColor']
-                                                  : AppColors.theme['primaryColor'])
-                                                  .withOpacity(_current == entry.key ? 0.9 : 0.4)),
-                                        ),
-                                      );
-                                    }).toList(),
-                                  ),
-                                ],
+
+                              Padding(
+                                padding: const EdgeInsets.all(8.0).copyWith(bottom: 0),
+                                child: StreamBuilder(
+                                    stream: StorageAPI.getImage(widget.post.postId).asStream(),
+                                    builder: (context, snap) {
+                                      // print("#snap: ${snap.data}");
+                                      if (snap.hasData) {
+                                        print("#hd: ${snap.data}");
+                                        widget.post.imageModelList  = snap.data;
+
+                                        // return Container();
+                                        return Column(
+                                          children: [
+                                            CarouselSlider.builder(
+                                              itemCount: widget.post.imageModelList?.length,
+                                              itemBuilder: (BuildContext context, int itemIndex, int pageViewIndex) {
+                                                print("#imgUrl-home-screen: ${widget.post.imageModelList?[itemIndex]}");
+                                                return ImageFrame(imageModel: widget.post.imageModelList?[itemIndex] ?? ImageModel(), provider: null);
+                                              },
+                                              options: CarouselOptions(
+                                                  scrollDirection: Axis.horizontal,
+                                                  autoPlay: widget.post.images?.length != 1,
+                                                  enlargeCenterPage: true,
+                                                  viewportFraction: 1,
+                                                  aspectRatio: 1.0,
+                                                  height: 500,
+
+                                                  initialPage: 0,
+                                                  onPageChanged: (index, reason) {
+                                                    setState(() {
+                                                      _current = index;
+                                                    });
+                                                  }),
+                                            ),
+
+                                            Row(
+                                              mainAxisAlignment: MainAxisAlignment.center,
+                                              children: widget.post.imageModelList!.asMap().entries.map((entry) {
+                                                return GestureDetector(
+                                                  onTap: () => _controller.animateToPage(entry.key),
+                                                  child: Container(
+                                                    width: 12.0,
+                                                    height: 12.0,
+                                                    margin: EdgeInsets.symmetric(vertical: 8.0, horizontal: 4.0),
+                                                    decoration: BoxDecoration(
+                                                        shape: BoxShape.circle,
+                                                        color: (Theme.of(context).brightness == Brightness.dark
+                                                            ? AppColors.theme['secondaryColor']
+                                                            : AppColors.theme['primaryColor'])
+                                                            .withOpacity(_current == entry.key ? 0.9 : 0.4)),
+                                                  ),
+                                                );
+                                              }).toList(),
+                                            ),
+                                          ],
+                                        );
+                                      } else {
+                                        return CircularProgressIndicator(
+                                          color: AppColors.theme['highlightColor'],
+                                        );
+                                      }
+                                    }),
                               ),
                             ],
                           ),
@@ -301,7 +320,7 @@ class _PostCardState extends State<PostCard> {
                             ),
                             pollOptions: List<PollOption>.from(
                               widget.post.poll!.options!.map(
-                                    (option) {
+                                (option) {
                                   var a = PollOption(
                                     id: option.optionId,
                                     title: Text(
@@ -331,22 +350,25 @@ class _PostCardState extends State<PostCard> {
                             likeCount: widget.post.like?.length ?? 0,
                             likeBuilder: (bool isLiked) {
                               return isLiked
-                                  ? Icon(Icons.thumb_up, color: AppColors.theme["primaryColor"],)
-                                  : Icon(Icons.thumb_up_alt_outlined, color: AppColors.theme["primaryColor"],);
+                                  ? Icon(
+                                      Icons.thumb_up,
+                                      color: AppColors.theme["primaryColor"],
+                                    )
+                                  : Icon(
+                                      Icons.thumb_up_alt_outlined,
+                                      color: AppColors.theme["primaryColor"],
+                                    );
                             },
                             bubblesColor: BubblesColor(
                               dotPrimaryColor: AppColors.theme["primaryColor"],
                               dotSecondaryColor: AppColors.theme["secondaryBgColor"],
                             ),
-                            circleColor: CircleColor(
-                                start: AppColors.theme["primaryColor"], end:  AppColors.theme["secondaryBgColor"]
-                            ),
+                            circleColor: CircleColor(start: AppColors.theme["primaryColor"], end: AppColors.theme["secondaryBgColor"]),
                             onTap: (bool isLiked) async {
-                              
                               print("#likeList: ${widget.post.like}");
 
                               bool successful = await PostAPI.onLikeButtonTap(widget.post.postId, appUserProvider.user?.userID ?? "noUser", isLiked);
-                              if(successful){
+                              if (successful) {
                                 if (isLiked)
                                   widget.post.like?.remove(appUserProvider.user?.userID ?? "noUser");
                                 else
@@ -355,17 +377,15 @@ class _PostCardState extends State<PostCard> {
                               print("#succ: $successful");
 
                               return successful ? !isLiked : isLiked;
-                              },
+                            },
                           ),
                         ),
-
 
                         //comment button
                         Padding(
                           padding: EdgeInsets.all(8),
-
                           child: InkWell(
-                            onTap: (){
+                            onTap: () {
                               postProvider.post = widget.post;
                               Navigator.push(context, LeftToRight(CommentScreen()));
                             },
@@ -377,19 +397,17 @@ class _PostCardState extends State<PostCard> {
                                     Icons.comment_rounded,
                                     color: AppColors.theme["primaryColor"],
                                   ),
-
-                                  SizedBox(width: 8,),
-
-                                  Text("${widget.post.comment?.length ?? 0}",
+                                  SizedBox(
+                                    width: 8,
+                                  ),
+                                  Text(
+                                    "${widget.post.comment?.length ?? 0}",
                                     style: TextStyle(fontSize: 15, fontWeight: FontWeight.w500),
                                   ),
-
                                 ],
                               ),
                             ),
                           ),
-
-
                         )
                       ],
                     )
@@ -398,7 +416,6 @@ class _PostCardState extends State<PostCard> {
           ),
         );
       },
-
     );
   }
 }
