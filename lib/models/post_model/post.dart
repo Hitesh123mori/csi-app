@@ -16,7 +16,7 @@ class Post {
   Post({
     this.createBy,
     this.createTime,
-    this.likeCount,
+    this.like,
     this.description,
     this.attachmentName,
     this.pdfLink,
@@ -32,7 +32,7 @@ class Post {
     postId = json['postId'];
     createBy = json['createBy'];
     createTime = json['createTime'];
-    likeCount = json['likeCount'];
+    like = json['likeCount'];
     description = HelperFunctions.base64ToString(json['description']??"");
     attachmentName = json['attachmentName'];
     pdfLink = HelperFunctions.base64ToString(json['pdfLink']??"");
@@ -50,12 +50,12 @@ class Post {
   late String postId;
   String? createBy;
   String? createTime;
-  num? likeCount;
   String? description;
   String? attachmentName;
   String? pdfLink;
   late bool isThereImage;
   Poll? poll;
+  Map<String, bool>? like;
   List<Comment>? comment;
   List<String>? images;
 
@@ -64,7 +64,7 @@ class Post {
     map['postId'] = postId;
     map['createBy'] = createBy;
     map['createTime'] = createTime;
-    map['likeCount'] = likeCount;
+    map['like'] = like;
     map['description'] = HelperFunctions.stringToBase64(description??"");
     map['attachmentName'] = attachmentName;
     map['pdfLink'] = HelperFunctions.stringToBase64(pdfLink??"");
@@ -89,7 +89,7 @@ class Post {
 class Comment {
   Comment({
     this.message,
-    this.likeCount,
+    this.like,
     this.userId,
     this.createdTime,}){
     this.commentId = FirebaseAPIs.uuid.v1();
@@ -98,13 +98,13 @@ class Comment {
   Comment.fromJson(dynamic json) {
     commentId = json['commentId'];
     message = json['message'];
-    likeCount = json['likecount'];
+    like = json['likecount'];
     userId = json['userId'];
     createdTime = json['createdTime'];
   }
   String? commentId;
   String? message;
-  num? likeCount;
+  Map<String, bool>? like;
   String? userId;
   String? createdTime;
 
@@ -112,7 +112,7 @@ class Comment {
     final map = <String, dynamic>{};
     map['commentId'] = commentId;
     map['message'] = message;
-    map['likeCount'] = likeCount;
+    map['likeCount'] = like;
     map['userId'] = userId;
     map['createdTime'] = createdTime;
     return map;
@@ -193,5 +193,4 @@ class Options {
     map['votes'] = votes;
     return map;
   }
-
 }
