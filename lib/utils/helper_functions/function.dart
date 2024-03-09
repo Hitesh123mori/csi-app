@@ -1,5 +1,5 @@
 import 'dart:convert';
-
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:csi_app/utils/colors.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
@@ -7,7 +7,7 @@ import 'package:url_launcher/url_launcher.dart';
 
 class HelperFunctions{
 
-
+  /// for launch url
   static void launchURL(String url) {
     launchUrl(Uri.parse(url));
   }
@@ -59,16 +59,31 @@ class HelperFunctions{
   }
 
 
-  //for encodeing
+  /// for encodeing
   static String stringToBase64(String text){
     return base64.encode(utf8.encode(text));
   }
+
+  /// for decoding
   static String base64ToString(String encodeText){
     return utf8.decode(base64.decode(encodeText));
   }
 
+
+  /// for toast message
+  static void showToast(String msg) {
+    Fluttertoast.showToast(
+      msg: msg,
+      toastLength: Toast.LENGTH_SHORT,
+      gravity: ToastGravity.BOTTOM,
+      backgroundColor: AppColors.theme["tertiaryColor"].withOpacity(0.7),
+      textColor: AppColors.theme["secondaryBgColor"],
+      fontSize: 16.0,
+    );
+  }
+
 }
 
-main (){
-  print("#e ${HelperFunctions.stringToBase64("https://drive.usercontent.google.com/u/0/uc?id=1UDvG0vMZUncEBU820ubJxr8mOmfvCNjU&export=download")}");
-}
+// main (){
+//   print("#e ${HelperFunctions.stringToBase64("https://drive.usercontent.google.com/u/0/uc?id=1UDvG0vMZUncEBU820ubJxr8mOmfvCNjU&export=download")}");
+// }

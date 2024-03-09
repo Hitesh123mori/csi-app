@@ -1,5 +1,6 @@
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/material.dart';
+import 'package:googleapis/admob/v1.dart';
 import 'dart:io';
 import 'package:image_picker/image_picker.dart';
 import 'package:provider/provider.dart';
@@ -98,7 +99,9 @@ class _AddImageState extends State<AddImage> {
                           ? () {
                         if (_formKey.currentState!.validate()) {
                           value.post?.images = imagePaths;
+                          value.post?.attachmentName = _imageNameController.text ;
                           value.notify();
+                          Navigator.push(context, TopToBottom(AddPostScreen())) ;
                         }
                       }
                           : () {},
@@ -152,7 +155,7 @@ class _AddImageState extends State<AddImage> {
                       height: 20,
                     ),
                     if(imagePaths.isNotEmpty)
-                      CarouselSlider(
+                    CarouselSlider(
                         options: CarouselOptions(
                           height: 400.0,
                           enlargeCenterPage: true,
@@ -170,7 +173,7 @@ class _AddImageState extends State<AddImage> {
                                 width: MediaQuery.of(context).size.width,
                                 margin: EdgeInsets.symmetric(horizontal: 5.0),
                                 decoration: BoxDecoration(
-                                  color: Colors.amber,
+                                  color:AppColors.theme['backgroundColor'],
                                 ),
                                 child: Image.file(
                                   File(image.path),

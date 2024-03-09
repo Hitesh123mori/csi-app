@@ -17,34 +17,31 @@ class DriveAPI {
     final driveApi = drive.DriveApi(httpClient);
 
     // Pick a file from device
-    FilePickerResult? result = await FilePicker.platform.pickFiles(allowedExtensions: allowedExtensions);
+    FilePickerResult? result = await FilePicker.platform.pickFiles(type: FileType.custom, allowedExtensions: allowedExtensions);
     if (result != null) {
-      File file = File(result.files.single.path!); // Get the picked file
-      // File metadata
-      final drive.File fileToUpload = drive.File();
-      fileToUpload.name = path.basename(file.path);
-      fileToUpload.parents = parentFolderIDs;
+      try {
+        File file = File(result.files.single.path!); // Get the picked file
 
-      // Upload file
-      final response = driveApi.files.create(fileToUpload, uploadMedia: drive.Media(file.openRead(), file.lengthSync()));
+        // File metadata
+        final drive.File fileToUpload = drive.File();
+        fileToUpload.name = path.basename(file.path);
+        fileToUpload.parents = parentFolderIDs;
 
+        // Upload file
+        final response = await driveApi.files.create(fileToUpload, uploadMedia: drive.Media(file.openRead(), file.lengthSync()));
 
-      response.then((value) {
-        final downloadUrl = "https://drive.usercontent.google.com/u/0/uc?id=${value.id}&export=download";
+        final downloadUrl = "https://drive.usercontent.google.com/u/0/uc?id=${response.id}&export=download";
         print('#File uploaded! File download url: ${downloadUrl}');
         return {"File uploaded": downloadUrl};
-
-      }).onError((error, stackTrace) {
+      } catch (error, stackTrace) {
         print("#error-file-upload: $error \n $stackTrace");
-
         return {"Error": "Something went wrong retry again later"};
-      });
-
+      }
     } else {
       // User canceled the picker
       print('#Error: User canceled the file picking');
       return {"Error": "You cancelled file selection"};
     }
-    return null;
   }
+
 }
