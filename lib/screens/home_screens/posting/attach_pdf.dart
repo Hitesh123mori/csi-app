@@ -81,6 +81,8 @@ class _AttachPdfState extends State<AttachPdf> {
                         ? () {
                       if (_formKey.currentState!.validate()) {
                         print("#urlPdf : ${value.post?.pdfLink}");
+                        value.post?.pdfLink = downloadUrl;
+                        value.post?.isThereImage = false;
                         Navigator.push(context, TopToBottom(AddPostScreen()));
                       }
                     }
@@ -172,9 +174,8 @@ class _AttachPdfState extends State<AttachPdf> {
                       if (uploadResult != null &&
                           uploadResult.containsKey("File uploaded")) {
                         downloadUrl = uploadResult["File uploaded"]!;
-                        value.post?.pdfLink = downloadUrl;
                         isPdfAttached = true ;
-                        print("#pdfLink stored  : ${value.post?.pdfLink}");
+
                       } else if (uploadResult != null &&
                           uploadResult.containsKey("Error")) {
                         String errorMessage = uploadResult["Error"]!;

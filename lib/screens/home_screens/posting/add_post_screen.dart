@@ -12,6 +12,7 @@ import 'package:syncfusion_flutter_pdfviewer/pdfviewer.dart';
 import 'dart:io';
 import '../../../main.dart';
 import '../../../side_transition_effects/TopToBottom.dart';
+import '../../../utils/widgets/dialog_box.dart';
 import '../../../utils/widgets/posting/poll_text_field.dart';
 import '../../../utils/widgets/text_feilds/auth_text_feild.dart';
 import 'add_image.dart';
@@ -152,22 +153,78 @@ class _AddPostScreenState extends State<AddPostScreen> {
                       child: Icon(Icons.image_outlined),
                       label: "Image",
                       onTap: () {
-                        value.post?.description = _descriptionController.text;
-                        value.notify();
-                        Navigator.push(context, BottomToTop(AddImage()));
+                        final post = value.post;
+                        final hasImage = post?.isThereImage ?? false;
+                        final hasPdf = (post?.pdfLink ?? "") != "";
+
+                        if (!hasImage && !hasPdf) {
+                          post?.description = _descriptionController.text;
+                          value.notify();
+                          Navigator.push(context, BottomToTop(AddImage()));
+                        }
+                        else if (!hasImage && hasPdf) {
+                          showDialog(
+                            context: context,
+                            builder: (BuildContext context) {
+                              return CustomDialog(
+                                actionButton1Name: "Delete pdf",
+                                actionButton2Name: "Cancel",
+                                title: 'Attachment Issue',
+                                description:
+                                    'You cannot attach both PDF and image to the same post.',
+                                icon: Icons.error_outline_outlined,
+                                onAction1Pressed: () {
+                                  setState(() {
+                                    value.post?.pdfLink = "";
+                                    Navigator.pop(context) ;
+                                  });
+                                },
+                                onAction2Pressed: () {
+                                  Navigator.pop(context) ;
+                                },
+                              );
+                            },
+                          );
+                        }
                       },
                     ),
-                    SpeedDialChild(
-                      backgroundColor: AppColors.theme['disableButtonColor'],
-                      child: Icon(Icons.picture_as_pdf_outlined),
-                      label: "Pdf",
-                      onTap: () {
-                        value.post?.description = _descriptionController.text;
-                        value.notify();
-                        Navigator.push(context, BottomToTop(AttachPdf()));
-                      },
-                    ),
-                    SpeedDialChild(
+                SpeedDialChild(
+                  backgroundColor: AppColors.theme['disableButtonColor'],
+                  child: Icon(Icons.picture_as_pdf_outlined),
+                  label: "Pdf",
+                  onTap: () {
+                    final post = value.post;
+                    final hasImages = (post?.images?.isNotEmpty ?? false);
+                    if (hasImages) {
+                      showDialog(
+                        context: context,
+                        builder: (BuildContext context) {
+                          return CustomDialog(
+                            actionButton1Name: "Delete images",
+                            actionButton2Name: "Cancel",
+                            title: 'Attachment Issue',
+                            description: 'You cannot attach both PDF and image to the same post.',
+                            icon: Icons.error_outline_outlined,
+                            onAction1Pressed: () {
+                              setState(() {
+                                value.post?.images?.clear();
+                                Navigator.pop(context);
+                              });
+                            },
+                            onAction2Pressed: () {
+                              Navigator.pop(context);
+                            },
+                          );
+                        },
+                      );
+                    } else {
+                      value.post?.description = _descriptionController.text;
+                      value.notify();
+                      Navigator.push(context, BottomToTop(AttachPdf()));
+                    }
+                  },
+                ),
+                SpeedDialChild(
                       backgroundColor: AppColors.theme['disableButtonColor'],
                       child: Icon(Icons.poll_outlined),
                       label: "Poll",
@@ -181,14 +238,15 @@ class _AddPostScreenState extends State<AddPostScreen> {
                 ),
               ),
               body: SingleChildScrollView(
-                child: Column(
-                  children: [
-                    Padding(
-                      padding: const EdgeInsets.symmetric(horizontal: 10.0),
-                      child: Container(
+                child: Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 10.0),
+                  child: Column(
+                    children: [
+                      Container(
                         child: TextFormField(
                           onChanged: (_) {
-                            value.post?.description = _descriptionController.text;
+                            value.post?.description =
+                                _descriptionController.text;
                             value.notify();
                           },
                           controller: _descriptionController,
@@ -199,66 +257,92 @@ class _AddPostScreenState extends State<AddPostScreen> {
                               border: InputBorder.none),
                         ),
                       ),
-                    ),
-
-                    if (value.post?.images?.isNotEmpty?? false)
-                      CarouselSlider(
-                        options: CarouselOptions(
-                          height: 400.0,
-                          enlargeCenterPage: true,
-                          autoPlay: true,
-                          aspectRatio: 16 / 9,
-                          autoPlayCurve: Curves.fastOutSlowIn,
-                          enableInfiniteScroll: true,
-                          autoPlayAnimationDuration: Duration(milliseconds: 800),
-                          viewportFraction: 0.8,
-                        ),
-                        items: value.post?.images!.map((image) {
-                          return Builder(
-                            builder: (BuildContext context) {
-                              return Container(
-                                width: MediaQuery.of(context).size.width,
-                                margin: EdgeInsets.symmetric(horizontal: 5.0),
-                                decoration: BoxDecoration(
-                                  color:AppColors.theme['backgroundColor'],
-                                ),
-                                child: Image.file(
-                                  File(image),
-                                  fit: BoxFit.cover,
-                                ),
-                              );
-                            },
-                          );
-                        }).toList(),
-                      ),
-
-                    if (value.post?.pdfLink?.isNotEmpty?? false)
-                      Padding(
-                        padding: const EdgeInsets.all(8.0).copyWith(
-                          top: 0,
-                        ),
-                        child: Container(
-                          height: 500,
-                          width: mq.width*1,
-                          decoration: BoxDecoration(
-                            color: AppColors.theme['secondaryBgColor'],
-                          ),
-                          child: Padding(
-                            padding: const EdgeInsets.all(8.0),
-                            child: SfPdfViewer.network(
-                              pageLayoutMode: PdfPageLayoutMode.continuous,
-                              canShowScrollHead: false,
-                              pageSpacing: 2,
-                              canShowPageLoadingIndicator: false,
-                              value.post!.pdfLink!,
-                              key: _pdfViewerKey,
-                              scrollDirection: PdfScrollDirection.horizontal,
+                      if (value.post?.images?.isNotEmpty ?? false)
+                        Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Text(
+                              "Attachement",
+                              style: TextStyle(
+                                  fontSize: 16,
+                                  fontWeight: FontWeight.bold,
+                                  color: AppColors.theme['tertiaryColor']),
                             ),
-                          ),
+                            SizedBox(
+                              height: 20,
+                            ),
+                            CarouselSlider(
+                              options: CarouselOptions(
+                                height: 400.0,
+                                enlargeCenterPage: true,
+                                autoPlay: true,
+                                aspectRatio: 16 / 9,
+                                autoPlayCurve: Curves.fastOutSlowIn,
+                                enableInfiniteScroll: true,
+                                autoPlayAnimationDuration:
+                                    Duration(milliseconds: 800),
+                                viewportFraction: 0.8,
+                              ),
+                              items: value.post?.images!.map((image) {
+                                return Builder(
+                                  builder: (BuildContext context) {
+                                    return Container(
+                                      width: MediaQuery.of(context).size.width,
+                                      margin:
+                                          EdgeInsets.symmetric(horizontal: 5.0),
+                                      decoration: BoxDecoration(
+                                        color:
+                                            AppColors.theme['backgroundColor'],
+                                      ),
+                                      child: Image.file(
+                                        File(image),
+                                        fit: BoxFit.cover,
+                                      ),
+                                    );
+                                  },
+                                );
+                              }).toList(),
+                            ),
+                          ],
                         ),
-                      ),
-
-                  ],
+                      if (value.post?.pdfLink?.isNotEmpty ?? false)
+                        Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Text(
+                              "Attachement",
+                              style: TextStyle(
+                                  fontSize: 16,
+                                  fontWeight: FontWeight.bold,
+                                  color: AppColors.theme['tertiaryColor']),
+                            ),
+                            SizedBox(
+                              height: 20,
+                            ),
+                            Container(
+                              height: 500,
+                              width: mq.width * 1,
+                              decoration: BoxDecoration(
+                                color: AppColors.theme['secondaryBgColor'],
+                              ),
+                              child: Padding(
+                                padding: const EdgeInsets.all(8.0),
+                                child: SfPdfViewer.network(
+                                  pageLayoutMode: PdfPageLayoutMode.continuous,
+                                  canShowScrollHead: false,
+                                  pageSpacing: 2,
+                                  canShowPageLoadingIndicator: false,
+                                  value.post!.pdfLink!,
+                                  key: _pdfViewerKey,
+                                  scrollDirection:
+                                      PdfScrollDirection.horizontal,
+                                ),
+                              ),
+                            ),
+                          ],
+                        ),
+                    ],
+                  ),
                 ),
               ),
             ),
