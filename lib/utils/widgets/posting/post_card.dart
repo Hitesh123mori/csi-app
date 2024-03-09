@@ -6,7 +6,7 @@ import 'package:csi_app/models/post_model/post.dart';
 import 'package:csi_app/models/user_model/AppUser.dart';
 import 'package:csi_app/providers/CurrentUser.dart';
 import 'package:csi_app/providers/post_provider.dart';
-import 'package:csi_app/screens/home_screens/posting/comment_screens/CommentScreen.dart';
+import 'package:csi_app/screens/home_screens/posting/comment_screens/comment_screens.dart';
 import 'package:csi_app/side_transition_effects/left_right.dart';
 import 'package:csi_app/utils/colors.dart';
 import 'package:csi_app/utils/helper_functions/function.dart';
@@ -48,11 +48,11 @@ class _PostCardState extends State<PostCard> {
   Widget build(BuildContext context) {
     mq = MediaQuery.of(context).size;
     return Consumer2<PostProvider, AppUserProvider>(
-      builder: (context, postProvider, appUserProvider, child){
-
+      builder: (context, postProvider, appUserProvider, child) {
         //todo remove default user
-        if(isFirst){
-          appUserProvider.user = AppUser(userID: "e5b6c220-b816-1ee5-867c-d719914989a5");
+        if (isFirst) {
+          appUserProvider.user =
+              AppUser(userID: "e5b6c220-b816-1ee5-867c-d719914989a5");
           isFirst = false;
         }
         return Padding(
@@ -81,10 +81,12 @@ class _PostCardState extends State<PostCard> {
                         ),
                         subtitle: Text(
                           "Nirma University Club",
-                          style: TextStyle(color: AppColors.theme['tertiaryColor']),
+                          style: TextStyle(
+                              color: AppColors.theme['tertiaryColor']),
                         ),
                         leading: CircleAvatar(
-                          backgroundImage: AssetImage("assets/images/csi_logo.png"),
+                          backgroundImage:
+                              AssetImage("assets/images/csi_logo.png"),
                           radius: 25,
                         ),
                         contentPadding: EdgeInsets.only(left: 1),
@@ -102,13 +104,18 @@ class _PostCardState extends State<PostCard> {
                         children: [
                           showMore
                               ? Padding(
-                            padding: const EdgeInsets.symmetric(horizontal: 8.0),
-                            child: HelperFunctions.buildContent(widget.post.description ?? ""),
-                          )
+                                  padding: const EdgeInsets.symmetric(
+                                      horizontal: 8.0),
+                                  child: HelperFunctions.buildContent(
+                                      widget.post.description ?? ""),
+                                )
                               : Padding(
-                            padding: const EdgeInsets.symmetric(horizontal: 8.0),
-                            child: HelperFunctions.buildContent(HelperFunctions.truncateDescription(widget.post.description ?? "")),
-                          ),
+                                  padding: const EdgeInsets.symmetric(
+                                      horizontal: 8.0),
+                                  child: HelperFunctions.buildContent(
+                                      HelperFunctions.truncateDescription(
+                                          widget.post.description ?? "")),
+                                ),
                           if (widget.post.description!.length > 100)
                             TextButton(
                               onPressed: () {
@@ -118,7 +125,8 @@ class _PostCardState extends State<PostCard> {
                               },
                               child: Text(
                                 showMore ? 'Show Less' : 'Show More',
-                                style: TextStyle(color: AppColors.theme['tertiaryColor']),
+                                style: TextStyle(
+                                    color: AppColors.theme['tertiaryColor']),
                               ),
                             ),
                         ],
@@ -137,18 +145,27 @@ class _PostCardState extends State<PostCard> {
                               Container(
                                 height: 40,
                                 child: Row(
-                                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                  mainAxisAlignment:
+                                      MainAxisAlignment.spaceBetween,
                                   children: [
                                     Padding(
-                                      padding: const EdgeInsets.symmetric(horizontal: 13.0),
+                                      padding: const EdgeInsets.symmetric(
+                                          horizontal: 13.0),
                                       child: Text(widget.post.attachmentName!,
-                                          style: TextStyle(color: AppColors.theme['tertiaryColor'], fontWeight: FontWeight.bold)),
+                                          style: TextStyle(
+                                              color: AppColors
+                                                  .theme['tertiaryColor'],
+                                              fontWeight: FontWeight.bold)),
                                     ),
                                     Padding(
-                                      padding: const EdgeInsets.symmetric(horizontal: 13.0),
+                                      padding: const EdgeInsets.symmetric(
+                                          horizontal: 13.0),
                                       child: Text(
                                         imageUrls.length.toString() + " Images",
-                                        style: TextStyle(color: AppColors.theme['tertiaryColor'], fontWeight: FontWeight.bold),
+                                        style: TextStyle(
+                                            color: AppColors
+                                                .theme['tertiaryColor'],
+                                            fontWeight: FontWeight.bold),
                                       ),
                                     ),
                                   ],
@@ -160,7 +177,10 @@ class _PostCardState extends State<PostCard> {
                                     padding: const EdgeInsets.all(8.0),
                                     child: CarouselSlider.builder(
                                       itemCount: imageUrls.length,
-                                      itemBuilder: (BuildContext context, int itemIndex, int pageViewIndex) => Image.asset(imageUrls[itemIndex]),
+                                      itemBuilder: (BuildContext context,
+                                              int itemIndex,
+                                              int pageViewIndex) =>
+                                          Image.asset(imageUrls[itemIndex]),
                                       options: CarouselOptions(
                                           scrollDirection: Axis.horizontal,
                                           autoPlay: imageUrls.length != 1,
@@ -177,19 +197,29 @@ class _PostCardState extends State<PostCard> {
                                   ),
                                   Row(
                                     mainAxisAlignment: MainAxisAlignment.center,
-                                    children: imageUrls.asMap().entries.map((entry) {
+                                    children:
+                                        imageUrls.asMap().entries.map((entry) {
                                       return GestureDetector(
-                                        onTap: () => _controller.animateToPage(entry.key),
+                                        onTap: () => _controller
+                                            .animateToPage(entry.key),
                                         child: Container(
                                           width: 12.0,
                                           height: 12.0,
-                                          margin: EdgeInsets.symmetric(vertical: 8.0, horizontal: 4.0),
+                                          margin: EdgeInsets.symmetric(
+                                              vertical: 8.0, horizontal: 4.0),
                                           decoration: BoxDecoration(
                                               shape: BoxShape.circle,
-                                              color: (Theme.of(context).brightness == Brightness.dark
-                                                  ? AppColors.theme['secondaryColor']
-                                                  : AppColors.theme['primaryColor'])
-                                                  .withOpacity(_current == entry.key ? 0.9 : 0.4)),
+                                              color: (Theme.of(context)
+                                                              .brightness ==
+                                                          Brightness.dark
+                                                      ? AppColors.theme[
+                                                          'secondaryColor']
+                                                      : AppColors.theme[
+                                                          'primaryColor'])
+                                                  .withOpacity(
+                                                      _current == entry.key
+                                                          ? 0.9
+                                                          : 0.4)),
                                         ),
                                       );
                                     }).toList(),
@@ -214,30 +244,41 @@ class _PostCardState extends State<PostCard> {
                                 bottomRight: Radius.circular(0),
                               )),
                           height: 40,
-                          child: Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [
-                            Padding(
-                              padding: const EdgeInsets.symmetric(horizontal: 13.0),
-                              child: Text(widget.post.attachmentName ?? "",
-                                  style: TextStyle(color: AppColors.theme['tertiaryColor'], fontWeight: FontWeight.bold)),
-                            ),
-                            Padding(
-                              padding: const EdgeInsets.symmetric(horizontal: 13.0),
-                              child: Row(
-                                mainAxisAlignment: MainAxisAlignment.center,
-                                children: [
-                                  Text("Download", style: TextStyle(color: AppColors.theme['tertiaryColor'], fontWeight: FontWeight.bold)),
-                                  SizedBox(
-                                    width: 3,
+                          child: Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              children: [
+                                Padding(
+                                  padding: const EdgeInsets.symmetric(
+                                      horizontal: 13.0),
+                                  child: Text(widget.post.attachmentName ?? "",
+                                      style: TextStyle(
+                                          color:
+                                              AppColors.theme['tertiaryColor'],
+                                          fontWeight: FontWeight.bold)),
+                                ),
+                                Padding(
+                                  padding: const EdgeInsets.symmetric(
+                                      horizontal: 13.0),
+                                  child: Row(
+                                    mainAxisAlignment: MainAxisAlignment.center,
+                                    children: [
+                                      Text("Download",
+                                          style: TextStyle(
+                                              color: AppColors
+                                                  .theme['tertiaryColor'],
+                                              fontWeight: FontWeight.bold)),
+                                      SizedBox(
+                                        width: 3,
+                                      ),
+                                      Icon(
+                                        Icons.download_rounded,
+                                        size: 20,
+                                        color: AppColors.theme['tertiaryColor'],
+                                      )
+                                    ],
                                   ),
-                                  Icon(
-                                    Icons.download_rounded,
-                                    size: 20,
-                                    color: AppColors.theme['tertiaryColor'],
-                                  )
-                                ],
-                              ),
-                            ),
-                          ]),
+                                ),
+                              ]),
                         ),
                       ),
 
@@ -279,13 +320,18 @@ class _PostCardState extends State<PostCard> {
                                 strokeWidth: 2,
                               ),
                             ),
-                            leadingVotedProgessColor: AppColors.theme['secondaryBgColor'],
-                            votedBackgroundColor: AppColors.theme['secondaryColor'],
-                            votedProgressColor: AppColors.theme['secondaryBgColor'],
-                            pollOptionsSplashColor: AppColors.theme['secondaryBgColor'],
+                            leadingVotedProgessColor:
+                                AppColors.theme['secondaryBgColor'],
+                            votedBackgroundColor:
+                                AppColors.theme['secondaryColor'],
+                            votedProgressColor:
+                                AppColors.theme['secondaryBgColor'],
+                            pollOptionsSplashColor:
+                                AppColors.theme['secondaryBgColor'],
                             createdBy: "CSI",
                             pollId: widget.post.poll?.pollId,
-                            onVoted: (PollOption pollOption, int newTotalVotes) async {
+                            onVoted: (PollOption pollOption,
+                                int newTotalVotes) async {
                               await Future.delayed(const Duration(seconds: 2));
                               return true;
                             },
@@ -301,12 +347,14 @@ class _PostCardState extends State<PostCard> {
                             ),
                             pollOptions: List<PollOption>.from(
                               widget.post.poll!.options!.map(
-                                    (option) {
+                                (option) {
                                   var a = PollOption(
                                     id: option.optionId,
                                     title: Text(
                                       option.title ?? "",
-                                      style: TextStyle(color: AppColors.theme['tertiaryColor']),
+                                      style: TextStyle(
+                                          color:
+                                              AppColors.theme['tertiaryColor']),
                                     ),
                                     votes: option.votes,
                                   );
@@ -327,47 +375,60 @@ class _PostCardState extends State<PostCard> {
                         Padding(
                           padding: const EdgeInsets.all(8.0),
                           child: LikeButton(
-                            isLiked: widget.post.like?[appUserProvider.user?.userID] ?? false,
+                            isLiked: widget
+                                    .post.like?[appUserProvider.user?.userID] ??
+                                false,
                             likeCount: widget.post.like?.length ?? 0,
                             likeBuilder: (bool isLiked) {
                               return isLiked
-                                  ? Icon(Icons.thumb_up, color: AppColors.theme["primaryColor"],)
-                                  : Icon(Icons.thumb_up_alt_outlined, color: AppColors.theme["primaryColor"],);
+                                  ? Icon(
+                                      Icons.thumb_up,
+                                      color: AppColors.theme["primaryColor"],
+                                    )
+                                  : Icon(
+                                      Icons.thumb_up_alt_outlined,
+                                      color: AppColors.theme["primaryColor"],
+                                    );
                             },
                             bubblesColor: BubblesColor(
                               dotPrimaryColor: AppColors.theme["primaryColor"],
-                              dotSecondaryColor: AppColors.theme["secondaryBgColor"],
+                              dotSecondaryColor:
+                                  AppColors.theme["secondaryBgColor"],
                             ),
                             circleColor: CircleColor(
-                                start: AppColors.theme["primaryColor"], end:  AppColors.theme["secondaryBgColor"]
-                            ),
+                                start: AppColors.theme["primaryColor"],
+                                end: AppColors.theme["secondaryBgColor"]),
                             onTap: (bool isLiked) async {
-                              
                               print("#likeList: ${widget.post.like}");
 
-                              bool successful = await PostAPI.onLikeButtonTap(widget.post.postId, appUserProvider.user?.userID ?? "noUser", isLiked);
-                              if(successful){
+                              bool successful = await PostAPI.onLikeButtonTap(
+                                  widget.post.postId,
+                                  appUserProvider.user?.userID ?? "noUser",
+                                  isLiked);
+                              if (successful) {
                                 if (isLiked)
-                                  widget.post.like?.remove(appUserProvider.user?.userID ?? "noUser");
+                                  widget.post.like?.remove(
+                                      appUserProvider.user?.userID ?? "noUser");
                                 else
-                                  widget.post.like?[appUserProvider.user?.userID ?? "noUser"] = true;
+                                  widget.post.like?[
+                                      appUserProvider.user?.userID ??
+                                          "noUser"] = true;
                               }
                               print("#succ: $successful");
 
                               return successful ? !isLiked : isLiked;
-                              },
+                            },
                           ),
                         ),
-
 
                         //comment button
                         Padding(
                           padding: EdgeInsets.all(8),
-
                           child: InkWell(
-                            onTap: (){
+                            onTap: () {
                               postProvider.post = widget.post;
-                              Navigator.push(context, LeftToRight(CommentScreen()));
+                              Navigator.push(
+                                  context, LeftToRight(CommentScreen()));
                             },
                             child: Container(
                               child: Row(
@@ -377,19 +438,19 @@ class _PostCardState extends State<PostCard> {
                                     Icons.comment_rounded,
                                     color: AppColors.theme["primaryColor"],
                                   ),
-
-                                  SizedBox(width: 8,),
-
-                                  Text("${widget.post.comment?.length ?? 0}",
-                                    style: TextStyle(fontSize: 15, fontWeight: FontWeight.w500),
+                                  SizedBox(
+                                    width: 8,
                                   ),
-
+                                  Text(
+                                    "${widget.post.comment?.length ?? 0}",
+                                    style: TextStyle(
+                                        fontSize: 15,
+                                        fontWeight: FontWeight.w500),
+                                  ),
                                 ],
                               ),
                             ),
                           ),
-
-
                         )
                       ],
                     )
@@ -398,7 +459,6 @@ class _PostCardState extends State<PostCard> {
           ),
         );
       },
-
     );
   }
 }
