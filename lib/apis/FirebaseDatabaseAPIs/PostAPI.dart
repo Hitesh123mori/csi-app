@@ -19,6 +19,34 @@ class PostAPI {
 
   }
 
+  static Future<bool> onLikeButtonTap(String postId, String userId, bool isLiked) async {
+    if(isLiked){
+      print("#isLike: ${isLiked}");
+      return await FirebaseAPIs.rtdbRef.child("post/${postId}/like/${userId}").remove()
+          .then((value) {
+            print("#like R $postId");
+            return true;
+          })
+          .onError((error, stackTrace) {
+          print("#like R E $postId:${error}, ${stackTrace}");
+
+        return false;
+          });
+    }
+    else
+    return await FirebaseAPIs.rtdbRef.child("post/${postId}/like/${userId}").set(true)
+        .then((value) {
+        print("#like A $postId");
+
+    return true;
+        })
+        .onError((error, stackTrace) {
+      print("#like A E $postId: ${error}, ${stackTrace}");
+
+      return false;
+        });
+  }
+
 
 
 }

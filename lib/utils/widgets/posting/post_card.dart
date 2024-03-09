@@ -1,7 +1,9 @@
 import 'package:carousel_slider/carousel_slider.dart';
+import 'package:csi_app/apis/FirebaseDatabaseAPIs/PostAPI.dart';
 import 'package:csi_app/apis/StorageAPIs/StorageAPI.dart';
 import 'package:csi_app/main.dart';
 import 'package:csi_app/models/post_model/post.dart';
+import 'package:csi_app/models/user_model/AppUser.dart';
 import 'package:csi_app/providers/CurrentUser.dart';
 import 'package:csi_app/providers/post_provider.dart';
 import 'package:csi_app/screens/home_screens/posting/comment_screens/CommentScreen.dart';
@@ -31,6 +33,7 @@ class _PostCardState extends State<PostCard> {
   int _current = 0;
   final CarouselController _controller = CarouselController();
   final GlobalKey<SfPdfViewerState> _pdfViewerKey = GlobalKey();
+  bool isFirst = true;
 
   @override
   void initState() {
@@ -46,6 +49,12 @@ class _PostCardState extends State<PostCard> {
     mq = MediaQuery.of(context).size;
     return Consumer2<PostProvider, AppUserProvider>(
       builder: (context, postProvider, appUserProvider, child){
+
+        //todo remove default user
+        if(isFirst){
+          appUserProvider.user = AppUser(userID: "e5b6c220-b816-1ee5-867c-d719914989a5");
+          isFirst = false;
+        }
         return Padding(
           padding: EdgeInsets.all(5),
           child: Material(
@@ -332,11 +341,26 @@ class _PostCardState extends State<PostCard> {
                             circleColor: CircleColor(
                                 start: AppColors.theme["primaryColor"], end:  AppColors.theme["secondaryBgColor"]
                             ),
+                            onTap: (bool isLiked) async {
+                              
+                              print("#likeList: ${widget.post.like}");
+
+                              bool successful = await PostAPI.onLikeButtonTap(widget.post.postId, appUserProvider.user?.userID ?? "noUser", isLiked);
+                              if(successful){
+                                if (isLiked)
+                                  widget.post.like?.remove(appUserProvider.user?.userID ?? "noUser");
+                                else
+                                  widget.post.like?[appUserProvider.user?.userID ?? "noUser"] = true;
+                              }
+                              print("#succ: $successful");
+
+                              return successful ? !isLiked : isLiked;
+                              },
                           ),
                         ),
 
-                        //comment button
 
+                        //comment button
                         Padding(
                           padding: EdgeInsets.all(8),
 

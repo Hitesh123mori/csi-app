@@ -20,18 +20,12 @@ class AddImage extends StatefulWidget {
 
 class _AddImageState extends State<AddImage> {
   bool isImageButtonEnabled = false;
-
-  TextEditingController _imageNameController = TextEditingController();
-
-  // form key
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
-
+  TextEditingController _imageNameController = TextEditingController();
   List<XFile>? _imageList = [];
-
-  List<String> imagePaths = [] ;
-
+  List<String> imagePaths = [];
   bool isImageUploaded = false;
-
+  late FocusNode _textFieldFocusNode;
 
   Future<void> _pickImages() async {
     List<XFile>? images = await ImagePicker().pickMultiImage();
@@ -42,27 +36,28 @@ class _AddImageState extends State<AddImage> {
         isImageUploaded = true;
       });
     }
-    print("#images uploaded ${_imageList!.length} images") ;
+    print("#images uploaded ${_imageList!.length} images");
   }
 
   @override
   void initState() {
     super.initState();
-    // for pdf name
     _imageNameController.addListener(updateButtonState);
-  }
-
-  void updateButtonState() {
-    setState(() {
-      isImageButtonEnabled = _imageNameController.text.isNotEmpty;
-    });
+    _textFieldFocusNode = FocusNode(); // Initialize FocusNode
   }
 
   @override
   void dispose() {
     _imageNameController.removeListener(updateButtonState);
-
+    _textFieldFocusNode.dispose(); // Dispose FocusNode
     super.dispose();
+  }
+
+  void updateButtonState() {
+    setState(() {
+      isImageButtonEnabled = _imageNameController.text.isNotEmpty &&
+          imagePaths.isNotEmpty;
+    });
   }
 
   @override
@@ -78,7 +73,8 @@ class _AddImageState extends State<AddImage> {
               appBar: AppBar(
                 leading: IconButton(
                   onPressed: () {
-                    Navigator.push(context, TopToBottom(AddPostScreen()));
+                    Navigator.push(
+                        context, TopToBottom(AddPostScreen()));
                   },
                   icon: Icon(
                     Icons.keyboard_arrow_left_outlined,
@@ -87,7 +83,8 @@ class _AddImageState extends State<AddImage> {
                 ),
                 title: Text(
                   "Attach Images",
-                  style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+                  style:
+                  TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
                 ),
                 backgroundColor: AppColors.theme['secondaryColor'],
                 surfaceTintColor: AppColors.theme['secondaryColor'],
@@ -99,9 +96,12 @@ class _AddImageState extends State<AddImage> {
                           ? () {
                         if (_formKey.currentState!.validate()) {
                           value.post?.images = imagePaths;
-                          value.post?.attachmentName = _imageNameController.text ;
+                          value.post?.attachmentName =
+                              _imageNameController.text;
+                          value.post?.isThereImage = true ;
                           value.notify();
-                          Navigator.push(context, TopToBottom(AddPostScreen())) ;
+                          Navigator.push(
+                              context, TopToBottom(AddPostScreen()));
                         }
                       }
                           : () {},
@@ -110,14 +110,14 @@ class _AddImageState extends State<AddImage> {
                         width: 100,
                         child: Center(
                             child: Text(
-                          "Attach",
-                          style: TextStyle(
-                            color: isImageButtonEnabled
-                                ? AppColors.theme['secondaryColor']
-                                : AppColors.theme['tertiaryColor']
+                              "Attach",
+                              style: TextStyle(
+                                color: isImageButtonEnabled
+                                    ? AppColors.theme['secondaryColor']
+                                    : AppColors.theme['tertiaryColor']
                                     .withOpacity(0.5),
-                          ),
-                        )),
+                              ),
+                            )),
                         decoration: BoxDecoration(
                           color: isImageButtonEnabled
                               ? AppColors.theme['primaryColor']
@@ -130,8 +130,8 @@ class _AddImageState extends State<AddImage> {
                 ],
               ),
               body: Padding(
-                padding:
-                    const EdgeInsets.symmetric(horizontal: 20, vertical: 20),
+                padding: const EdgeInsets.symmetric(
+                    horizontal: 20, vertical: 20),
                 child: ListView(
                   children: [
                     Text(
@@ -150,12 +150,13 @@ class _AddImageState extends State<AddImage> {
                       isNumber: false,
                       prefixicon: Icon(Icons.drive_file_rename_outline),
                       obsecuretext: false,
+                      focusNode: _textFieldFocusNode, // Assign FocusNode
                     ),
                     SizedBox(
                       height: 20,
                     ),
-                    if(imagePaths.isNotEmpty)
-                    CarouselSlider(
+                    if (imagePaths.isNotEmpty)
+                      CarouselSlider(
                         options: CarouselOptions(
                           height: 400.0,
                           enlargeCenterPage: true,
@@ -163,7 +164,8 @@ class _AddImageState extends State<AddImage> {
                           aspectRatio: 16 / 9,
                           autoPlayCurve: Curves.fastOutSlowIn,
                           enableInfiniteScroll: true,
-                          autoPlayAnimationDuration: Duration(milliseconds: 800),
+                          autoPlayAnimationDuration:
+                          Duration(milliseconds: 800),
                           viewportFraction: 0.8,
                         ),
                         items: _imageList!.map((image) {
@@ -171,9 +173,11 @@ class _AddImageState extends State<AddImage> {
                             builder: (BuildContext context) {
                               return Container(
                                 width: MediaQuery.of(context).size.width,
-                                margin: EdgeInsets.symmetric(horizontal: 5.0),
+                                margin: EdgeInsets.symmetric(
+                                    horizontal: 5.0),
                                 decoration: BoxDecoration(
-                                  color:AppColors.theme['backgroundColor'],
+                                  color:
+                                  AppColors.theme['backgroundColor'],
                                 ),
                                 child: Image.file(
                                   File(image.path),
@@ -184,7 +188,7 @@ class _AddImageState extends State<AddImage> {
                           );
                         }).toList(),
                       ),
-                    if(imagePaths.isNotEmpty)
+                    if (imagePaths.isNotEmpty)
                       SizedBox(
                         height: 20,
                       ),
@@ -201,11 +205,14 @@ class _AddImageState extends State<AddImage> {
                         ),
                         backgroundColor: MaterialStateProperty.all<Color>(
                             Colors.transparent),
-                        surfaceTintColor: MaterialStateProperty.all<Color>(
+                        surfaceTintColor:
+                        MaterialStateProperty.all<Color>(
                             AppColors.theme['primaryColor']),
                       ),
                       child: Text(
-                        !isImageUploaded ?  'Select Images' : "Reupload Images",
+                        !isImageUploaded
+                            ? 'Select Images'
+                            : "Reupload Images",
                         style: TextStyle(
                           fontWeight: FontWeight.bold,
                           color: AppColors.theme['tertiaryColor'],
@@ -222,3 +229,4 @@ class _AddImageState extends State<AddImage> {
     );
   }
 }
+
