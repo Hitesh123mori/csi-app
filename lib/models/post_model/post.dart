@@ -26,13 +26,14 @@ class Post {
     this.images,
   }) {
     this.postId = FirebaseAPIs.uuid.v1();
+    this.like = {};
   }
 
   Post.fromJson(dynamic json) {
     postId = json['postId'];
     createBy = json['createBy'];
     createTime = json['createTime'];
-    like = json['likeCount'];
+    like = json['like'] ?? {};
     description = HelperFunctions.base64ToString(json['description']??"");
     attachmentName = json['attachmentName'];
     pdfLink = HelperFunctions.base64ToString(json['pdfLink']??"");
@@ -55,7 +56,7 @@ class Post {
   String? pdfLink;
   late bool isThereImage;
   Poll? poll;
-  Map<String, bool>? like;
+  Map<String, dynamic>? like;
   List<Comment>? comment;
   List<String>? images;
 
@@ -64,7 +65,7 @@ class Post {
     map['postId'] = postId;
     map['createBy'] = createBy;
     map['createTime'] = createTime;
-    map['like'] = like;
+    map['like'] = like ?? {};
     map['description'] = HelperFunctions.stringToBase64(description??"");
     map['attachmentName'] = attachmentName;
     map['pdfLink'] = HelperFunctions.stringToBase64(pdfLink??"");
