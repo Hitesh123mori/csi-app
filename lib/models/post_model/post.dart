@@ -80,9 +80,6 @@ class Post {
     if (comment != null) {
       map['comment'] = comment?.map((v) => {v.commentId: v.toJson()});
     }
-    return map;
-  }
-
 }
 
 /// commentId : "cid-1"

@@ -14,8 +14,10 @@ import 'package:csi_app/side_transition_effects/left_right.dart';
 import 'package:csi_app/utils/colors.dart';
 import 'package:csi_app/utils/helper_functions/date_format.dart';
 import 'package:csi_app/utils/helper_functions/function.dart';
+import 'package:csi_app/utils/shimmer_effects/post_screen_shimmer_effect.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_polls/flutter_polls.dart';
+import 'package:googleapis/monitoring/v3.dart';
 import 'package:like_button/like_button.dart';
 import 'package:provider/provider.dart';
 import 'package:syncfusion_flutter_pdfviewer/pdfviewer.dart';
@@ -39,17 +41,11 @@ class _PostCardState extends State<PostCard> {
   final CarouselController _controller = CarouselController();
   final GlobalKey<SfPdfViewerState> _pdfViewerKey = GlobalKey();
   bool isFirst = true;
-  PostCreator? postCreator;
-
-  Future getPostCreator()async {
-    postCreator = await PostUserProfile.getPostCreator(widget.post.createBy ?? "");
-  }
 
 
   @override
   void initState() {
     super.initState();
-    getPostCreator();
   }
 
   @override
@@ -57,6 +53,7 @@ class _PostCardState extends State<PostCard> {
     mq = MediaQuery.of(context).size;
     return Consumer2<PostProvider, AppUserProvider>(
       builder: (context, postProvider, appUserProvider, child) {
+
         return Padding(
           padding: EdgeInsets.all(5),
           child: Material(
@@ -72,42 +69,56 @@ class _PostCardState extends State<PostCard> {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     // post header
-                    Card(
-                      elevation: 0,
-                      surfaceTintColor: AppColors.theme['secondaryColor'],
-                      color: AppColors.theme['secondaryColor'],
-                      // color: AppColors.theme['secondaryBgColor'],
-                      child: ListTile(
-                        isThreeLine: true,
-                        title: Text(
-                          "${postCreator?.name}",
-                          style: TextStyle(fontWeight: FontWeight.bold),
-                        ),
-                        subtitle: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Text(
-                              "${postCreator?.about ?? ""}",
-                              style: TextStyle(color: AppColors.theme['tertiaryColor']),
-                            ),
-                            Text(
-                              "${MyDateUtil.getMessageTime(context: context, time: widget.post.createTime ?? "0")}",
-                              style: TextStyle(color: AppColors.theme['tertiaryColor'], fontSize: 11),
-                            )
-                          ],
-                        ),
+                    StreamBuilder(stream: PostUserProfile.getPostCreator(widget.post.createBy ?? "").asStream(),
+                        builder: (context, snapshot){
+                          if(snapshot.hasData){
+                            PostCreator postCreator = PostCreator.fromJson(snapshot.data);
 
-                        leading: CircleAvatar(
-                          child: Text("${postCreator?.name?[0].toUpperCase()}"),
-                          radius: 25,
-                          backgroundColor: AppColors.theme["secondaryBgColor"],
-                        ),
-                        contentPadding: EdgeInsets.only(left: 1),
-                        trailing: IconButton(
-                          onPressed: () {},
-                          icon: Icon(Icons.more_vert_outlined),
-                        ),
-                      ),
+                            return Card(
+                              elevation: 0,
+                              surfaceTintColor: AppColors.theme['secondaryColor'],
+                              color: AppColors.theme['secondaryColor'],
+                              // color: AppColors.theme['secondaryBgColor'],
+                              child: ListTile(
+                                isThreeLine: true,
+                                title: Text(
+                                  "${postCreator?.name}",
+                                  style: TextStyle(fontWeight: FontWeight.bold),
+                                ),
+                                subtitle: Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    Text(
+                                      "${postCreator?.about ?? ""}",
+                                      style: TextStyle(color: AppColors.theme['tertiaryColor']),
+                                    ),
+                                    Text(
+                                      "${MyDateUtil.getMessageTime(context: context, time: widget.post.createTime ?? "0")}",
+                                      style: TextStyle(color: AppColors.theme['tertiaryColor'], fontSize: 11),
+                                    )
+                                  ],
+                                ),
+
+                                leading: CircleAvatar(
+                                  child: Text("${postCreator?.name?[0].toUpperCase()}"),
+                                  radius: 25,
+                                  backgroundColor: AppColors.theme["secondaryBgColor"],
+                                ),
+                                contentPadding: EdgeInsets.only(left: 1),
+                                trailing: IconButton(
+                                  onPressed: () {},
+                                  icon: Icon(Icons.more_vert_outlined),
+                                ),
+                              ),
+                            );
+                          }
+
+                          else {
+                            return PostShimmerEffect();
+                          }
+
+                        }
+
                     ),
 
                     // display description if present
@@ -325,7 +336,7 @@ class _PostCardState extends State<PostCard> {
                             votedBackgroundColor: AppColors.theme['secondaryColor'],
                             votedProgressColor: AppColors.theme['secondaryBgColor'],
                             pollOptionsSplashColor: AppColors.theme['secondaryBgColor'],
-                            createdBy: "${postCreator?.name}",
+                            createdBy: "",
                             pollId: widget.post.poll?.pollId,
                             onVoted: (PollOption pollOption, int newTotalVotes) async {
 

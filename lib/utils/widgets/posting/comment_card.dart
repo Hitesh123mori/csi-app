@@ -1,3 +1,4 @@
+import 'package:csi_app/models/user_model/post_creator.dart';
 import 'package:csi_app/providers/CurrentUser.dart';
 import 'package:csi_app/utils/colors.dart';
 import 'package:csi_app/utils/helper_functions/date_format.dart';
@@ -11,7 +12,8 @@ import '../../../models/post_model/post.dart';
 
 class CommentCard extends StatefulWidget {
   final PostComment cmnt;
-  const CommentCard({super.key, required this.cmnt});
+  final String postCreatorId ;
+  const CommentCard({super.key, required this.cmnt, required this.postCreatorId});
 
   @override
   State<CommentCard> createState() => _CommentCardState();
@@ -53,7 +55,8 @@ class _CommentCardState extends State<CommentCard> {
                     appUserProvider.user?.about ?? "",
                     style: TextStyle(color: AppColors.theme['tertiaryColor'], fontWeight: FontWeight.w500),
                   ),
-                  trailing: Row(
+                  trailing: appUserProvider.user?.userID == widget.postCreatorId
+                      ? Row(
                     mainAxisSize: MainAxisSize.min,
                     children: [
                       Container(
@@ -71,7 +74,8 @@ class _CommentCardState extends State<CommentCard> {
                         ),
                       ),
                     ],
-                  ),
+                  )
+                      : Container(),
 
                 ),
                 Padding(
