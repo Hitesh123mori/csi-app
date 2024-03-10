@@ -43,8 +43,16 @@ class _SplashScreenState extends State<SplashScreen> {
         systemNavigationBarIconBrightness: Brightness.dark,
       ));
       if (FirebaseAPIs.auth.currentUser != null) {
-        await widget.appUser.initUser();
-        Navigator.pushReplacement(context, LeftToRight(HomeScreen()));
+        try {
+          await widget.appUser.initUser();
+          Navigator.pushReplacement(context, LeftToRight(HomeScreen()));
+        }
+        catch (e){
+          print("#Error: $e");
+          widget.appUser.logOut();
+          Navigator.pushReplacement(context, RightToLeft(OnboardingScreen()));
+
+        }
       } else
         Navigator.pushReplacement(context, RightToLeft(OnboardingScreen()));
     });

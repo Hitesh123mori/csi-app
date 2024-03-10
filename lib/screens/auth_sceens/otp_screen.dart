@@ -221,6 +221,9 @@ class _OtpScreenState extends State<OtpScreen> {
                                           Navigator.pushReplacement(context,
                                               LeftToRight(SetPassword(emailAddress: _emailController.text,)));
                                         }
+                                        else{
+                                          HelperFunctions.showToast("Invalid OTP");
+                                        }
 
                                       }
                                     },
@@ -277,7 +280,29 @@ class _OtpScreenState extends State<OtpScreen> {
                             mainAxisAlignment: MainAxisAlignment.end,
                             children: [
                               TextButton(
-                                onPressed: () {},
+                                onPressed: () async {
+                                  if (isButtonEnabled) {
+                                    FocusScope.of(context).unfocus();
+                                    setState(() {
+                                      isButtonClicked = false;
+                                      _isLoading = true;
+                                    });
+                                    if (_formKey.currentState!.validate()) {
+
+                                      var res = await FirebaseAuth.sendOTP(_emailController.text.trim());
+                                      print("#res-otp-screen: $res");
+                                      HelperFunctions.showToast(res);
+                                      setState(() {
+                                        _isLoading = false;
+                                      });
+                                      setState(() {
+                                        isButtonClicked = true;
+                                        enablePinput = true;
+                                      });
+                                    }
+                                  }
+
+                                },
                                 child: Text(
                                   "Resend OTP",
                                   style: TextStyle(
