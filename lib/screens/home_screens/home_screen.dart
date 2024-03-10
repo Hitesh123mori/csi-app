@@ -27,7 +27,7 @@ class _HomeScreenState extends State<HomeScreen> {
   Widget screenname = PostsScreen();
 
   final FocusNode _focusNode = FocusNode();
-
+  bool _isFirst = true;
 
   @override
   void initState() {
@@ -47,9 +47,11 @@ class _HomeScreenState extends State<HomeScreen> {
   @override
   Widget build(BuildContext context) {
     mq = MediaQuery.of(context).size;
-    return Consumer2<BottomNavigationProvider, AppUserProvider>(
-        builder: (context, bottomNavProvider, appUserProvider, child) {
-          initUser(appUserProvider);
+    return Consumer2<BottomNavigationProvider, AppUserProvider>(builder: (context, bottomNavProvider, appUserProvider, child) {
+      if (_isFirst){
+        initUser(appUserProvider);
+        _isFirst = false;
+      }
       print("#user :  ${appUserProvider.user?.name}");
       return Scaffold(
         appBar: AppBar(
@@ -61,8 +63,7 @@ class _HomeScreenState extends State<HomeScreen> {
               ? SafeArea(
                   child: Container(
                     height: 45,
-                    constraints: BoxConstraints(
-                        minWidth: 200, maxWidth: 250, maxHeight: 50),
+                    constraints: BoxConstraints(minWidth: 200, maxWidth: 250, maxHeight: 50),
                     alignment: Alignment.center,
                     decoration: BoxDecoration(
                       color: AppColors.theme['secondaryBgColor'],
@@ -91,10 +92,7 @@ class _HomeScreenState extends State<HomeScreen> {
               : SafeArea(
                   child: Text(
                     bottomNavProvider.current,
-                    style: TextStyle(
-                        color: AppColors.theme['tertiaryColor'],
-                        fontWeight: FontWeight.bold,
-                        fontSize: 18),
+                    style: TextStyle(color: AppColors.theme['tertiaryColor'], fontWeight: FontWeight.bold, fontSize: 18),
                   ),
                 ),
           leading: Padding(
