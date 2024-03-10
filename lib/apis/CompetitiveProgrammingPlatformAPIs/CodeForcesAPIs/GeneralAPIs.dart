@@ -3,7 +3,7 @@ import 'package:csi_app/apis/CompetitiveProgrammingPlatformAPIs/CodeForcesAPIs/C
 import 'package:csi_app/models/user_model/CodeforcesUserProfile.dart';
 import 'package:http/http.dart' as http;
 
-class GeneralAPIs{
+class CFGeneralAPIs{
   static Future<dynamic> getCFSubmissions(String handle) async {
     final response = await http.get(Uri.parse(CodeForcesURLs.userProblemSolved(username: handle)));
 
@@ -56,23 +56,27 @@ class GeneralAPIs{
   }
 
 
-  static Future<CodeforcesUserProfile?> fetchCodeforcesUserProfile(String handle) async {
+  static Stream<Map<String, dynamic>> fetchCodeforcesUserProfile(String handle) async* {
     final response = await http.get(Uri.parse('https://codeforces.com/api/user.info?handles=$handle'));
 
-    if (response.statusCode != 200) {
-      print('Failed to load data: ${response.statusCode}');
-      return null;
-      // throw Exception('Failed to load data: ${response.statusCode}');
+    if (response.statusCode == 200) {
+      final responseData = jsonDecode(response.body);
+      final List<dynamic> users = responseData['result'];
+
+      if (users.isNotEmpty) {
+        yield {
+          'handle': users[0]['handle'],
+          'rating': users[0]['rating'] ?? '0',
+          'rank': users[0]['rank'] ?? "None",
+          'maxRating': users[0]['maxRating'] ?? '0',
+          'maxRank': users[0]['maxRank'] ?? 'None',
+        };
+      } else {
+        throw Exception('User not found');
+      }
+    } else {
+      throw Exception('Failed to load data: ${response.statusCode}');
     }
-
-    final Map<String, dynamic> responseData = jsonDecode(response.body);
-    final List<dynamic> users = responseData['result'];
-
-    if (users.isEmpty) {
-      throw Exception('User not found');
-    }
-
-    return CodeforcesUserProfile.fromJson(users[0]);
   }
 
 }

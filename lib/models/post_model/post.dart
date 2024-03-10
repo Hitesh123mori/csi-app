@@ -46,7 +46,7 @@ class Post {
     if (json['comment'] != null) {
       comment = [];
       json['comment'].forEach((k, v) {
-        comment?.add(postComment.fromJson(v));
+        comment?.add(PostComment.fromJson(v));
       });
     }
   }
@@ -59,7 +59,7 @@ class Post {
   late bool isThereImage;
   Poll? poll;
   Map<dynamic, dynamic>? like;
-  List<postComment>? comment;
+  List<PostComment>? comment;
   List<XFile>? images;
   List<ImageModel>? imageModelList;
 
@@ -90,8 +90,8 @@ class Post {
 /// userId : ""
 /// createdTime : ""
 
-class postComment {
-  postComment({
+class PostComment {
+  PostComment({
     this.message,
     this.like,
     this.userId,
@@ -99,7 +99,7 @@ class postComment {
     this.commentId = FirebaseAPIs.uuid.v1();
   }
 
-  postComment.fromJson(dynamic json) {
+  PostComment.fromJson(dynamic json) {
     commentId = json['commentId'];
     message = json['message'];
     like = json['like'];
