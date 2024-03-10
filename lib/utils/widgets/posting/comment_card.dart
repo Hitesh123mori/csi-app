@@ -45,7 +45,7 @@ class _CommentCardState extends State<CommentCard> {
                         child: Text(
                       HelperFunctions.getInitials(appUserProvider.user?.name ?? ""),
                       style: TextStyle(color: AppColors.theme['tertiaryColor'], fontWeight: FontWeight.bold),
-                    )),
+                        )),
                   ),
                   title: Text(
                     appUserProvider.user?.name ?? "",

@@ -44,10 +44,7 @@ class _CommentScreenState extends State<CommentScreen> {
                   surfaceTintColor: AppColors.theme['secondaryColor'],
                   title: Text(
                     "Comments",
-                    style: TextStyle(
-                        fontSize: 20,
-                        fontWeight: FontWeight.bold,
-                        color: AppColors.theme['tertiaryColor']),
+                    style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold, color: AppColors.theme['tertiaryColor']),
                   ),
                   backgroundColor: AppColors.theme['secondaryColor'],
                   leading: IconButton(
@@ -62,26 +59,32 @@ class _CommentScreenState extends State<CommentScreen> {
                 ),
                 body: SafeArea(
                   child: Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 10.0,vertical: 10),
+                    padding: const EdgeInsets.symmetric(horizontal: 10.0, vertical: 10),
                     child: Column(
                       children: [
                         Expanded(
-                          child: (postProvider.post?.comment?.isEmpty ?? true )? Center(
-                            child: Text(
-                              'No comments yet',
-                              style: TextStyle(
-                                fontSize: 16,
-                                color: Colors.grey,
-                              ),
-                            ),
-                          ) : ListView.builder(
-                            physics: BouncingScrollPhysics(),
-                              itemCount: postProvider.post?.comment!.length,
-                              itemBuilder: (BuildContext context, int index) {
-                            return CommentCard(cmnt: postProvider.post!.comment![index], postCreatorId: postProvider.post?.createBy??"",);
-                          }),
+                          child: (postProvider.post?.comment?.isEmpty ?? true)
+                              ? Center(
+                                  child: Text(
+                                    'No comments yet',
+                                    style: TextStyle(
+                                      fontSize: 16,
+                                      color: Colors.grey,
+                                    ),
+                                  ),
+                                )
+                              : ListView.builder(
+                                  physics: BouncingScrollPhysics(),
+                                  itemCount: postProvider.post?.comment?.length ?? 0,
+                                  itemBuilder: (BuildContext context, int index) {
+                                    print("#mmmm");
+                                    return CommentCard(
+                                      cmnt: postProvider.post!.comment![index],
+                                      postCreatorId: postProvider.post?.createBy ?? "",
+                                    );
+                                  }),
                         ),
-                        buildChatInput(appUserProvider.user!,postProvider.post!),
+                        buildChatInput(appUserProvider.user!, postProvider.post!),
                       ],
                     ),
                   ),
@@ -94,7 +97,7 @@ class _CommentScreenState extends State<CommentScreen> {
 
   // custom input text filed
 
-  Widget buildChatInput(AppUser user,Post post) {
+  Widget buildChatInput(AppUser user, Post post) {
     return Padding(
       padding: EdgeInsets.symmetric(
         horizontal: mq.width * 0.01,
@@ -114,22 +117,19 @@ class _CommentScreenState extends State<CommentScreen> {
                   SizedBox(width: mq.width * 0.03),
                   Expanded(
                     child: Container(
-                      constraints:
-                          BoxConstraints(maxHeight: _textFieldMaxHeight),
+                      constraints: BoxConstraints(maxHeight: _textFieldMaxHeight),
                       child: SingleChildScrollView(
                         child: TextField(
                           controller: _textController,
                           focusNode: _messageFocusNode,
                           onChanged: (text) {
                             setState(() {
-                              _isMessageTextFieldFocused =
-                                  _messageFocusNode.hasFocus;
+                              _isMessageTextFieldFocused = _messageFocusNode.hasFocus;
                             });
                           },
                           onTap: () {
                             setState(() {
-                              _isMessageTextFieldFocused =
-                                  _messageFocusNode.hasFocus;
+                              _isMessageTextFieldFocused = _messageFocusNode.hasFocus;
                             });
                           },
                           maxLines: null,
@@ -170,9 +170,9 @@ class _CommentScreenState extends State<CommentScreen> {
                 createdTime: DateTime.now().millisecondsSinceEpoch.toString(),
               );
 
-              final res = await PostAPI.addComment(post.postId,pc);
+              final res = await PostAPI.addComment(post.postId, pc);
 
-              if (res.containsKey("success")){
+              if (res.containsKey("success")) {
                 post.comment?.add(pc);
               }
               setState(() {});

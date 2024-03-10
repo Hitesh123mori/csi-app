@@ -109,7 +109,7 @@ class PostComment {
   }
   String? commentId;
   String? message;
-  Map<String, dynamic>? like;
+  Map<dynamic, dynamic>? like;
   String? userId;
   String? createdTime;
 
