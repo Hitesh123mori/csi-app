@@ -46,6 +46,7 @@ class Post {
     if (json['comment'] != null) {
       comment = [];
       json['comment'].forEach((k, v) {
+        print("#cm: $k, $v");
         comment?.add(PostComment.fromJson(v));
       });
     }
@@ -77,7 +78,7 @@ class Post {
       map['poll'] = poll?.toJson();
     }
     if (comment != null) {
-      map['comment'] = comment?.map((v) => v.toJson()).toList();
+      map['comment'] = comment?.map((v) => {v.commentId: v.toJson()});
     }
     return map;
   }
@@ -112,8 +113,8 @@ class PostComment {
   String? userId;
   String? createdTime;
 
-  Map<String, dynamic> toJson() {
-    final map = <String, dynamic>{};
+  Map<dynamic, dynamic> toJson() {
+    final map = <dynamic, dynamic>{};
     map['commentId'] = commentId;
     map['message'] = message;
     map['like'] = like;

@@ -174,10 +174,8 @@ class _CommentScreenState extends State<CommentScreen> {
 
               if (res.containsKey("success")){
                 post.comment?.add(pc);
-                setState(() {
-
-                });
               }
+              setState(() {});
 
               _textController.text = "";
             },
