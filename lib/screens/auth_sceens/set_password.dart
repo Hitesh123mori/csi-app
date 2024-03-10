@@ -12,7 +12,7 @@ import 'login_screen.dart';
 
 class SetPassword extends StatefulWidget {
   String emailAddress;
-   SetPassword({required this.emailAddress, Key? key}) : super(key: key);
+  SetPassword({required this.emailAddress, Key? key}) : super(key: key);
 
   @override
   State<SetPassword> createState() => _SetPasswordState();
@@ -29,6 +29,7 @@ class _SetPasswordState extends State<SetPassword> {
 
   bool isButtonEnabled = false;
 
+
   @override
   void initState() {
     super.initState();
@@ -38,8 +39,8 @@ class _SetPasswordState extends State<SetPassword> {
 
   void updateButtonState() {
     setState(() {
-      isButtonEnabled =
-          _passController.text.isNotEmpty && _confirmPassController.text.isNotEmpty;
+      isButtonEnabled = _passController.text.isNotEmpty &&
+          _confirmPassController.text.isNotEmpty;
     });
   }
 
@@ -49,7 +50,6 @@ class _SetPasswordState extends State<SetPassword> {
     _passController.removeListener(updateButtonState);
     super.dispose();
   }
-
 
   String? _validatePassword(String? value) {
     if (value == null || value.isEmpty) {
@@ -75,9 +75,9 @@ class _SetPasswordState extends State<SetPassword> {
             textSelectionTheme: TextSelectionThemeData(
               cursorColor: AppColors.theme['primaryColor'],
               selectionColor: AppColors.theme['primaryColor'].withOpacity(0.2),
-              selectionHandleColor: AppColors.theme['secondaryBgColor'].withOpacity(0.2),
-            )
-        ),
+              selectionHandleColor:
+                  AppColors.theme['secondaryBgColor'].withOpacity(0.2),
+            )),
         debugShowCheckedModeBanner: false,
         home: Scaffold(
           backgroundColor: AppColors.theme['secondaryBgColor'],
@@ -92,7 +92,8 @@ class _SetPasswordState extends State<SetPassword> {
                     children: [
                       Center(
                         child: Container(
-                          child: Image.asset("assets/images/auth_images/password.png"),
+                          child: Image.asset(
+                              "assets/images/auth_images/password.png"),
                           height: 250,
                           width: 250,
                         ),
@@ -171,7 +172,7 @@ class _SetPasswordState extends State<SetPassword> {
                                 onPressed: () {
                                   setState(() {
                                     _isConfirmPasswordHidden =
-                                    !_isConfirmPasswordHidden;
+                                        !_isConfirmPasswordHidden;
                                   });
                                 },
                               ),
@@ -190,25 +191,29 @@ class _SetPasswordState extends State<SetPassword> {
                             AuthButton(
                               onpressed: isButtonEnabled
                                   ? () async {
-                                FocusScope.of(context).unfocus();
-                                if (_formKey.currentState!.validate()) {
-
-                                    Navigator.pushReplacement(context, LeftToRight(RegisterScreen(email: widget.emailAddress, password: _passController.text,)));
-
-                                }
-                              }
-                                  : () {
-                                FocusScope.of(context).unfocus();
-                              },
+                                      FocusScope.of(context).unfocus();
+                                      if (_formKey.currentState!.validate()) {
+                                        Navigator.pushReplacement(
+                                            context,
+                                            LeftToRight(RegisterScreen(
+                                              email: widget.emailAddress,
+                                              password: _passController.text,
+                                            )));
+                                      }
+                                    }
+                                  : () async {
+                                      FocusScope.of(context).unfocus();
+                                    },
                               name: 'Set Password',
                               bcolor: isButtonEnabled
                                   ? AppColors.theme['primaryColor']
                                   : AppColors.theme['disableButtonColor']
-                                  .withOpacity(0.4),
+                                      .withOpacity(0.4),
                               tcolor: isButtonEnabled
                                   ? AppColors.theme['secondaryColor']
                                   : AppColors.theme['tertiaryColor']
-                                  .withOpacity(0.5),
+                                      .withOpacity(0.5),
+                              isLoading: false,
                             ),
                           ],
                         ),

@@ -47,11 +47,11 @@ class _PostCardState extends State<PostCard> {
     mq = MediaQuery.of(context).size;
     return Consumer2<PostProvider, AppUserProvider>(
       builder: (context, postProvider, appUserProvider, child) {
-        //todo remove default user
-        if (isFirst) {
-          appUserProvider.user = AppUser(userID: "e5b6c220-b816-1ee5-867c-d719914989a5");
-          isFirst = false;
-        }
+        // //todo remove default user
+        // if (isFirst) {
+        //   appUserProvider.user = AppUser(userID: "e5b6c220-b816-1ee5-867c-d719914989a5");
+        //   isFirst = false;
+        // }
         return Padding(
           padding: EdgeInsets.all(5),
           child: Material(

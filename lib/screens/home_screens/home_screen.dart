@@ -28,6 +28,7 @@ class _HomeScreenState extends State<HomeScreen> {
 
   final FocusNode _focusNode = FocusNode();
 
+
   @override
   void initState() {
     super.initState();
@@ -45,7 +46,6 @@ class _HomeScreenState extends State<HomeScreen> {
     return Consumer2<BottomNavigationProvider, AppUserProvider>(
         builder: (context, bottomNavProvider, appUserProvider, child) {
       print("#user :  ${appUserProvider.user?.name}");
-      appUserProvider.initUser();
       return Scaffold(
         appBar: AppBar(
           surfaceTintColor: AppColors.theme['secondaryColor'],

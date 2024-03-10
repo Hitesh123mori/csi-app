@@ -76,8 +76,8 @@ class HelperFunctions{
       msg: msg,
       toastLength: Toast.LENGTH_SHORT,
       gravity: ToastGravity.BOTTOM,
-      backgroundColor: AppColors.theme["tertiaryColor"].withOpacity(0.7),
-      textColor: AppColors.theme["secondaryBgColor"],
+      backgroundColor: AppColors.theme["tertiaryColor"].withOpacity(0.2),
+      textColor: AppColors.theme["tertiaryColor"],
       fontSize: 16.0,
     );
   }
