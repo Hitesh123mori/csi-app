@@ -62,5 +62,15 @@ class PostAPI {
   }
 
 
-
+  static Future<Map<String, String>> addComment(String postId, PostComment postComment)async {
+    return await FirebaseAPIs.rtdbRef.child("post/$postId/comment/${postComment.commentId}").set(postComment.toJson())
+    .then((value) {
+      print("#com-s");
+      return {'success': 'Comment posted'};
+    })
+    .onError((error, stackTrace) {
+      print("#com-e: $error \n $stackTrace");
+      return {"error": '$error \n $stackTrace'};
+    });
+  }
 }

@@ -20,11 +20,13 @@ class AttachPdf extends StatefulWidget {
 class _AttachPdfState extends State<AttachPdf> {
   bool isAttachpdfButtonEnabled = false;
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
+  final GlobalKey<SfPdfViewerState> _pdfViewerKey = GlobalKey();
+
   TextEditingController _pdfnameController = TextEditingController();
   String downloadUrl = "";
   late FocusNode _textFieldFocusNode;
   bool isPdfAttached  = false ;
-  final GlobalKey<SfPdfViewerState> _pdfViewerKey = GlobalKey();
+  bool _isLoading = false;
 
   @override
   void initState() {
@@ -83,7 +85,10 @@ class _AttachPdfState extends State<AttachPdf> {
                         print("#urlPdf : ${value.post?.pdfLink}");
                         value.post?.pdfLink = downloadUrl;
                         value.post?.isThereImage = false;
+                        value.post?.attachmentName  = _pdfnameController.text ;
+                        downloadUrl = "";
                         Navigator.push(context, TopToBottom(AddPostScreen()));
+
                       }
                     }
                         : () {},
@@ -140,7 +145,7 @@ class _AttachPdfState extends State<AttachPdf> {
                     height: 20,
                   ),
 
-                  if (value.post?.pdfLink?.isNotEmpty?? false)
+                  if (downloadUrl != "")
                     Padding(
                       padding: const EdgeInsets.all(8.0).copyWith(
                         top: 0,
@@ -154,27 +159,37 @@ class _AttachPdfState extends State<AttachPdf> {
                         child: Padding(
                           padding: const EdgeInsets.all(8.0),
                           child: SfPdfViewer.network(
+                            downloadUrl,
                             pageLayoutMode: PdfPageLayoutMode.continuous,
                             canShowScrollHead: false,
                             pageSpacing: 2,
                             canShowPageLoadingIndicator: false,
-                            value.post!.pdfLink!,
                             key: _pdfViewerKey,
                             scrollDirection: PdfScrollDirection.horizontal,
                           ),
                         ),
                       ),
                     ),
+
                   OutlinedButton(
                     onPressed: () async {
-                      _textFieldFocusNode.requestFocus(); // Request focus
+                      _textFieldFocusNode.requestFocus();
+                      setState(() {
+                          _isLoading = true ;
+                      });
                       Map<String, String>? uploadResult =
                       await DriveAPI.uploadFile();
+
+                      setState(() {
+                        _isLoading = false ;
+                      });
 
                       if (uploadResult != null &&
                           uploadResult.containsKey("File uploaded")) {
                         downloadUrl = uploadResult["File uploaded"]!;
                         isPdfAttached = true ;
+                        // value.notify();
+                        setState(() {});
 
                       } else if (uploadResult != null &&
                           uploadResult.containsKey("Error")) {
@@ -205,8 +220,33 @@ class _AttachPdfState extends State<AttachPdf> {
                         AppColors.theme['primaryColor'],
                       ),
                     ),
-                    child: Text(
-                      isPdfAttached ?  "Reupload Pdf" : 'Choose Pdf',
+                    child: _isLoading ?Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                          Container(
+                            height: 25,
+                            width: 25,
+                            child: Center(
+                              child: CircularProgressIndicator(
+                                strokeWidth: 2,
+                                color: AppColors.theme['tertiaryColor'],
+                              ),
+                            ),
+                          ),
+                        SizedBox(width:  10),
+                        Center(
+                          child: Text(
+                            "Uploading...",
+                            style: TextStyle(
+                              color: AppColors.theme['tertiaryColor'],
+                              fontSize: 18,
+                              fontWeight: FontWeight.bold,
+                            ),
+                          ),
+                        ),
+                      ],
+                    ): Text(
+                      isPdfAttached ?  "Uploaded" : 'Choose Pdf',
                       style: TextStyle(
                         fontWeight: FontWeight.bold,
                         color: AppColors.theme['tertiaryColor'],

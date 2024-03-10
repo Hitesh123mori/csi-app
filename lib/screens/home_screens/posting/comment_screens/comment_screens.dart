@@ -1,3 +1,5 @@
+import 'package:csi_app/apis/FirebaseDatabaseAPIs/PostAPI.dart';
+import 'package:csi_app/models/post_model/post.dart';
 import 'package:csi_app/providers/CurrentUser.dart';
 import 'package:csi_app/providers/post_provider.dart';
 import 'package:csi_app/screens/home_screens/home_screen.dart';
@@ -64,14 +66,22 @@ class _CommentScreenState extends State<CommentScreen> {
                     child: Column(
                       children: [
                         Expanded(
-                          child: ListView.builder(
+                          child: (postProvider.post?.comment?.isEmpty ?? true )? Center(
+                            child: Text(
+                              'No comments yet',
+                              style: TextStyle(
+                                fontSize: 16,
+                                color: Colors.grey,
+                              ),
+                            ),
+                          ) : ListView.builder(
                             physics: BouncingScrollPhysics(),
                               itemCount: postProvider.post?.comment!.length,
                               itemBuilder: (BuildContext context, int index) {
                             return CommentCard(cmnt: postProvider.post!.comment![index],);
                           }),
                         ),
-                        buildChatInput(appUserProvider.user!),
+                        buildChatInput(appUserProvider.user!,postProvider.post!),
                       ],
                     ),
                   ),
@@ -84,7 +94,7 @@ class _CommentScreenState extends State<CommentScreen> {
 
   // custom input text feild
 
-  Widget buildChatInput(AppUser user) {
+  Widget buildChatInput(AppUser user,Post post) {
     return Padding(
       padding: EdgeInsets.symmetric(
         horizontal: mq.width * 0.01,
@@ -147,8 +157,27 @@ class _CommentScreenState extends State<CommentScreen> {
           MaterialButton(
             minWidth: 0,
             shape: CircleBorder(),
-            onPressed: () {
-              //todo: send button
+            onPressed: () async {
+              Map<String, dynamic>? likes = {
+                'user1': true,
+                'user2': false,
+              };
+
+              PostComment pc = PostComment(
+                message: _textController.text,
+                like: likes,
+                userId: user.userID,
+                createdTime: DateTime.now().millisecondsSinceEpoch.toString(),
+              );
+
+              final res = await PostAPI.addComment(post.postId,pc);
+
+              if (res.containsKey("success")){
+                post.comment?.add(pc);
+              }
+              setState(() {});
+
+              _textController.text = "";
             },
             color: AppColors.theme['primaryColor'],
             child: Center(

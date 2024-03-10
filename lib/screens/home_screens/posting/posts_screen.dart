@@ -10,6 +10,7 @@ import 'package:csi_app/main.dart';
 import 'package:csi_app/utils/colors.dart';
 import 'package:csi_app/utils/widgets/posting/post_card.dart';
 
+import '../../../utils/shimmer_effects/post_screen_shimmer_effect.dart';
 import 'add_post_screen.dart';
 
 class PostsScreen extends StatefulWidget {
@@ -47,48 +48,39 @@ class _PostsScreenState extends State<PostsScreen> {
           //   },
           // ),
 
-          child: StreamBuilder(
-            stream: FirebaseAPIs.rtdbRef.child("post").onValue,
-            builder: (context, snap){
-              if(snap.hasData){
-
-                Map<dynamic, dynamic> val = snap.data?.snapshot.value as Map<dynamic, dynamic>;
-                List<Post> posts = [];
-
-                val.forEach((key, value) async {
-                  print("#kv $key: $value");
-
-                  posts.add(Post.fromJson(value));
-                  // if (posts.last.isThereImage) {
-                  //   posts.last.imageModelList = await StorageAPI.getImage(posts.last.postId);
-                  //   print("#pi ${posts.last.imageModelList?.last.uri}");
-                  // }
-
-                });
-
-                print("#val: $val");
-                return ListView.builder(
-                    physics: BouncingScrollPhysics(),
-                    shrinkWrap: true,
-                    itemCount: posts.length,
-                    itemBuilder: (context, index) {
-                      print("#idx-$index: ${posts[index].pdfLink}");
-                      return PostCard(
-                        post: posts[index],
-                      );
-                    },
-                  );
-
-              }
-              else if (snap.hasError){
-                print("#error-postScreen: ${snap.error.toString()}");
-                return Text("${snap.error.toString()}");
-              }
-              else{
-                return CircularProgressIndicator();
-              }
-            },
-          )
+            child: StreamBuilder(
+              stream: FirebaseAPIs.rtdbRef.child("post").onValue,
+              builder: (context, snap) {
+                if (snap.hasData) {
+                  Map<dynamic, dynamic>? val = snap.data?.snapshot.value as Map<dynamic, dynamic>?;
+                  if (val == null || val.isEmpty) {
+                    return Center(
+                      child: Text("No posts"),
+                    );
+                  } else {
+                    List<Post> posts = [];
+                    val.forEach((key, value) {
+                      posts.add(Post.fromJson(value));
+                    });
+                    return ListView.builder(
+                      physics: BouncingScrollPhysics(),
+                      shrinkWrap: true,
+                      itemCount: posts.length,
+                      itemBuilder: (context, index) {
+                        return PostCard(
+                          post: posts[index],
+                        );
+                      },
+                    );
+                  }
+                } else if (snap.hasError) {
+                  print("#error-postScreen: ${snap.error.toString()}");
+                  return Text("${snap.error.toString()}");
+                } else {
+                  return PostShimmerEffect();
+                }
+              },
+            )
         )
         );
   }

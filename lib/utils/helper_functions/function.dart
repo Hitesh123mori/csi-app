@@ -82,6 +82,20 @@ class HelperFunctions{
     );
   }
 
+
+  static String getInitials(String name) {
+    List<String> nameSplit = name.split(" ");
+    String initials = "";
+
+    int numWords = nameSplit.length > 2 ? 2 : nameSplit.length;
+
+    for (int i = 0; i < numWords; i++) {
+      initials += nameSplit[i][0];
+    }
+
+    return initials.toUpperCase();
+  }
+
 }
 
 // main (){

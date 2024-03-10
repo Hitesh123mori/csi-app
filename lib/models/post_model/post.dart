@@ -46,7 +46,8 @@ class Post {
     if (json['comment'] != null) {
       comment = [];
       json['comment'].forEach((k, v) {
-        comment?.add(postComment.fromJson(v));
+        print("#cm: $k, $v");
+        comment?.add(PostComment.fromJson(v));
       });
     }
   }
@@ -59,7 +60,7 @@ class Post {
   late bool isThereImage;
   Poll? poll;
   Map<dynamic, dynamic>? like;
-  List<postComment>? comment;
+  List<PostComment>? comment;
   List<XFile>? images;
   List<ImageModel>? imageModelList;
 
@@ -77,7 +78,7 @@ class Post {
       map['poll'] = poll?.toJson();
     }
     if (comment != null) {
-      map['comment'] = comment?.map((v) => v.toJson()).toList();
+      map['comment'] = comment?.map((v) => {v.commentId: v.toJson()});
     }
     return map;
   }
@@ -90,8 +91,8 @@ class Post {
 /// userId : ""
 /// createdTime : ""
 
-class postComment {
-  postComment({
+class PostComment {
+  PostComment({
     this.message,
     this.like,
     this.userId,
@@ -99,7 +100,7 @@ class postComment {
     this.commentId = FirebaseAPIs.uuid.v1();
   }
 
-  postComment.fromJson(dynamic json) {
+  PostComment.fromJson(dynamic json) {
     commentId = json['commentId'];
     message = json['message'];
     like = json['like'];
@@ -112,8 +113,8 @@ class postComment {
   String? userId;
   String? createdTime;
 
-  Map<String, dynamic> toJson() {
-    final map = <String, dynamic>{};
+  Map<dynamic, dynamic> toJson() {
+    final map = <dynamic, dynamic>{};
     map['commentId'] = commentId;
     map['message'] = message;
     map['like'] = like;
