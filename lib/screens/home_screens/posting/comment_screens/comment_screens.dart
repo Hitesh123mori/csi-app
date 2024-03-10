@@ -78,7 +78,7 @@ class _CommentScreenState extends State<CommentScreen> {
                             physics: BouncingScrollPhysics(),
                               itemCount: postProvider.post?.comment!.length,
                               itemBuilder: (BuildContext context, int index) {
-                            return CommentCard(cmnt: postProvider.post!.comment![index],);
+                            return CommentCard(cmnt: postProvider.post!.comment![index], postCreatorId: postProvider.post?.createBy??"",);
                           }),
                         ),
                         buildChatInput(appUserProvider.user!,postProvider.post!),
@@ -92,7 +92,7 @@ class _CommentScreenState extends State<CommentScreen> {
     );
   }
 
-  // custom input text feild
+  // custom input text filed
 
   Widget buildChatInput(AppUser user,Post post) {
     return Padding(
