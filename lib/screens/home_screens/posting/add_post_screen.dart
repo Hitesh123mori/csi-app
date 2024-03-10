@@ -127,8 +127,8 @@ class _AddPostScreenState extends State<AddPostScreen> {
                             await StorageAPI.uploadPostImg(postProvider.post!.postId, await element.readAsBytes());
                           });
                           PostAPI.postUpload(postProvider.post!);
-                          Navigator.push(context, RightToLeft(HomeScreen()));
                           postProvider.post = null;
+                          Navigator.push(context, RightToLeft(HomeScreen()));
                         }
                       },
                       child: Container(

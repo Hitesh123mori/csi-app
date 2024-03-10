@@ -57,7 +57,6 @@ class _PostCardState extends State<PostCard> {
     mq = MediaQuery.of(context).size;
     return Consumer2<PostProvider, AppUserProvider>(
       builder: (context, postProvider, appUserProvider, child) {
-
         return Padding(
           padding: EdgeInsets.all(5),
           child: Material(
@@ -260,7 +259,7 @@ class _PostCardState extends State<PostCard> {
                           child: Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [
                             Padding(
                               padding: const EdgeInsets.symmetric(horizontal: 13.0),
-                              child: Text(widget.post.attachmentName ?? "",
+                              child: Text(widget.post?.attachmentName ?? "Pdf",
                                   style: TextStyle(color: AppColors.theme['tertiaryColor'], fontWeight: FontWeight.bold)),
                             ),
                             Padding(
