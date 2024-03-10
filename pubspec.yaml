@@ -53,6 +53,9 @@ dependencies:
   cupertino_icons: ^1.0.2
   http:
 
+  random_string:
+  uri:
+
 
   firebase_core: ^2.25.5
   firebase_storage:
