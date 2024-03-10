@@ -35,18 +35,18 @@ class _PostsScreenState extends State<PostsScreen> {
           backgroundColor: AppColors.theme['primaryColor'],
         ),
         body: Padding(
-          padding: const EdgeInsets.symmetric(vertical:5),
-          // child: ListView.builder(
-          //   physics: BouncingScrollPhysics(),
-          //   shrinkWrap: true,
-          //   itemCount: posts.length,
-          //   itemBuilder: (context, index) {
-          //     print("#l${posts.length}");
-          //     return PostCard(
-          //       post: posts[index],
-          //     );
-          //   },
-          // ),
+            padding: const EdgeInsets.symmetric(vertical:5),
+            // child: ListView.builder(
+            //   physics: BouncingScrollPhysics(),
+            //   shrinkWrap: true,
+            //   itemCount: posts.length,
+            //   itemBuilder: (context, index) {
+            //     print("#l${posts.length}");
+            //     return PostCard(
+            //       post: posts[index],
+            //     );
+            //   },
+            // ),
 
             child: StreamBuilder(
               stream: FirebaseAPIs.rtdbRef.child("post").onValue,
@@ -82,6 +82,6 @@ class _PostsScreenState extends State<PostsScreen> {
               },
             )
         )
-        );
+    );
   }
 }

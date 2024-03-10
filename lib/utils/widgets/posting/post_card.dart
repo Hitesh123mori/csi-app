@@ -114,7 +114,7 @@ class _PostCardState extends State<PostCard> {
                           }
 
                           else {
-                            return PostShimmerEffect();
+                            return SizedBox();
                           }
 
                         }
@@ -128,18 +128,18 @@ class _PostCardState extends State<PostCard> {
                         children: [
                           showMore
                               ? Padding(
-                                  padding: const EdgeInsets.symmetric(
-                                      horizontal: 8.0),
-                                  child: HelperFunctions.buildContent(
-                                      widget.post.description ?? ""),
-                                )
+                            padding: const EdgeInsets.symmetric(
+                                horizontal: 8.0),
+                            child: HelperFunctions.buildContent(
+                                widget.post.description ?? ""),
+                          )
                               : Padding(
-                                  padding: const EdgeInsets.symmetric(
-                                      horizontal: 8.0),
-                                  child: HelperFunctions.buildContent(
-                                      HelperFunctions.truncateDescription(
-                                          widget.post.description ?? "")),
-                                ),
+                            padding: const EdgeInsets.symmetric(
+                                horizontal: 8.0),
+                            child: HelperFunctions.buildContent(
+                                HelperFunctions.truncateDescription(
+                                    widget.post.description ?? "")),
+                          ),
                           if (widget.post.description!.length > 100)
                             TextButton(
                               onPressed: () {
@@ -244,7 +244,7 @@ class _PostCardState extends State<PostCard> {
                                         );
                                       } else {
                                         return CircularProgressIndicator(
-                                          color: AppColors.theme['highlightColor'],
+                                          color: AppColors.theme['primaryColor'],
                                         );
                                       }
                                     }),
@@ -394,7 +394,7 @@ class _PostCardState extends State<PostCard> {
                             ),
                             circleColor: CircleColor(start: AppColors.theme["primaryColor"], end: AppColors.theme["secondaryBgColor"]),
                             onTap: (bool isLiked) async {
-                              
+
                               print("#likeList: ${widget.post.like}");
 
                               bool successful = await PostAPI.onLikeButtonTap(widget.post.postId, appUserProvider.user?.userID ?? "noUser", isLiked);
@@ -407,7 +407,7 @@ class _PostCardState extends State<PostCard> {
                               print("#succ: $successful");
 
                               return successful ? !isLiked : isLiked;
-                              },
+                            },
                           ),
                         ),
 
