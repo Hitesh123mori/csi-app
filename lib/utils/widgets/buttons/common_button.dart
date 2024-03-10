@@ -7,6 +7,7 @@ class PrimaryButton extends StatelessWidget {
   final String name;
   final Color bcolor;
   final Color tcolor;
+
   const PrimaryButton({
     super.key,
     required this.onpressed,
