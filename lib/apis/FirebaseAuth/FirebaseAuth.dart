@@ -40,7 +40,7 @@ class FirebaseAuth {
           print('Problem: ${p.code}: ${p.msg}');
         }
 
-        return "Error sending OTP.";
+        return "Error while sending OTP.";
       }
       // DONE
 
@@ -72,7 +72,7 @@ class FirebaseAuth {
       );
 
 
-      return "Registered";
+      return "Welcome! to CSI";
 
     } on FirebaseAuthException catch (e) {
       if (e.code == 'weak-password') {
@@ -101,7 +101,7 @@ class FirebaseAuth {
           password: password
       );
 
-      return "Logged In";
+      return "Welcome! to CSI";
 
     } on FirebaseAuthException catch (e) {
       if (e.code == 'user-not-found') return 'No user found for that email.';

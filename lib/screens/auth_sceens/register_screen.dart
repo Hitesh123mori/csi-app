@@ -2,6 +2,7 @@ import 'package:csi_app/apis/FireStoreAPIs/UserProfileAPI.dart';
 import 'package:csi_app/apis/FirebaseAuth/FirebaseAuth.dart';
 import 'package:csi_app/screens/home_screens/home_screen.dart';
 import 'package:csi_app/side_transition_effects/left_right.dart';
+import 'package:csi_app/utils/helper_functions/function.dart';
 import 'package:flutter/material.dart';
 import 'package:csi_app/screens/auth_sceens/login_screen.dart';
 import 'package:csi_app/side_transition_effects/right_left.dart';
@@ -23,13 +24,14 @@ class _RegisterScreenState extends State<RegisterScreen> {
   TextEditingController _emailController = TextEditingController();
   TextEditingController _yearController = TextEditingController();
   TextEditingController _codeforcesController = TextEditingController();
-  TextEditingController _passController = TextEditingController();
-  TextEditingController _confirmPassController = TextEditingController();
+  TextEditingController _aboutController = TextEditingController();
 
-  bool _isPasswordHidden = true;
-  bool _isConfirmPasswordHidden = true;
+  // bool _isPasswordHidden = true;
+  // bool _isConfirmPasswordHidden = true;
+  //
+  // String _selectedItem = "1";
 
-  String _selectedItem = "1";
+  bool _isLoading = false;
 
   List<String> _items = ['1', '2', '3', '4'];
 
@@ -50,7 +52,6 @@ class _RegisterScreenState extends State<RegisterScreen> {
       isButtonEnabled = _nameController.text.isNotEmpty &&
           _yearController.text.isNotEmpty &&
           _codeforcesController.text.isNotEmpty;
-
     });
   }
 
@@ -61,9 +62,6 @@ class _RegisterScreenState extends State<RegisterScreen> {
     _codeforcesController.removeListener(updateButtonState);
     super.dispose();
   }
-
-
-
 
   String? _validateFullName(String? value) {
     if (value == null || value.isEmpty) {
@@ -97,9 +95,9 @@ class _RegisterScreenState extends State<RegisterScreen> {
             textSelectionTheme: TextSelectionThemeData(
               cursorColor: AppColors.theme['primaryColor'],
               selectionColor: AppColors.theme['primaryColor'].withOpacity(0.2),
-              selectionHandleColor: AppColors.theme['secondaryBgColor'].withOpacity(0.2),
-            )
-        ),
+              selectionHandleColor:
+                  AppColors.theme['secondaryBgColor'].withOpacity(0.2),
+            )),
         debugShowCheckedModeBanner: false,
         home: Scaffold(
           backgroundColor: AppColors.theme['secondaryBgColor'],
@@ -114,7 +112,8 @@ class _RegisterScreenState extends State<RegisterScreen> {
                     children: [
                       Center(
                         child: Container(
-                          child: Image.asset("assets/images/auth_images/info.png"),
+                          child:
+                              Image.asset("assets/images/auth_images/info.png"),
                           height: 250,
                           width: 250,
                         ),
@@ -169,30 +168,41 @@ class _RegisterScreenState extends State<RegisterScreen> {
                               child: DropdownButtonFormField<String>(
                                 hint: Text("Choose Year"),
                                 decoration: InputDecoration(
-                                  prefixIconColor: AppColors.theme['tertiaryColor'],
-                                  prefixIcon: Icon(Icons.calendar_today_rounded),
+                                  prefixIconColor:
+                                      AppColors.theme['tertiaryColor'],
+                                  prefixIcon:
+                                      Icon(Icons.calendar_today_rounded),
                                   border: OutlineInputBorder(
                                     borderRadius: BorderRadius.circular(10),
-                                    borderSide: BorderSide(color: AppColors.theme['primaryColor']!),
+                                    borderSide: BorderSide(
+                                        color:
+                                            AppColors.theme['primaryColor']!),
                                   ),
                                   focusedBorder: OutlineInputBorder(
                                     borderRadius: BorderRadius.circular(10),
-                                    borderSide: BorderSide(color: AppColors.theme['primaryColor']!),
+                                    borderSide: BorderSide(
+                                        color:
+                                            AppColors.theme['primaryColor']!),
                                   ),
                                   enabledBorder: OutlineInputBorder(
                                     borderRadius: BorderRadius.circular(10),
-                                    borderSide: BorderSide(color: AppColors.theme['primaryColor']!),
+                                    borderSide: BorderSide(
+                                        color:
+                                            AppColors.theme['primaryColor']!),
                                   ),
                                 ),
-                                dropdownColor: AppColors.theme['secondaryBgColor'], // Set dropdown menu background color
-                                value: _yearController.text.isNotEmpty ? _yearController.text : null,
+                                dropdownColor: AppColors.theme[
+                                    'secondaryBgColor'], // Set dropdown menu background color
+                                value: _yearController.text.isNotEmpty
+                                    ? _yearController.text
+                                    : null,
                                 onChanged: (String? newValue) {
                                   setState(() {
                                     _yearController.text = newValue!;
                                   });
                                 },
                                 items: _items.map<DropdownMenuItem<String>>(
-                                      (String value) {
+                                  (String value) {
                                     return DropdownMenuItem<String>(
                                       value: value,
                                       child: Text(value + " Year"),
@@ -220,6 +230,22 @@ class _RegisterScreenState extends State<RegisterScreen> {
                               obsecuretext: false,
                               validator: _validateCodeforcesID,
                             ),
+                            Text(
+                              "About you",
+                              style: TextStyle(
+                                  fontSize: 16, fontWeight: FontWeight.bold),
+                            ),
+                            SizedBox(
+                              height: 5,
+                            ),
+                            CustomAuthTextField(
+                              hintText: 'Enter your info',
+                              isNumber: false,
+                              prefixicon: Icon(Icons.info_outline),
+                              controller: _aboutController,
+                              obsecuretext: false,
+                              validator: _validateCodeforcesID,
+                            ),
                             SizedBox(
                               height: 20,
                             ),
@@ -227,24 +253,42 @@ class _RegisterScreenState extends State<RegisterScreen> {
                               onpressed: isButtonEnabled
                                   ? () async {
                                       FocusScope.of(context).unfocus();
+                                      setState(() {
+                                        _isLoading = true;
+                                      });
                                       if (_formKey.currentState!.validate()) {
                                         // for signup
-                                        final res = await FirebaseAuth.signUp(widget.email, widget.password);
+                                        final res = await FirebaseAuth.signUp(
+                                            widget.email, widget.password);
                                         print("#res-signup: $res");
 
                                         // for database
-                                        final res2 =  await UserProfile.signupUser(_nameController.text, _yearController.text, _codeforcesController.text);
+                                        final res2 =
+                                            await UserProfile.signupUser(
+                                                _nameController.text,
+                                                _yearController.text,
+                                                _codeforcesController.text,
+                                                _aboutController.text);
                                         print("#res2-signup: $res2");
 
-                                        if(res == 'Registered' && res2 == 'ok' && res2 !=null)
-                                          Navigator.pushReplacement(context, LeftToRight(HomeScreen()));
-
+                                        if (res == 'Welcome! to CSI' &&
+                                            res2 == 'Registered' &&
+                                            res2 != null) {
+                                          HelperFunctions.showToast(res2);
+                                          HelperFunctions.showToast(res);
+                                          Navigator.pushReplacement(context,
+                                              LeftToRight(HomeScreen()));
+                                        }
                                       }
+
+                                      setState(() {
+                                        _isLoading = false;
+                                      });
                                     }
-                                  : () {
+                                  : () async {
                                       FocusScope.of(context).unfocus();
                                     },
-                              name: 'Sign Up',
+                              name: _isLoading ? 'Please wait...' : 'Sign Up',
                               bcolor: isButtonEnabled
                                   ? AppColors.theme['primaryColor']
                                   : AppColors.theme['disableButtonColor']
@@ -253,6 +297,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                                   ? AppColors.theme['secondaryColor']
                                   : AppColors.theme['tertiaryColor']
                                       .withOpacity(0.5),
+                              isLoading: _isLoading,
                             ),
                           ],
                         ),
