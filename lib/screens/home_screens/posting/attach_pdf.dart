@@ -1,7 +1,6 @@
 import 'package:csi_app/providers/post_provider.dart';
 import 'package:csi_app/utils/colors.dart';
 import 'package:flutter/material.dart';
-import 'package:googleapis/drive/v3.dart';
 import 'package:provider/provider.dart';
 import 'package:syncfusion_flutter_pdfviewer/pdfviewer.dart';
 import '../../../apis/googleAIPs/drive/DriveApi.dart';
@@ -32,7 +31,7 @@ class _AttachPdfState extends State<AttachPdf> {
   void initState() {
     super.initState();
     _pdfnameController.addListener(updateButtonState);
-    _textFieldFocusNode = FocusNode(); // Initialize FocusNode
+    _textFieldFocusNode = FocusNode();
   }
 
   @override
@@ -175,8 +174,9 @@ class _AttachPdfState extends State<AttachPdf> {
                     onPressed: () async {
                       _textFieldFocusNode.requestFocus();
                       setState(() {
-                          _isLoading = true ;
+                        _isLoading = true;
                       });
+                      await Future.delayed(Duration(seconds: 5));
                       Map<String, String>? uploadResult =
                       await DriveAPI.uploadFile();
 
@@ -190,7 +190,6 @@ class _AttachPdfState extends State<AttachPdf> {
                         isPdfAttached = true ;
                         // value.notify();
                         setState(() {});
-
                       } else if (uploadResult != null &&
                           uploadResult.containsKey("Error")) {
                         String errorMessage = uploadResult["Error"]!;

@@ -74,12 +74,22 @@ class _CommentScreenState extends State<CommentScreen> {
                                 color: Colors.grey,
                               ),
                             ),
-                          ) : ListView.builder(
-                            physics: BouncingScrollPhysics(),
-                              itemCount: postProvider.post?.comment!.length,
+                          ) :ListView.builder(
+                              physics: BouncingScrollPhysics(),
+                              itemCount: postProvider.post?.comment?.length ?? 0, // Null check added here
                               itemBuilder: (BuildContext context, int index) {
-                            return CommentCard(cmnt: postProvider.post!.comment![index], postCreatorId: postProvider.post?.createBy??"",);
-                          }),
+                                // Check if postProvider.post and postProvider.post.comment are not null
+                                if (postProvider.post != null && postProvider.post!.comment != null) {
+                                  // Access comment only if it's not null
+                                  final comment = postProvider.post!.comment![index];
+                                  return CommentCard(cmnt: comment, postCreatorId: postProvider.post?.createBy ?? "",);
+                                } else {
+                                  // Return a placeholder widget if comment or postProvider.post is null
+                                  return SizedBox();
+                                }
+                              }
+                          )
+
                         ),
                         buildChatInput(appUserProvider.user!,postProvider.post!),
                       ],

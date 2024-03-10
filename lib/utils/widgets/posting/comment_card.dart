@@ -39,13 +39,15 @@ class _CommentCardState extends State<CommentCard> {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 ListTile(
+                  contentPadding: EdgeInsets.all(0),
                   leading: CircleAvatar(
                     backgroundColor: AppColors.theme['secondaryBgColor'],
                     child: Center(
-                        child: Text(
-                      HelperFunctions.getInitials(appUserProvider.user?.name ?? ""),
-                      style: TextStyle(color: AppColors.theme['tertiaryColor'], fontWeight: FontWeight.bold),
-                    )),
+                      child: Text(
+                        HelperFunctions.getInitials(appUserProvider.user?.name ?? ""),
+                        style: TextStyle(color: AppColors.theme['tertiaryColor'], fontWeight: FontWeight.bold),
+                      ),
+                    ),
                   ),
                   title: Text(
                     appUserProvider.user?.name ?? "",
@@ -55,28 +57,30 @@ class _CommentCardState extends State<CommentCard> {
                     appUserProvider.user?.about ?? "",
                     style: TextStyle(color: AppColors.theme['tertiaryColor'], fontWeight: FontWeight.w500),
                   ),
-                  trailing: appUserProvider.user?.userID == widget.postCreatorId
-                      ? Row(
-                    mainAxisSize: MainAxisSize.min,
-                    children: [
-                      Container(
-                        decoration: BoxDecoration(
-                          color: AppColors.theme['primaryColor'],
-                          borderRadius: BorderRadius.circular(4),
-                        ),
-                        padding: EdgeInsets.symmetric(horizontal: 5, vertical: 2),
-                        child: Text(
-                          "Creator",
-                          style: TextStyle(
-                            color: AppColors.theme['secondaryColor'],
-                            fontSize: 12,
+                  trailing: Container(
+                    width: 100,
+                    child: appUserProvider.user?.userID == widget.postCreatorId
+                        ? Row(
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        Container(
+                          decoration: BoxDecoration(
+                            color: AppColors.theme['primaryColor'],
+                            borderRadius: BorderRadius.circular(4),
+                          ),
+                          padding: EdgeInsets.symmetric(horizontal: 5, vertical: 2),
+                          child: Text(
+                            "Creator",
+                            style: TextStyle(
+                              color: AppColors.theme['secondaryColor'],
+                              fontSize: 12,
+                            ),
                           ),
                         ),
-                      ),
-                    ],
-                  )
-                      : Container(),
-
+                      ],
+                    )
+                        : Container(),
+                  ),
                 ),
                 Padding(
                   padding: const EdgeInsets.symmetric(horizontal: 20.0, vertical: 10),
@@ -90,7 +94,6 @@ class _CommentCardState extends State<CommentCard> {
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
-                      //todo: fix like button
                       Padding(
                         padding: const EdgeInsets.all(8.0),
                         child: LikeButton(
@@ -98,13 +101,13 @@ class _CommentCardState extends State<CommentCard> {
                           likeBuilder: (bool isLiked) {
                             return isLiked
                                 ? Icon(
-                                    Icons.thumb_up,
-                                    color: AppColors.theme["primaryColor"],
-                                  )
+                              Icons.thumb_up,
+                              color: AppColors.theme["primaryColor"],
+                            )
                                 : Icon(
-                                    Icons.thumb_up_alt_outlined,
-                                    color: AppColors.theme["primaryColor"],
-                                  );
+                              Icons.thumb_up_alt_outlined,
+                              color: AppColors.theme["primaryColor"],
+                            );
                           },
                           bubblesColor: BubblesColor(
                             dotPrimaryColor: AppColors.theme["primaryColor"],
@@ -114,11 +117,13 @@ class _CommentCardState extends State<CommentCard> {
                           onTap: (bool isLiked) async {},
                         ),
                       ),
-
-                      Text(MyDateUtil.getMessageTime(context: context, time: widget.cmnt.createdTime! ?? "")),
+                      Text(
+                        MyDateUtil.getMessageTime(context: context, time: widget.cmnt.createdTime ?? ""), // Use the null-aware operator (??) to provide a fallback value
+                      ),
                     ],
                   ),
                 )
+
               ],
             ),
           ),
