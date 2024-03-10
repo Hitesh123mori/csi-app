@@ -19,7 +19,17 @@ class PostAPI {
   }
 
 
-  static Future updateVote() async {
+  static Future updateVote(String postId, String optionId, int newTotalVotes) async {
+    return await FirebaseAPIs.rtdbRef.child("post/$postId/poll/options/$optionId/votes").set(newTotalVotes)
+    .then((value) {
+      print("#nv $newTotalVotes");
+      return true;
+    })
+      .onError((error, stackTrace) {
+        print("nv E: $error, \n $stackTrace");
+        return false;
+      })
+    ;
 
   }
 
