@@ -11,7 +11,7 @@ class UserProfile {
     await docRef.set(user.toJson()).then((value) => null).onError((error, stackTrace) => null);
   }
 
-  static Future<dynamic> signupUser(String name, String year, String cfId) async {
+  static Future<dynamic> signupUser(String name, String year, String cfId,String about) async {
     User? user = FirebaseAPIs.auth.currentUser;
 
     if (user != null) {
@@ -23,6 +23,7 @@ class UserProfile {
         nuRoll: user.email.toString().replaceAll("@nirmauni.ac.in", ""),
         cfId: cfId,
         isAdmin: false,
+        about: about,
         isSuperuser: false,
         notificationToken: "",
         year: year,
@@ -30,7 +31,7 @@ class UserProfile {
       print("#UP: ${appUser.toJson().toString()}");
       return await _collectionRef.doc(user.uid)
           .set(appUser.toJson())
-          .then((value) => 'ok')
+          .then((value) => 'Registered')
           .onError((error, stackTrace) => error.toString());
     }
   }

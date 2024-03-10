@@ -1,15 +1,18 @@
 import 'package:carousel_slider/carousel_slider.dart';
+import 'package:csi_app/apis/FireStoreAPIs/PostUserProfile.dart';
 import 'package:csi_app/apis/FirebaseDatabaseAPIs/PostAPI.dart';
 import 'package:csi_app/apis/StorageAPIs/StorageAPI.dart';
 import 'package:csi_app/main.dart';
 import 'package:csi_app/models/post_model/image_model.dart';
 import 'package:csi_app/models/post_model/post.dart';
 import 'package:csi_app/models/user_model/AppUser.dart';
+import 'package:csi_app/models/user_model/post_creator.dart';
 import 'package:csi_app/providers/CurrentUser.dart';
 import 'package:csi_app/providers/post_provider.dart';
 import 'package:csi_app/screens/home_screens/posting/comment_screens/comment_screens.dart';
 import 'package:csi_app/side_transition_effects/left_right.dart';
 import 'package:csi_app/utils/colors.dart';
+import 'package:csi_app/utils/helper_functions/date_format.dart';
 import 'package:csi_app/utils/helper_functions/function.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_polls/flutter_polls.dart';
@@ -36,10 +39,17 @@ class _PostCardState extends State<PostCard> {
   final CarouselController _controller = CarouselController();
   final GlobalKey<SfPdfViewerState> _pdfViewerKey = GlobalKey();
   bool isFirst = true;
+  PostCreator? postCreator;
+
+  Future getPostCreator()async {
+    postCreator = await PostUserProfile.getPostCreator(widget.post.createBy ?? "");
+  }
+
 
   @override
   void initState() {
     super.initState();
+    getPostCreator();
   }
 
   @override
@@ -47,11 +57,7 @@ class _PostCardState extends State<PostCard> {
     mq = MediaQuery.of(context).size;
     return Consumer2<PostProvider, AppUserProvider>(
       builder: (context, postProvider, appUserProvider, child) {
-        //todo remove default user
-        if (isFirst) {
-          appUserProvider.user = AppUser(userID: "e5b6c220-b816-1ee5-867c-d719914989a5");
-          isFirst = false;
-        }
+
         return Padding(
           padding: EdgeInsets.all(5),
           child: Material(
@@ -64,6 +70,7 @@ class _PostCardState extends State<PostCard> {
                 ),
                 width: mq.width,
                 child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     // post header
                     Card(
@@ -72,17 +79,29 @@ class _PostCardState extends State<PostCard> {
                       color: AppColors.theme['secondaryColor'],
                       // color: AppColors.theme['secondaryBgColor'],
                       child: ListTile(
+                        isThreeLine: true,
                         title: Text(
-                          "Computer Society of India",
+                          "${postCreator?.name}",
                           style: TextStyle(fontWeight: FontWeight.bold),
                         ),
-                        subtitle: Text(
-                          "Nirma University Club",
-                          style: TextStyle(color: AppColors.theme['tertiaryColor']),
+                        subtitle: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Text(
+                              "${postCreator?.about ?? ""}",
+                              style: TextStyle(color: AppColors.theme['tertiaryColor']),
+                            ),
+                            Text(
+                              "${MyDateUtil.getMessageTime(context: context, time: widget.post.createTime ?? "0")}",
+                              style: TextStyle(color: AppColors.theme['tertiaryColor'], fontSize: 11),
+                            )
+                          ],
                         ),
+
                         leading: CircleAvatar(
-                          backgroundImage: AssetImage("assets/images/csi_logo.png"),
+                          child: Text("${postCreator?.name?[0].toUpperCase()}"),
                           radius: 25,
+                          backgroundColor: AppColors.theme["secondaryBgColor"],
                         ),
                         contentPadding: EdgeInsets.only(left: 1),
                         trailing: IconButton(
@@ -307,11 +326,12 @@ class _PostCardState extends State<PostCard> {
                             votedBackgroundColor: AppColors.theme['secondaryColor'],
                             votedProgressColor: AppColors.theme['secondaryBgColor'],
                             pollOptionsSplashColor: AppColors.theme['secondaryBgColor'],
-                            createdBy: "CSI",
+                            createdBy: "${postCreator?.name}",
                             pollId: widget.post.poll?.pollId,
                             onVoted: (PollOption pollOption, int newTotalVotes) async {
-                              await Future.delayed(const Duration(seconds: 2));
-                              return true;
+
+                              bool success = await PostAPI.updateVote(widget.post.postId, pollOption.id.toString(), newTotalVotes+1);
+                              return success;
                             },
                             pollTitle: Align(
                               alignment: Alignment.centerLeft,

@@ -28,6 +28,7 @@ class _HomeScreenState extends State<HomeScreen> {
 
   final FocusNode _focusNode = FocusNode();
 
+
   @override
   void initState() {
     super.initState();
@@ -39,13 +40,17 @@ class _HomeScreenState extends State<HomeScreen> {
     super.dispose();
   }
 
+  Future initUser(AppUserProvider appUserProvider) async {
+    await appUserProvider.initUser();
+  }
+
   @override
   Widget build(BuildContext context) {
     mq = MediaQuery.of(context).size;
     return Consumer2<BottomNavigationProvider, AppUserProvider>(
         builder: (context, bottomNavProvider, appUserProvider, child) {
+          initUser(appUserProvider);
       print("#user :  ${appUserProvider.user?.name}");
-      appUserProvider.initUser();
       return Scaffold(
         appBar: AppBar(
           surfaceTintColor: AppColors.theme['secondaryColor'],

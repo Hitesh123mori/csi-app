@@ -1,5 +1,6 @@
 import 'package:csi_app/apis/FirebaseAuth/FirebaseAuth.dart';
 import 'package:csi_app/screens/auth_sceens/set_password.dart';
+import 'package:csi_app/utils/helper_functions/function.dart';
 import 'package:flutter/material.dart';
 import 'package:pinput/pinput.dart';
 
@@ -26,6 +27,7 @@ class _OtpScreenState extends State<OtpScreen> {
   bool enablePinput = false;
   bool isButtonClicked = false;
   bool isPinFilled = false;
+  bool _isLoading = false;
 
   @override
   void initState() {
@@ -204,18 +206,28 @@ class _OtpScreenState extends State<OtpScreen> {
                             ),
                             (isButtonClicked && isButtonEnabled && enablePinput)
                                 ? AuthButton(
-                                    onpressed: () {
+                                    onpressed: () async {
                                       if (isPinFilled) {
+                                        setState(() {
+                                          _isLoading = true;
+                                        });
                                         bool isValid = FirebaseAuth.verifyOTP(_verifyOTP);
                                         print("#val ${isValid}") ;
+                                        setState(() {
+                                          _isLoading = false;
+                                        });
                                         if (isValid){
+                                          HelperFunctions.showToast("Email Verified");
                                           Navigator.pushReplacement(context,
                                               LeftToRight(SetPassword(emailAddress: _emailController.text,)));
+                                        }
+                                        else{
+                                          HelperFunctions.showToast("Invalid OTP");
                                         }
 
                                       }
                                     },
-                                    name: 'Verify',
+                                    name: _isLoading ? "Verifying..." : 'Verify',
                                     bcolor: isPinFilled
                                         ? AppColors.theme['primaryColor']!
                                         : AppColors.theme['disableButtonColor']!
@@ -224,15 +236,22 @@ class _OtpScreenState extends State<OtpScreen> {
                                         ? AppColors.theme['secondaryColor']!
                                         : AppColors.theme['tertiaryColor']!
                                             .withOpacity(0.5),
+                                  isLoading: _isLoading,
                                   )
                                 : AuthButton(
                                     onpressed: () async {
                                       if (isButtonEnabled) {
                                         FocusScope.of(context).unfocus();
+                                        setState(() {
+                                          _isLoading = true;
+                                        });
                                         if (_formKey.currentState!.validate()) {
                                           var res = await FirebaseAuth.sendOTP(_emailController.text);
                                           print("#res-otp-screen: $res");
-
+                                          HelperFunctions.showToast(res);
+                                          setState(() {
+                                            _isLoading = false;
+                                          });
                                           setState(() {
                                             isButtonClicked = true;
                                             enablePinput = true;
@@ -240,7 +259,7 @@ class _OtpScreenState extends State<OtpScreen> {
                                         }
                                       }
                                     },
-                                    name: 'Get OTP',
+                                    name: _isLoading ? "Sending...": 'Get OTP',
                                     bcolor: isButtonEnabled
                                         ? AppColors.theme['primaryColor']!
                                         : AppColors.theme['disableButtonColor']!
@@ -249,6 +268,7 @@ class _OtpScreenState extends State<OtpScreen> {
                                         ? AppColors.theme['secondaryColor']!
                                         : AppColors.theme['tertiaryColor']!
                                             .withOpacity(0.5),
+                                   isLoading: _isLoading,
                                   ),
                           ],
                         ),
@@ -260,7 +280,29 @@ class _OtpScreenState extends State<OtpScreen> {
                             mainAxisAlignment: MainAxisAlignment.end,
                             children: [
                               TextButton(
-                                onPressed: () {},
+                                onPressed: () async {
+                                  if (isButtonEnabled) {
+                                    FocusScope.of(context).unfocus();
+                                    setState(() {
+                                      isButtonClicked = false;
+                                      _isLoading = true;
+                                    });
+                                    if (_formKey.currentState!.validate()) {
+
+                                      var res = await FirebaseAuth.sendOTP(_emailController.text.trim());
+                                      print("#res-otp-screen: $res");
+                                      HelperFunctions.showToast(res);
+                                      setState(() {
+                                        _isLoading = false;
+                                      });
+                                      setState(() {
+                                        isButtonClicked = true;
+                                        enablePinput = true;
+                                      });
+                                    }
+                                  }
+
+                                },
                                 child: Text(
                                   "Resend OTP",
                                   style: TextStyle(
