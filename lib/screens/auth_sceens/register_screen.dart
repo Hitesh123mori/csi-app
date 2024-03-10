@@ -259,8 +259,8 @@ class _RegisterScreenState extends State<RegisterScreen> {
                                       if (_formKey.currentState!.validate()) {
                                         // for signup
                                         final res = await FirebaseAuth.signUp(
-                                            widget.email, widget.password);
-                                        print("#res-signup: $res");
+                                            widget.email.trim(), widget.password);
+                                        print("#res-signup: $res, ${widget.email}");
 
                                         // for database
                                         final res2 =
@@ -271,11 +271,13 @@ class _RegisterScreenState extends State<RegisterScreen> {
                                                 _aboutController.text);
                                         print("#res2-signup: $res2");
 
+
+                                        HelperFunctions.showToast(res);
                                         if (res == 'Welcome! to CSI' &&
                                             res2 == 'Registered' &&
                                             res2 != null) {
                                           HelperFunctions.showToast(res2);
-                                          HelperFunctions.showToast(res);
+                                          await
                                           Navigator.pushReplacement(context,
                                               LeftToRight(HomeScreen()));
                                         }

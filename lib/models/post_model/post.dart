@@ -25,7 +25,6 @@ class Post {
     this.isThereImage = false,
     this.poll,
     this.comment,
-    this.images,
   }) {
     this.postId = FirebaseAPIs.uuid.v1();
     // this.like = {};
@@ -142,6 +141,7 @@ class Poll {
     pollId = json['pollId'];
     question = json['question'];
     endTime = json['endTime'];
+
     if (json['options'] != null) {
       options = [];
       json['options'].forEach((k, v) {
@@ -160,10 +160,16 @@ class Poll {
     map['pollId'] = pollId;
     map['question'] = question;
     map['endTime'] = endTime;
+    // print("#opt? $options");
     if (options != null) {
-      map['options'] = options?.map((v) {
-        return v.toJson();
-      }).toList();
+      print("#if");
+      map['options'] = {}; // Initialize options as an empty map
+      options?.forEach((v) { // Iterate over each element in options
+        Map<String, dynamic> m = v.toJson(); // Convert each element to a map
+        map['options'][m['optionId']] = m; // Assign each element to map['options']
+      });
+      print("#opt ${map['options']}"); // Print the contents of map['options']
+
     }
     return map;
   }

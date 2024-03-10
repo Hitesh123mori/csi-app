@@ -3,6 +3,7 @@ import 'dart:typed_data';
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:csi_app/apis/FirebaseDatabaseAPIs/PostAPI.dart';
 import 'package:csi_app/models/post_model/post.dart';
+import 'package:csi_app/providers/CurrentUser.dart';
 import 'package:csi_app/providers/post_provider.dart';
 import 'package:csi_app/screens/home_screens/home_screen.dart';
 import 'package:csi_app/screens/home_screens/posting/attach_pdf.dart';
@@ -69,13 +70,13 @@ class _AddPostScreenState extends State<AddPostScreen> {
   @override
   Widget build(BuildContext context) {
     mq = MediaQuery.of(context).size;
-    return Consumer<PostProvider>(builder: (context, value, child) {
-      if(value.post == null){
-        value.post = Post();
+    return Consumer2<PostProvider, AppUserProvider>(builder: (context, postProvider, appUserProvider, child) {
+      if(postProvider.post == null){
+        postProvider.post = Post();
       }
-      if (value.post != null && isFirst) {
+      if (postProvider.post != null && isFirst) {
 
-        _descriptionController.text = value.post?.description ?? "";
+        _descriptionController.text = postProvider.post?.description ?? "";
         isFirst = false;
       }
       return GestureDetector(
@@ -119,14 +120,15 @@ class _AddPostScreenState extends State<AddPostScreen> {
                       onTap: () async {
                         if (_formKey.currentState!.validate()) {
                           //todo : add post logic here
-                          value.post?.isThereImage = value.post?.images?.isNotEmpty ?? false;
-
-                          value.post?.images?.forEach((element) async {
-                            await StorageAPI.uploadPostImg(value.post!.postId, await element.readAsBytes());
+                          postProvider.post?.isThereImage = postProvider.post?.images?.isNotEmpty ?? false;
+                          postProvider.post?.createBy = appUserProvider.user!.userID;
+                          postProvider.post?.createTime = DateTime.now().millisecondsSinceEpoch.toString();
+                          postProvider.post?.images?.forEach((element) async {
+                            await StorageAPI.uploadPostImg(postProvider.post!.postId, await element.readAsBytes());
                           });
-                          PostAPI.postUpload(value.post!);
-                          value.post = null;
-                          Navigator.pushReplacement(context, RightToLeft(HomeScreen()));
+                          PostAPI.postUpload(postProvider.post!);
+                          Navigator.push(context, RightToLeft(HomeScreen()));
+                          postProvider.post = null;
                         }
                       },
                       child: Container(
@@ -173,14 +175,14 @@ class _AddPostScreenState extends State<AddPostScreen> {
                       child: Icon(Icons.image_outlined),
                       label: "Image",
                       onTap: () {
-                        final post = value.post;
+                        final post = postProvider.post;
                         final hasImage = post?.images?.isNotEmpty ?? false;
 
                         final hasPdf = (post?.pdfLink ?? "") != "";
 
                         if (!hasPdf) {
                           post?.description = _descriptionController.text;
-                          value.notify();
+                          postProvider.notify();
                           Navigator.push(context, BottomToTop(AddImage()));
                         }
                         else if (!hasImage && hasPdf) {
@@ -196,7 +198,7 @@ class _AddPostScreenState extends State<AddPostScreen> {
                                 icon: Icons.error_outline_outlined,
                                 onAction1Pressed: () {
                                   setState(() {
-                                    value.post?.pdfLink = "";
+                                    postProvider.post?.pdfLink = "";
                                     Navigator.pop(context) ;
                                   });
                                 },
@@ -214,7 +216,7 @@ class _AddPostScreenState extends State<AddPostScreen> {
                   child: Icon(Icons.picture_as_pdf_outlined),
                   label: "Pdf",
                   onTap: () {
-                    final post = value.post;
+                    final post = postProvider.post;
                     final hasImages = (post?.images?.isNotEmpty ?? false);
                     if (hasImages) {
                       showDialog(
@@ -228,7 +230,7 @@ class _AddPostScreenState extends State<AddPostScreen> {
                             icon: Icons.error_outline_outlined,
                             onAction1Pressed: () {
                               setState(() {
-                                value.post?.images?.clear();
+                                postProvider.post?.images?.clear();
                                 Navigator.pop(context);
                               });
                             },
@@ -239,8 +241,8 @@ class _AddPostScreenState extends State<AddPostScreen> {
                         },
                       );
                     } else {
-                      value.post?.description = _descriptionController.text;
-                      value.notify();
+                      postProvider.post?.description = _descriptionController.text;
+                      postProvider.notify();
                       Navigator.push(context, BottomToTop(AttachPdf()));
                     }
                   },
@@ -250,8 +252,8 @@ class _AddPostScreenState extends State<AddPostScreen> {
                       child: Icon(Icons.poll_outlined),
                       label: "Poll",
                       onTap: () {
-                        value.post?.description = _descriptionController.text;
-                        value.notify();
+                        postProvider.post?.description = _descriptionController.text;
+                        postProvider.notify();
                         Navigator.push(context, BottomToTop(PollScreen()));
                       },
                     )
@@ -266,9 +268,9 @@ class _AddPostScreenState extends State<AddPostScreen> {
                       Container(
                         child: TextFormField(
                           onChanged: (_) {
-                            value.post?.description =
+                            postProvider.post?.description =
                                 _descriptionController.text;
-                            value.notify();
+                            postProvider.notify();
                           },
                           controller: _descriptionController,
                           cursorColor: AppColors.theme['primaryColor'],
@@ -278,7 +280,7 @@ class _AddPostScreenState extends State<AddPostScreen> {
                               border: InputBorder.none),
                         ),
                       ),
-                      if (value.post?.images?.isNotEmpty ?? false)
+                      if (postProvider.post?.images?.isNotEmpty ?? false)
                         Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
@@ -304,7 +306,7 @@ class _AddPostScreenState extends State<AddPostScreen> {
                                     Duration(milliseconds: 800),
                                 viewportFraction: 0.8,
                               ),
-                              items: value.post?.images!.map((image) {
+                              items: postProvider.post?.images!.map((image) {
                                 return Builder(
                                   builder: (BuildContext context) {
                                     return Container(
@@ -320,8 +322,8 @@ class _AddPostScreenState extends State<AddPostScreen> {
                                         children: [
                                           IconButton(
                                               onPressed: () {
-                                                value.post?.images?.remove(image);
-                                                value.notify();
+                                                postProvider.post?.images?.remove(image);
+                                                postProvider.notify();
                                               },
                                               icon: Icon(Icons.close)),
 
@@ -345,7 +347,7 @@ class _AddPostScreenState extends State<AddPostScreen> {
                             ),
                           ],
                         ),
-                      if (value.post?.pdfLink?.isNotEmpty ?? false)
+                      if (postProvider.post?.pdfLink?.isNotEmpty ?? false)
                         Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
@@ -372,7 +374,7 @@ class _AddPostScreenState extends State<AddPostScreen> {
                                   canShowScrollHead: false,
                                   pageSpacing: 2,
                                   canShowPageLoadingIndicator: false,
-                                  value.post!.pdfLink!,
+                                  postProvider.post!.pdfLink!,
                                   key: _pdfViewerKey,
                                   scrollDirection:
                                       PdfScrollDirection.horizontal,
@@ -382,7 +384,7 @@ class _AddPostScreenState extends State<AddPostScreen> {
                           ],
                         ),
 
-                      if(value.post?.poll != null)
+                      if(postProvider.post?.poll != null)
                         Container(
                           decoration: BoxDecoration(
                               border: Border.all(color: AppColors.theme["tertiaryColor"]),
@@ -397,7 +399,7 @@ class _AddPostScreenState extends State<AddPostScreen> {
                                 children: [
                                   IconButton(
                                       onPressed: (){
-                                        value.post?.poll = null;
+                                        postProvider.post?.poll = null;
                                         setState(() {});
                                       },
                                       icon: Icon(Icons.close, size: 20,),
@@ -418,7 +420,7 @@ class _AddPostScreenState extends State<AddPostScreen> {
                                     votedProgressColor: AppColors.theme['secondaryBgColor'],
                                     pollOptionsSplashColor: AppColors.theme['secondaryBgColor'],
                                     createdBy: "CSI",
-                                    pollId: value.post?.poll?.pollId,
+                                    pollId: postProvider.post?.poll?.pollId,
                                     onVoted: (PollOption pollOption, int newTotalVotes) async {
                                       await Future.delayed(const Duration(seconds: 2));
                                       return true;
@@ -426,7 +428,7 @@ class _AddPostScreenState extends State<AddPostScreen> {
                                     pollTitle: Align(
                                       alignment: Alignment.centerLeft,
                                       child: Text(
-                                        value.post?.poll!.question ?? "",
+                                        postProvider.post?.poll!.question ?? "",
                                         style: const TextStyle(
                                           fontSize: 14,
                                           fontWeight: FontWeight.w600,
@@ -434,7 +436,7 @@ class _AddPostScreenState extends State<AddPostScreen> {
                                       ),
                                     ),
                                     pollOptions: List<PollOption>.from(
-                                      value.post!.poll!.options!.map(
+                                      postProvider.post!.poll!.options!.map(
                                             (option) {
                                           var a = PollOption(
                                             id: option.optionId,
