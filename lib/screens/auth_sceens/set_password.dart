@@ -1,14 +1,10 @@
-import 'package:csi_app/apis/FirebaseAuth/FirebaseAuth.dart';
-import 'package:csi_app/screens/auth_sceens/otp_screen.dart';
 import 'package:csi_app/screens/auth_sceens/register_screen.dart';
 import 'package:csi_app/side_transition_effects/left_right.dart';
 import 'package:flutter/material.dart';
 
-import '../../side_transition_effects/right_left.dart';
 import '../../utils/colors.dart';
 import '../../utils/widgets/buttons/auth_button.dart';
 import '../../utils/widgets/text_feilds/auth_text_feild.dart';
-import 'login_screen.dart';
 
 class SetPassword extends StatefulWidget {
   String emailAddress;

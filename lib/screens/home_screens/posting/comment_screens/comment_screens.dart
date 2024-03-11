@@ -4,12 +4,10 @@ import 'package:csi_app/providers/CurrentUser.dart';
 import 'package:csi_app/providers/post_provider.dart';
 import 'package:csi_app/screens/home_screens/home_screen.dart';
 import 'package:csi_app/utils/colors.dart';
-import 'package:csi_app/utils/widgets/posting/post_card.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 import 'package:csi_app/side_transition_effects/TopToBottom.dart';
-import 'package:csi_app/screens/home_screens/posting/posts_screen.dart';
 
 import '../../../../main.dart';
 import '../../../../models/user_model/AppUser.dart';

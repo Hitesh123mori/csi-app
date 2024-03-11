@@ -1,10 +1,8 @@
-import 'package:csi_app/models/user_model/post_creator.dart';
 import 'package:csi_app/providers/CurrentUser.dart';
 import 'package:csi_app/utils/colors.dart';
 import 'package:csi_app/utils/helper_functions/date_format.dart';
 import 'package:csi_app/utils/helper_functions/function.dart';
 import 'package:flutter/material.dart';
-import 'package:googleapis/admob/v1.dart';
 import 'package:like_button/like_button.dart';
 import 'package:provider/provider.dart';
 import '../../../main.dart';
@@ -85,7 +83,7 @@ class _CommentCardState extends State<CommentCard> {
                 Padding(
                   padding: const EdgeInsets.symmetric(horizontal: 20.0, vertical: 10),
                   child: Text(
-                    widget.cmnt!.message ?? "",
+                    widget.cmnt.message ?? "",
                     style: TextStyle(color: AppColors.theme['tertiaryColor'], fontWeight: FontWeight.w500),
                   ),
                 ),
@@ -114,7 +112,9 @@ class _CommentCardState extends State<CommentCard> {
                             dotSecondaryColor: AppColors.theme["secondaryBgColor"],
                           ),
                           circleColor: CircleColor(start: AppColors.theme["primaryColor"], end: AppColors.theme["secondaryBgColor"]),
-                          onTap: (bool isLiked) async {},
+                          onTap: (bool isLiked) async {
+                            return null;
+                          },
                         ),
                       ),
                       Text(

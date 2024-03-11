@@ -1,5 +1,4 @@
 import 'package:csi_app/apis/FirebaseAPIs.dart';
-import 'package:csi_app/models/post_model/post.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 
 import '../../models/post_model/image_model.dart';

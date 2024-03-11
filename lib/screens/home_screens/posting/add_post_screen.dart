@@ -14,16 +14,12 @@ import 'package:csi_app/utils/colors.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_polls/flutter_polls.dart';
 import 'package:flutter_speed_dial/flutter_speed_dial.dart';
-import 'package:image_picker/image_picker.dart';
 import 'package:provider/provider.dart';
 import 'package:syncfusion_flutter_pdfviewer/pdfviewer.dart';
-import 'dart:io';
 import '../../../apis/StorageAPIs/StorageAPI.dart';
 import '../../../main.dart';
 import '../../../side_transition_effects/TopToBottom.dart';
 import '../../../utils/widgets/dialog_box.dart';
-import '../../../utils/widgets/posting/poll_text_field.dart';
-import '../../../utils/widgets/text_feilds/auth_text_feild.dart';
 import 'add_image.dart';
 
 class AddPostScreen extends StatefulWidget {

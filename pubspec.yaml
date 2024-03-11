@@ -43,7 +43,7 @@ dependencies:
   flutter_polls: ^0.1.5
   like_button: ^2.0.5
   shared_preferences:
-#  fluttertoast: ^8.2.4
+
   url_launcher: ^6.2.4
   fluttertoast: ^8.2.4
   flutter_emoji: ^2.5.1
@@ -58,14 +58,14 @@ dependencies:
   uri:
 
 
-  firebase_core: ^2.25.5
-  firebase_storage:
-  flutter_notification_channel: ^2.0.0
-  firebase_messaging: ^14.7.4
-  firebase_auth: ^4.10.1
-  cloud_firestore: ^4.9.3
-  firebase_database: ^10.4.7
-  googleapis: ^13.0.0
+  firebase_core: ^2.27.0
+  firebase_storage: ^11.6.9
+#  flutter_notification_channel: ^3.0.0
+  firebase_messaging: ^14.7.19
+  firebase_auth: ^4.17.8
+  cloud_firestore: ^4.15.8
+  firebase_database: ^10.4.9
+  googleapis: ^13.1.0
   googleapis_auth: ^1.5.0
 
   path_provider:

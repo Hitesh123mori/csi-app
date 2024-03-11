@@ -1,6 +1,5 @@
 import 'dart:convert';
 import 'package:csi_app/apis/CompetitiveProgrammingPlatformAPIs/CodeForcesAPIs/CodeForcesURLs.dart';
-import 'package:csi_app/models/user_model/CodeforcesUserProfile.dart';
 import 'package:http/http.dart' as http;
 
 class CFGeneralAPIs{

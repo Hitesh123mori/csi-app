@@ -4,8 +4,6 @@ import 'package:csi_app/screens/home_screens/home_screen.dart';
 import 'package:csi_app/side_transition_effects/left_right.dart';
 import 'package:csi_app/utils/helper_functions/function.dart';
 import 'package:flutter/material.dart';
-import 'package:csi_app/screens/auth_sceens/login_screen.dart';
-import 'package:csi_app/side_transition_effects/right_left.dart';
 import 'package:csi_app/utils/colors.dart';
 import 'package:csi_app/utils/widgets/buttons/auth_button.dart';
 import 'package:csi_app/utils/widgets/text_feilds/auth_text_feild.dart';

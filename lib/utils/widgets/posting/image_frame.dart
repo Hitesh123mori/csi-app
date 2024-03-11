@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 
-import '../../../main.dart';
 import '../../../models/post_model/image_model.dart';
 import '../../colors.dart';
 class ImageFrame extends StatefulWidget {

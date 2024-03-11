@@ -1,6 +1,5 @@
 import 'package:csi_app/apis/FirebaseAPIs.dart';
 import 'package:csi_app/models/post_model/post.dart';
-import 'package:firebase_database/firebase_database.dart';
 
 class PostAPI {
 
