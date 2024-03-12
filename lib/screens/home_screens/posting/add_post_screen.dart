@@ -11,6 +11,7 @@ import 'package:csi_app/screens/home_screens/posting/poll%20screen.dart';
 import 'package:csi_app/side_transition_effects/bottom_top.dart';
 import 'package:csi_app/side_transition_effects/right_left.dart';
 import 'package:csi_app/utils/colors.dart';
+import 'package:csi_app/utils/helper_functions/function.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_polls/flutter_polls.dart';
 import 'package:flutter_speed_dial/flutter_speed_dial.dart';
@@ -70,12 +71,12 @@ class _AddPostScreenState extends State<AddPostScreen> {
   @override
   Widget build(BuildContext context) {
     mq = MediaQuery.of(context).size;
-    return Consumer2<PostProvider, AppUserProvider>(builder: (context, postProvider, appUserProvider, child) {
-      if(postProvider.post == null){
+    return Consumer2<PostProvider, AppUserProvider>(
+        builder: (context, postProvider, appUserProvider, child) {
+      if (postProvider.post == null) {
         postProvider.post = Post();
       }
       if (postProvider.post != null && isFirst) {
-
         _descriptionController.text = postProvider.post?.description ?? "";
         isFirst = false;
       }
@@ -120,11 +121,16 @@ class _AddPostScreenState extends State<AddPostScreen> {
                       onTap: () async {
                         if (_formKey.currentState!.validate()) {
                           //todo : add post logic here
-                          postProvider.post?.isThereImage = postProvider.post?.images?.isNotEmpty ?? false;
-                          postProvider.post?.createBy = appUserProvider.user!.userID;
-                          postProvider.post?.createTime = DateTime.now().millisecondsSinceEpoch.toString();
+                          postProvider.post?.isThereImage =
+                              postProvider.post?.images?.isNotEmpty ?? false;
+                          postProvider.post?.createBy =
+                              appUserProvider.user!.userID;
+                          postProvider.post?.createTime =
+                              DateTime.now().millisecondsSinceEpoch.toString();
                           postProvider.post?.images?.forEach((element) async {
-                            await StorageAPI.uploadPostImg(postProvider.post!.postId, await element.readAsBytes());
+                            await StorageAPI.uploadPostImg(
+                                postProvider.post!.postId,
+                                await element.readAsBytes());
                           });
                           PostAPI.postUpload(postProvider.post!);
                           postProvider.post = null;
@@ -184,8 +190,7 @@ class _AddPostScreenState extends State<AddPostScreen> {
                           post?.description = _descriptionController.text;
                           postProvider.notify();
                           Navigator.push(context, BottomToTop(AddImage()));
-                        }
-                        else if (!hasImage && hasPdf) {
+                        } else if (!hasImage && hasPdf) {
                           showDialog(
                             context: context,
                             builder: (BuildContext context) {
@@ -199,11 +204,11 @@ class _AddPostScreenState extends State<AddPostScreen> {
                                 onAction1Pressed: () {
                                   setState(() {
                                     postProvider.post?.pdfLink = "";
-                                    Navigator.pop(context) ;
+                                    Navigator.pop(context);
                                   });
                                 },
                                 onAction2Pressed: () {
-                                  Navigator.pop(context) ;
+                                  Navigator.pop(context);
                                 },
                               );
                             },
@@ -211,48 +216,52 @@ class _AddPostScreenState extends State<AddPostScreen> {
                         }
                       },
                     ),
-                SpeedDialChild(
-                  backgroundColor: AppColors.theme['disableButtonColor'],
-                  child: Icon(Icons.picture_as_pdf_outlined),
-                  label: "Pdf",
-                  onTap: () {
-                    final post = postProvider.post;
-                    final hasImages = (post?.images?.isNotEmpty ?? false);
-                    if (hasImages) {
-                      showDialog(
-                        context: context,
-                        builder: (BuildContext context) {
-                          return CustomDialog(
-                            actionButton1Name: "Delete images",
-                            actionButton2Name: "Cancel",
-                            title: 'Attachment Issue',
-                            description: 'You cannot attach both PDF and image to the same post.',
-                            icon: Icons.error_outline_outlined,
-                            onAction1Pressed: () {
-                              setState(() {
-                                postProvider.post?.images?.clear();
-                                Navigator.pop(context);
-                              });
-                            },
-                            onAction2Pressed: () {
-                              Navigator.pop(context);
+                    SpeedDialChild(
+                      backgroundColor: AppColors.theme['disableButtonColor'],
+                      child: Icon(Icons.picture_as_pdf_outlined),
+                      label: "Pdf",
+                      onTap: () {
+                        final post = postProvider.post;
+                        final hasImages = (post?.images?.isNotEmpty ?? false);
+                        if (hasImages) {
+                          showDialog(
+                            context: context,
+                            builder: (BuildContext context) {
+                              return CustomDialog(
+                                actionButton1Name: "Delete images",
+                                actionButton2Name: "Cancel",
+                                title: 'Attachment Issue',
+                                description:
+                                    'You cannot attach both PDF and image to the same post.',
+                                icon: Icons.error_outline_outlined,
+                                onAction1Pressed: () {
+                                  setState(() {
+                                    postProvider.post?.images?.clear();
+                                    HelperFunctions.showToast("Images Deleted");
+                                    Navigator.pop(context);
+                                  });
+                                },
+                                onAction2Pressed: () {
+                                  Navigator.pop(context);
+                                },
+                              );
                             },
                           );
-                        },
-                      );
-                    } else {
-                      postProvider.post?.description = _descriptionController.text;
-                      postProvider.notify();
-                      Navigator.push(context, BottomToTop(AttachPdf()));
-                    }
-                  },
-                ),
-                SpeedDialChild(
+                        } else {
+                          postProvider.post?.description =
+                              _descriptionController.text;
+                          postProvider.notify();
+                          Navigator.push(context, BottomToTop(AttachPdf()));
+                        }
+                      },
+                    ),
+                    SpeedDialChild(
                       backgroundColor: AppColors.theme['disableButtonColor'],
                       child: Icon(Icons.poll_outlined),
                       label: "Poll",
                       onTap: () {
-                        postProvider.post?.description = _descriptionController.text;
+                        postProvider.post?.description =
+                            _descriptionController.text;
                         postProvider.notify();
                         Navigator.push(context, BottomToTop(PollScreen()));
                       },
@@ -284,6 +293,9 @@ class _AddPostScreenState extends State<AddPostScreen> {
                         Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
+                            SizedBox(
+                              height: 40,
+                            ),
                             Text(
                               "Attachement",
                               style: TextStyle(
@@ -296,7 +308,7 @@ class _AddPostScreenState extends State<AddPostScreen> {
                             ),
                             CarouselSlider(
                               options: CarouselOptions(
-                                height: 400.0,
+                                height: 500.0,
                                 enlargeCenterPage: true,
                                 autoPlay: true,
                                 aspectRatio: 16 / 9,
@@ -317,28 +329,53 @@ class _AddPostScreenState extends State<AddPostScreen> {
                                         color:
                                             AppColors.theme['backgroundColor'],
                                       ),
-                                      child: Column(
-
-                                        children: [
-                                          IconButton(
-                                              onPressed: () {
-                                                postProvider.post?.images?.remove(image);
-                                                postProvider.notify();
-                                              },
-                                              icon: Icon(Icons.close)),
-
-                                          StreamBuilder(stream: image.readAsBytes().asStream(),
-                                              builder: (context, snapshot){
-                                                  if(snapshot.hasError) return Text("Error");
+                                      child: SingleChildScrollView(
+                                        child: Column(
+                                          children: [
+                                            IconButton(
+                                                onPressed: () {
+                                                  postProvider.post?.images
+                                                      ?.remove(image);
+                                                  HelperFunctions.showToast(
+                                                      "Image Deleted!");
+                                                  postProvider.notify();
+                                                },
+                                                icon: Container(
+                                                    height: 30,
+                                                    width: 30,
+                                                    decoration: BoxDecoration(
+                                                      color: Colors.red,
+                                                      borderRadius:
+                                                          BorderRadius.circular(
+                                                              20),
+                                                    ),
+                                                    child: Icon(
+                                                      Icons.close,
+                                                      color: AppColors.theme[
+                                                          'secondaryColor'],
+                                                    ))),
+                                            StreamBuilder(
+                                                stream: image
+                                                    .readAsBytes()
+                                                    .asStream(),
+                                                builder: (context, snapshot) {
+                                                  if (snapshot.hasError)
+                                                    return Text("Error");
                                                   else if (snapshot.hasData) {
-                                                    Uint8List bytes = Uint8List(0);
-                                                    return Image.memory(snapshot.data ?? bytes);
+                                                    Uint8List bytes =
+                                                        Uint8List(0);
+                                                    return Image.memory(
+                                                        fit: BoxFit.cover,
+                                                        height: 300,
+                                                        snapshot.data ?? bytes);
+                                                  } else {
+                                                    return Center(
+                                                        child:
+                                                            CircularProgressIndicator(color: AppColors.theme['primaryColor'],));
                                                   }
-                                                  else{
-                                                    return CircularProgressIndicator();
-                                                  }
-                                              })
-                                        ],
+                                                })
+                                          ],
+                                        ),
                                       ),
                                     );
                                   },
@@ -383,28 +420,30 @@ class _AddPostScreenState extends State<AddPostScreen> {
                             ),
                           ],
                         ),
-
-                      if(postProvider.post?.poll != null)
+                      if (postProvider.post?.poll != null)
                         Container(
                           decoration: BoxDecoration(
-                              border: Border.all(color: AppColors.theme["tertiaryColor"]),
-                              borderRadius: BorderRadius.circular(10),
+                            border: Border.all(
+                                color: AppColors.theme["tertiaryColor"]),
+                            borderRadius: BorderRadius.circular(10),
                           ),
-
                           child: Padding(
-                            padding: const EdgeInsets.symmetric(horizontal: 8.0),
+                            padding:
+                                const EdgeInsets.symmetric(horizontal: 8.0),
                             child: Container(
                               child: Column(
                                 crossAxisAlignment: CrossAxisAlignment.end,
                                 children: [
                                   IconButton(
-                                      onPressed: (){
-                                        postProvider.post?.poll = null;
-                                        setState(() {});
-                                      },
-                                      icon: Icon(Icons.close, size: 20,),
+                                    onPressed: () {
+                                      postProvider.post?.poll = null;
+                                      setState(() {});
+                                    },
+                                    icon: Icon(
+                                      Icons.close,
+                                      size: 20,
+                                    ),
                                   ),
-
                                   FlutterPolls(
                                     pollEnded: true,
                                     loadingWidget: SizedBox(
@@ -415,14 +454,20 @@ class _AddPostScreenState extends State<AddPostScreen> {
                                         strokeWidth: 2,
                                       ),
                                     ),
-                                    leadingVotedProgessColor: AppColors.theme['secondaryBgColor'],
-                                    votedBackgroundColor: AppColors.theme['secondaryColor'],
-                                    votedProgressColor: AppColors.theme['secondaryBgColor'],
-                                    pollOptionsSplashColor: AppColors.theme['secondaryBgColor'],
+                                    leadingVotedProgessColor:
+                                        AppColors.theme['secondaryBgColor'],
+                                    votedBackgroundColor:
+                                        AppColors.theme['secondaryColor'],
+                                    votedProgressColor:
+                                        AppColors.theme['secondaryBgColor'],
+                                    pollOptionsSplashColor:
+                                        AppColors.theme['secondaryBgColor'],
                                     createdBy: "CSI",
                                     pollId: postProvider.post?.poll?.pollId,
-                                    onVoted: (PollOption pollOption, int newTotalVotes) async {
-                                      await Future.delayed(const Duration(seconds: 2));
+                                    onVoted: (PollOption pollOption,
+                                        int newTotalVotes) async {
+                                      await Future.delayed(
+                                          const Duration(seconds: 2));
                                       return true;
                                     },
                                     pollTitle: Align(
@@ -437,12 +482,14 @@ class _AddPostScreenState extends State<AddPostScreen> {
                                     ),
                                     pollOptions: List<PollOption>.from(
                                       postProvider.post!.poll!.options!.map(
-                                            (option) {
+                                        (option) {
                                           var a = PollOption(
                                             id: option.optionId,
                                             title: Text(
                                               option.title ?? "",
-                                              style: TextStyle(color: AppColors.theme['tertiaryColor']),
+                                              style: TextStyle(
+                                                  color: AppColors
+                                                      .theme['tertiaryColor']),
                                             ),
                                             votes: option.votes,
                                           );

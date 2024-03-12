@@ -271,12 +271,11 @@ class _RegisterScreenState extends State<RegisterScreen> {
                                                 _aboutController.text);
                                         print("#res2-signup: $res2");
 
-
-                                        HelperFunctions.showToast(res);
                                         if (res == 'Welcome! to CSI' &&
                                             res2 == 'Registered' &&
                                             res2 != null) {
                                           HelperFunctions.showToast(res2);
+                                          HelperFunctions.showToast(res);
                                           await
                                           Navigator.pushReplacement(context,
                                               LeftToRight(HomeScreen()));

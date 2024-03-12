@@ -212,7 +212,6 @@ class _PostCardState extends State<PostCard> {
                                                   viewportFraction: 1,
                                                   aspectRatio: 1.0,
                                                   height: 500,
-
                                                   initialPage: 0,
                                                   onPageChanged: (index, reason) {
                                                     setState(() {
