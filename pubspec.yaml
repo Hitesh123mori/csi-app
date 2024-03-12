@@ -80,6 +80,10 @@ dependencies:
 
   pinput: ^4.0.0
 
+
+  syncfusion_flutter_calendar: 24.1.45
+  syncfusion_flutter_datepicker: 24.1.45
+
 dev_dependencies:
   flutter_test:
     sdk: flutter

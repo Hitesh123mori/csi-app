@@ -10,7 +10,7 @@ import '../../side_transition_effects/left_right.dart';
 import '../../side_transition_effects/right_left.dart';
 import '../user_profile/user_profile_screen.dart';
 import 'calendar.dart';
-import 'upcoming_events.dart';
+import 'event_screens/upcoming_events.dart';
 import 'notifications.dart';
 import 'posting/posts_screen.dart';
 
