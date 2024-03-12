@@ -1,3 +1,4 @@
+import 'package:csi_app/utils/colors.dart';
 import 'package:flutter/material.dart';
 
 class CustomDialog extends StatelessWidget {
@@ -25,20 +26,20 @@ class CustomDialog extends StatelessWidget {
     return AlertDialog(
       title: Row(
         children: <Widget>[
-          Icon(icon),
+          Icon(icon,color:AppColors.theme['primaryColor'] ,),
           SizedBox(width: 10),
-          Text(title),
+          Text(title,style: TextStyle(color: AppColors.theme['primaryColor'],fontWeight: FontWeight.bold)),
         ],
       ),
-      content: Text(description),
+      content: Text(description,style: TextStyle(color: AppColors.theme['tertiaryColor'],fontWeight: FontWeight.bold)),
       actions: <Widget>[
         TextButton(
           onPressed: onAction1Pressed,
-          child: Text(actionButton1Name ?? ""),
+          child: Text(actionButton1Name ?? "",style: TextStyle(color: Colors.red,fontWeight: FontWeight.bold),),
         ),
         TextButton(
           onPressed: onAction2Pressed,
-          child: Text(actionButton2Name ?? ""),
+          child: Text(actionButton2Name ?? "",style: TextStyle(color: AppColors.theme['primaryColor'],fontWeight: FontWeight.bold),),
         ),
       ],
     );
