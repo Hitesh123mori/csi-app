@@ -1,4 +1,7 @@
+import 'package:csi_app/apis/googleAIPs/drive/DriveApi.dart';
+import 'package:csi_app/side_transition_effects/right_left.dart';
 import 'package:csi_app/utils/shimmer_effects/post_screen_shimmer_effect.dart';
+import 'package:csi_app/utils/widgets/buttons/three_dot_button.dart';
 import 'package:flutter/material.dart';
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:provider/provider.dart';
@@ -21,6 +24,8 @@ import 'package:csi_app/utils/colors.dart';
 import 'package:csi_app/utils/helper_functions/date_format.dart';
 import 'package:csi_app/utils/helper_functions/function.dart';
 import 'package:csi_app/utils/widgets/posting/image_frame.dart';
+
+import '../../../screens/home_screens/posting/add_post_screen.dart';
 
 class PostCard extends StatefulWidget {
   final Post post;
@@ -61,7 +66,7 @@ class _PostCardState extends State<PostCard> {
                     return Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        _buildPostHeader(context, postCreator),
+                        _buildPostHeader(context, postCreator, appUserProvider.user?.userID ?? "", postProvider),
                         if (widget.post.description != null) _buildDescription(),
                         if (widget.post.isThereImage) _buildImageSection(),
                         if (widget.post.pdfLink != "") _buildPdfSection(),
@@ -107,7 +112,7 @@ class _PostCardState extends State<PostCard> {
     );
   }
 
-  Widget _buildPostHeader(BuildContext context, PostCreator postCreator) {
+  Widget _buildPostHeader(BuildContext context, PostCreator postCreator, String appUserId, PostProvider postProvider) {
     return Card(
       elevation: 0,
       surfaceTintColor: AppColors.theme['secondaryColor'],
@@ -137,10 +142,46 @@ class _PostCardState extends State<PostCard> {
           backgroundColor: AppColors.theme["secondaryBgColor"],
         ),
         contentPadding: EdgeInsets.only(left: 1),
-        trailing: IconButton(
-          onPressed: () {},
-          icon: Icon(Icons.more_vert_outlined),
-        ),
+        trailing: postCreator.userID == appUserId
+            ? ThreeDotButton(
+          options: ["Edit", "Delete"],
+          onOptionSelected: (String option) async {
+            print("#selOpt $option");
+
+            switch (option) {
+              case "edit":
+                print("Editing");
+                postProvider.post = widget.post;
+                postProvider.forEdit = true;
+
+                postProvider.notify();
+                Navigator.push(context, RightToLeft(AddPostScreen()));
+                break;
+              case "delete":
+                print("Deleting");
+
+                if(widget.post.isThereImage ?? false)
+                  StorageAPI.deletePostImg(widget.post.imageModelList);
+
+                if(widget.post.pdfLink != "" && widget.post.pdfLink != null)
+                  await DriveAPI.deleteFileFromDrive(widget.post.pdfLink);
+
+                final res = await PostAPI.deletePost(widget.post.postId ?? "");
+
+                if(res.containsKey("succ")){
+                  HelperFunctions.showToast(res["succ"] ?? "");
+                }
+                else{
+                  HelperFunctions.showToast("Error deleting post");
+                  print("#del-post-error ${res["Error deleting post"]}");
+                }
+
+                break;
+            }
+          },
+        )
+            :Container(),
+            // : ThreeDotButton(options: ["Report"], onOptionSelected: (String option) {print("#optSel $option");}),
       ),
     );
   }
@@ -211,6 +252,7 @@ class _PostCardState extends State<PostCard> {
                   if (snap.hasData) {
                     print("#hd: ${snap.data}");
                     widget.post.imageModelList = snap.data;
+                    if (widget.post.imageModelList?.isEmpty ?? true) return PostShimmerEffect();
                     return Column(
                       children: [
                         CarouselSlider.builder(
@@ -433,4 +475,6 @@ class _PostCardState extends State<PostCard> {
       ],
     );
   }
+
 }
+

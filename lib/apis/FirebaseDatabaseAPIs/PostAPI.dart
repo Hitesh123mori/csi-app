@@ -8,7 +8,6 @@ class PostAPI {
 
       return FirebaseAPIs.rtdbRef.child("post/${post.postId.toString()}").set(post.toJson())
           .then((value) {
-
             return "Posted";
           })
           .onError((error, stackTrace) {
@@ -16,7 +15,6 @@ class PostAPI {
             return "Error";
           });
   }
-
 
   static Future updateVote(String postId, String optionId, int newTotalVotes) async {
     return await FirebaseAPIs.rtdbRef.child("post/$postId/poll/options/$optionId/votes").set(newTotalVotes)
@@ -60,7 +58,6 @@ class PostAPI {
         });
   }
 
-
   static Future<Map<String, String>> addComment(String postId, PostComment postComment)async {
     return await FirebaseAPIs.rtdbRef.child("post/$postId/comment/${postComment.commentId}").set(postComment.toJson())
     .then((value) {
@@ -71,5 +68,11 @@ class PostAPI {
       print("#com-e: $error \n $stackTrace");
       return {"error": '$error \n $stackTrace'};
     });
+  }
+
+  static Future<Map<String, String>> deletePost(String postId) async {
+    return await FirebaseAPIs.rtdbRef.child("post/$postId").remove()
+        .then((value) => {"succ": "Post deleted"})
+        .onError((error, stackTrace) => {"Error deleting post": "$error, \n $stackTrace"});
   }
 }

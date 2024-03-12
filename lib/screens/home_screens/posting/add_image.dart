@@ -31,7 +31,8 @@ class _AddImageState extends State<AddImage> {
   Future<void> _pickImages() async {
     List<XFile>? images = await ImagePicker().pickMultiImage();
     setState(() {
-      _imageList = images;
+      if (_imageList == null) _imageList = [];
+      _imageList?.addAll(images);
       // imagePaths = _imageList!.map((XFile file) => file.path).toList();
       isImageUploaded = true;
     });
@@ -201,7 +202,7 @@ class _AddImageState extends State<AddImage> {
                         surfaceTintColor: MaterialStateProperty.all<Color>(AppColors.theme['primaryColor']),
                       ),
                       child: Text(
-                        !isImageUploaded ? 'Select Images' : "Reupload Images",
+                        !isImageUploaded ? 'Select Images' : "Add Images",
                         style: TextStyle(
                           fontWeight: FontWeight.bold,
                           color: AppColors.theme['tertiaryColor'],

@@ -191,6 +191,10 @@ class _AttachPdfState extends State<AttachPdf> {
                         setState(() {
                           _isLoading = true;
                         });
+
+                        if(value.post?.pdfLink != "" && value.post?.pdfLink != null)
+                          await DriveAPI.deleteFileFromDrive(value.post?.pdfLink);
+
                       Map<String, String>? uploadResult =
                       await DriveAPI.uploadFile();
 

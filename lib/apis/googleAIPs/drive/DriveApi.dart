@@ -44,4 +44,40 @@ class DriveAPI {
     }
   }
 
+  static Future<bool> deleteFileFromDrive(String? url) async {
+    if (url == null) return true;
+
+    final _credentials = ServiceAccountCredentials.fromJson(credentials);
+
+    // Authenticate using service account credentials
+    final httpClient = await clientViaServiceAccount(_credentials, _scopes);
+
+    // Instantiate the Drive API
+    final driveApi = drive.DriveApi(httpClient);
+
+    try {
+      // Delete the file
+      await driveApi.files.delete(extractIdFromUrl(url));
+
+      print('File deleted successfully.');
+      return true;
+    } catch (e) {
+      print('Error deleting file: $e');
+      return false;
+    } finally {
+      // Close the HTTP client to release resources
+      httpClient.close();
+    }
+  }
+
+  static String extractIdFromUrl(String url) {
+    RegExp regExp = RegExp(r'id=([^&]+)');
+    Match? match = regExp.firstMatch(url);
+    if (match != null) {
+      return match.group(1)!;
+    } else {
+      return ''; // Return empty string if ID not found
+    }
+  }
+
 }

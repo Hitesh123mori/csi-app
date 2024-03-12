@@ -59,6 +59,7 @@ class _PostsScreenState extends State<PostsScreen> {
                   } else {
                     List<Post> posts = [];
                     val.forEach((key, value) {
+                      print("#key : $key");
                       posts.add(Post.fromJson(value));
                     });
                     return ListView.builder(

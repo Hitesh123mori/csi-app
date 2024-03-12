@@ -18,6 +18,12 @@ class StorageAPI {
     });
   }
 
+  static Future deletePostImg(List<ImageModel>? imageModelList) async {
+    imageModelList?.forEach((element) async {
+      await element.delete();
+    });
+  }
+
 
   static Future<dynamic> getImage(String postId)async {
     final imgRef = _postFolder.child("${postId.toString()}");
