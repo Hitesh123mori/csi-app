@@ -1,10 +1,14 @@
+import 'package:csi_app/apis/FireStoreAPIs/UserControl.dart';
+import 'package:csi_app/models/user_model/AppUser.dart';
 import 'package:flutter/material.dart';
 
 import '../../colors.dart';
 import '../../helper_functions/function.dart';
 
 class AdminCard extends StatelessWidget {
-  const AdminCard({super.key});
+  AppUser appUser;
+
+  AdminCard({super.key, required this.appUser});
 
   @override
   Widget build(BuildContext context) {
@@ -18,9 +22,10 @@ class AdminCard extends StatelessWidget {
         child: ListTile(
           leading: CircleAvatar(
             backgroundColor: AppColors.theme['secondaryBgColor'],
+            child: Text(HelperFunctions.getInitials(appUser.name ?? "A B")),
           ),
-          title: Text("Hitesh Mori"),
-          subtitle: Text("App developer"),
+          title: Text("${appUser.name}"),
+          subtitle: Text("${appUser.about}"),
         ),
       ),
     );
@@ -44,7 +49,7 @@ class AdminCard extends StatelessWidget {
             ),
             CircleAvatar(
               radius: 60,
-              child:Text(HelperFunctions.getInitials("Hitesh"), style: TextStyle(
+              child:Text(HelperFunctions.getInitials(appUser.name ?? "A B"), style: TextStyle(
                   color: AppColors.theme['secondaryColor'],
                   fontWeight: FontWeight.bold,fontSize: 40)),
               backgroundColor: AppColors.theme['primaryColor'],
@@ -54,7 +59,7 @@ class AdminCard extends StatelessWidget {
             ),
             Center(
               child: Text(
-                "Hitesh Mori",
+                appUser.name ?? "",
                 style: TextStyle(
                     color: AppColors.theme['tertiaryColors'],
                     fontWeight: FontWeight.bold,fontSize: 25),
@@ -75,7 +80,16 @@ class AdminCard extends StatelessWidget {
                       10), // Adjust border radius as needed
                   color: Colors.blue, // Change background color
                   child: InkWell(
-                    onTap: () {},
+                    onTap: () async {
+                      bool succ = await UserControl.makeSuperuser(appUser.userID);
+                      if(succ){
+                        HelperFunctions.showToast("${appUser.name} has been promoted to superuser");
+                      }
+                      else{
+                        HelperFunctions.showToast("Unable to promote at the moment");
+                      }
+                      Navigator.pop(context);
+                    },
                     child: Container(
                       decoration: BoxDecoration(
                           color: AppColors.theme['primaryColor'],
@@ -104,7 +118,17 @@ class AdminCard extends StatelessWidget {
                 BorderRadius.circular(10), // Adjust border radius as needed
                 color: Colors.blue, // Change background color
                 child: InkWell(
-                  onTap: () {},
+                  onTap: () async {
+                    bool succ = await UserControl.removeAdmin(appUser.userID);
+                    if(succ){
+                      HelperFunctions.showToast("${appUser.name} has been removed from admin");
+                    }
+                    else{
+                      HelperFunctions.showToast("Unable to remove at the moment");
+                    }
+                    Navigator.pop(context);
+
+                  },
                   child: Container(
                     decoration: BoxDecoration(
                         color: Colors.red,

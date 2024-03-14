@@ -126,9 +126,7 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
                             height: mq.height * 0.8,
                             child: TabBarView(
                               children: [
-                                CodeforcesView(
-                                  appUserProvider: appUserProvider,
-                                ),
+                                CodeforcesView(),
                                 CsiAchievements(),
                               ],
                             ),

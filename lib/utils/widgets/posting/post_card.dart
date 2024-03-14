@@ -113,6 +113,7 @@ class _PostCardState extends State<PostCard> {
   }
 
   Widget _buildPostHeader(BuildContext context, PostCreator postCreator, String appUserId, PostProvider postProvider) {
+
     return Card(
       elevation: 0,
       surfaceTintColor: AppColors.theme['secondaryColor'],

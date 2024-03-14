@@ -96,6 +96,7 @@ class _AllUsersState extends State<AllUsers> {
                         shrinkWrap: true,
                         itemCount: users.length,
                         itemBuilder: (context, index) {
+                          if(users[index].userID == appUserProvider.user?.userID ) return Container();
                           return UserCard(
                             appUser: users[index],
                           );

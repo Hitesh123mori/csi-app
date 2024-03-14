@@ -10,12 +10,9 @@ import '../../utils/helper_functions/function.dart';
 import '../../utils/shimmer_effects/profile_screen_shimmer_effect.dart';
 
 class CodeforcesView extends StatefulWidget {
-  // final Map<int, int> ratingCount ;
-  // final int totalCount ;
-  final AppUserProvider appUserProvider;
+
   const CodeforcesView({
     super.key,
-    required this.appUserProvider,
   });
 
   @override
@@ -42,25 +39,11 @@ class _CodeforcesViewState extends State<CodeforcesView> {
   void initState() {
     super.initState();
     _circularChartKey = GlobalKey<SfCircularChartState>();
-    _fetchCodeforcesData();
   }
 
   Map<int, int> ratingCount = {};
   int totalCount = 0;
 
-  Future<void> _fetchCodeforcesData() async {
-    Map<String, dynamic>? cfSubmissions = await CFGeneralAPIs.getCFSubmissions(
-        widget.appUserProvider.user?.cfId ?? "");
-
-    if (cfSubmissions != null) {
-      setState(() {
-        totalCount = cfSubmissions["totalCount"] ?? 0;
-        ratingCount = Map<int, int>.from(cfSubmissions["ratingCount"] ?? {});
-      });
-    } else {
-      print("Error: CF submissions data not available.");
-    }
-  }
 
   Widget build(BuildContext context) {
     mq = MediaQuery.of(context).size;
@@ -76,10 +59,8 @@ class _CodeforcesViewState extends State<CodeforcesView> {
                 children: [
                   SizedBox(height: 30),
                   StreamBuilder(
-                    stream: CFGeneralAPIs.fetchCodeforcesUserProfile(
-                        appUserProvider.user?.cfId ?? ""),
-                    builder: (context,
-                        AsyncSnapshot<Map<String, dynamic>> snapshot) {
+                    stream: CFGeneralAPIs.fetchCodeforcesUserProfile(appUserProvider.user?.cfId ?? ""),
+                    builder: (context, AsyncSnapshot<Map<String, dynamic>> snapshot) {
                       if (snapshot.connectionState == ConnectionState.waiting) {
                         return Row(
                           mainAxisAlignment: MainAxisAlignment.center,
@@ -98,6 +79,7 @@ class _CodeforcesViewState extends State<CodeforcesView> {
                         return Container();
                       } else {
                         final userProfile = snapshot.data!;
+
                         return Padding(
                           padding: EdgeInsets.symmetric(horizontal: 10.0),
                           child: Card(
@@ -122,8 +104,7 @@ class _CodeforcesViewState extends State<CodeforcesView> {
                                         style: TextStyle(
                                           fontSize: 24,
                                           fontWeight: FontWeight.bold,
-                                          color: rankColors[userProfile['rank']] ??
-                                              AppColors.theme['tertiaryColor'],
+                                          color: rankColors[userProfile['rank']] ?? AppColors.theme['tertiaryColor'],
                                         ),
                                       ),
                                     ),
@@ -142,82 +123,76 @@ class _CodeforcesViewState extends State<CodeforcesView> {
                                         crossAxisAlignment: CrossAxisAlignment.start,
                                         children: [
                                           ListTile(
-                                            title:Text(
+                                            title: Text(
                                               "Rank",
                                               style: TextStyle(
                                                 fontSize: 20,
                                                 fontWeight: FontWeight.bold,
-                                                color: AppColors
-                                                        .theme['tertiaryColor'],
+                                                color: AppColors.theme['tertiaryColor'],
                                               ),
                                             ),
-                                            leading: Icon(Icons.trending_up,),
+                                            leading: Icon(
+                                              Icons.trending_up,
+                                            ),
                                             subtitle: Text(
                                               '${userProfile['rank']}',
                                               style: TextStyle(
-
-                                                color: AppColors
-                                                    .theme['tertiaryColor'],
+                                                color: AppColors.theme['tertiaryColor'],
                                               ),
                                             ),
                                           ),
-
                                           ListTile(
-                                            title:Text(
+                                            title: Text(
                                               "Rating",
                                               style: TextStyle(
                                                 fontSize: 20,
                                                 fontWeight: FontWeight.bold,
-                                                color: AppColors
-                                                    .theme['tertiaryColor'],
+                                                color: AppColors.theme['tertiaryColor'],
                                               ),
                                             ),
-                                            leading: Icon(Icons.stars,),
+                                            leading: Icon(
+                                              Icons.stars,
+                                            ),
                                             subtitle: Text(
                                               '${userProfile['rating']}',
                                               style: TextStyle(
-                                                color: AppColors
-                                                    .theme['tertiaryColor'],
+                                                color: AppColors.theme['tertiaryColor'],
                                               ),
                                             ),
                                           ),
-
                                           ListTile(
-                                            title:Text(
+                                            title: Text(
                                               'Max Rating',
                                               style: TextStyle(
                                                 fontSize: 20,
                                                 fontWeight: FontWeight.bold,
-                                                color: AppColors
-                                                    .theme['tertiaryColor'],
+                                                color: AppColors.theme['tertiaryColor'],
                                               ),
                                             ),
-                                            leading: Icon(Icons.emoji_events,),
+                                            leading: Icon(
+                                              Icons.emoji_events,
+                                            ),
                                             subtitle: Text(
                                               '${userProfile['maxRating']}',
                                               style: TextStyle(
-                                                color: AppColors
-                                                    .theme['tertiaryColor'],
+                                                color: AppColors.theme['tertiaryColor'],
                                               ),
                                             ),
                                           ),
-
                                           ListTile(
-                                            title:Text(
+                                            title: Text(
                                               'Max Rank',
                                               style: TextStyle(
                                                 fontSize: 20,
                                                 fontWeight: FontWeight.bold,
-                                                color: AppColors
-                                                    .theme['tertiaryColor'],
+                                                color: AppColors.theme['tertiaryColor'],
                                               ),
                                             ),
-                                            leading: Icon( Icons.star),
+                                            leading: Icon(Icons.star),
                                             subtitle: Text(
                                               '${userProfile['maxRank']}',
                                               style: TextStyle(
-                                                color: AppColors
-                                                    .theme['tertiaryColor'],
+                                                color: AppColors.theme['tertiaryColor'],
                                               ),
                                             ),
                                           ),
@@ -233,9 +208,39 @@ class _CodeforcesViewState extends State<CodeforcesView> {
                       }
                     },
                   ),
-                  ratingCount.isNotEmpty && totalCount != 0
-                      ? _buildCircularChart()
-                      :SizedBox(),
+
+
+                  StreamBuilder(
+                      stream: CFGeneralAPIs.getCFSubmissions(appUserProvider.user?.cfId ?? "").asStream(),
+                      builder: (context, snapshot) {
+                        if (snapshot.connectionState == ConnectionState.waiting) {
+                          return Row(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            crossAxisAlignment: CrossAxisAlignment.center,
+                            children: [
+                              SizedBox(
+                                height: 100,
+                              ),
+                              Center(
+                                  child: CircularProgressIndicator(
+                                color: AppColors.theme['primaryColor'],
+                              )),
+                            ],
+                          );
+                        } else if (snapshot.hasError) {
+                          return Container();
+                        } else {
+                          Map<String, dynamic> cfSubmissions = snapshot.data;
+
+                          totalCount = cfSubmissions["totalCount"] ?? 0;
+                          ratingCount = Map<int, int>.from(cfSubmissions["ratingCount"] ?? {});
+
+                          return ratingCount.isNotEmpty && totalCount != 0
+                              ? _buildCircularChart()
+                              :SizedBox();
+
+                        }
+                      }),
                   SizedBox(height: 70),
                 ],
               ),
@@ -246,8 +251,7 @@ class _CodeforcesViewState extends State<CodeforcesView> {
     );
   }
 
-  Widget _buildProfileInfo(
-      String label, String value, IconData icon, Color color) {
+  Widget _buildProfileInfo(String label, String value, IconData icon, Color color) {
     return Row(
       children: [
         Icon(

@@ -28,6 +28,7 @@ class UserProfile {
         isSuperuser: false,
         notificationToken: "",
         year: year,
+        createdAt: DateTime.now().millisecondsSinceEpoch.toString()
       );
       print("#UP: ${appUser.toJson().toString()}");
       return await _collectionRef.doc(user.uid)
@@ -49,5 +50,16 @@ class UserProfile {
     return _collectionRef.snapshots();
    }
 
+  static Future<bool> updateUserProfile(String? userId, Map<String, dynamic> fields) async {
+    return await _collectionRef.doc("$userId").update(fields)
+        .then((value) {
+          print("#updated");
+          return true;
+        })
+        .onError((error, stackTrace) {
+          print("#update-e: $error, $stackTrace");
+          return false;
+        });
+  }
 }
 

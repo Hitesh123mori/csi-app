@@ -63,6 +63,7 @@ class _AnnouncementScreenState extends State<AnnouncementScreen> {
           actions: [
             Padding(
               padding: EdgeInsets.symmetric(horizontal: !_isLoading ? 7.0 : 20),
+              //todo add inkwell and store description and userId
               child: AnimatedContainer(
                 duration: Duration(milliseconds: 500),
                 curve: Curves.easeInOut,
