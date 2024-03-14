@@ -28,7 +28,6 @@ class UserProfile {
         isSuperuser: false,
         notificationToken: "",
         year: year,
-        createdAt: DateTime.now().millisecondsSinceEpoch.toString(),
       );
       print("#UP: ${appUser.toJson().toString()}");
       return await _collectionRef.doc(user.uid)
