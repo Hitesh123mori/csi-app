@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart' ;
 import '../../main.dart';
 import '../../utils/colors.dart';
+import '../../utils/shimmer_effects/notification_card_shimmer_effect.dart';
 
 class Notifications extends StatefulWidget {
   const Notifications({super.key});
@@ -40,5 +41,6 @@ class _NotificationsState extends State<Notifications> {
         child: Text("Notifications",style: TextStyle(fontWeight: FontWeight.bold),),
       ),
     );
+
   }
 }

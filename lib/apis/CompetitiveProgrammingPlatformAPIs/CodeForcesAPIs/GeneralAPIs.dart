@@ -3,6 +3,8 @@ import 'package:csi_app/apis/CompetitiveProgrammingPlatformAPIs/CodeForcesAPIs/C
 import 'package:http/http.dart' as http;
 
 class CFGeneralAPIs{
+
+
   static Future<dynamic> getCFSubmissions(String handle) async {
     final response = await http.get(Uri.parse(CodeForcesURLs.userProblemSolved(username: handle)));
 

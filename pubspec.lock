@@ -526,6 +526,14 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "0.13.1"
+  flutter_notification_channel:
+    dependency: "direct main"
+    description:
+      name: flutter_notification_channel
+      sha256: "85f02dceefce1dd05838b639dee3d64ab8721df4882eee7a29ecb277f00ab087"
+      url: "https://pub.dev"
+    source: hosted
+    version: "2.0.0"
   flutter_plugin_android_lifecycle:
     dependency: transitive
     description:
@@ -588,10 +596,10 @@ packages:
     dependency: "direct main"
     description:
       name: googleapis
-      sha256: "4eefba93b5f714d6c2bcc1695ff6fb09d36684d2a06912285d3981069796da10"
+      sha256: "4e101034eeec5bc949046732d4cea322a8c7a4f69d112c6376912c94705be6f2"
       url: "https://pub.dev"
     source: hosted
-    version: "13.1.0"
+    version: "13.0.0"
   googleapis_auth:
     dependency: "direct main"
     description:
@@ -700,10 +708,10 @@ packages:
     dependency: transitive
     description:
       name: intl
-      sha256: "3bc132a9dbce73a7e4a21a17d06e1878839ffbf975568bc875c60537824b0c4d"
+      sha256: d6f56758b7d3014a48af9701c085700aac781a92a87a62b1333b46d8879661cf
       url: "https://pub.dev"
     source: hosted
-    version: "0.18.1"
+    version: "0.19.0"
   introduction_screen:
     dependency: "direct main"
     description:
@@ -1045,14 +1053,6 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "1.2.0"
-  syncfusion_flutter_calendar:
-    dependency: "direct main"
-    description:
-      name: syncfusion_flutter_calendar
-      sha256: "12c9750dc5b728cb2eee251533a7bcc0b66171f9c7d2c5a3ed665494534148f0"
-      url: "https://pub.dev"
-    source: hosted
-    version: "24.1.45"
   syncfusion_flutter_core:
     dependency: transitive
     description:
@@ -1061,14 +1061,6 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "24.2.9"
-  syncfusion_flutter_datepicker:
-    dependency: "direct main"
-    description:
-      name: syncfusion_flutter_datepicker
-      sha256: "22e9845e3389a7554f5ccf683032ba4ce4cf9a19f656f5e811a075df31f78c9e"
-      url: "https://pub.dev"
-    source: hosted
-    version: "24.1.45"
   syncfusion_flutter_pdf:
     dependency: transitive
     description:
