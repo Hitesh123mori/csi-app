@@ -1,9 +1,10 @@
 import 'package:csi_app/providers/CurrentUser.dart';
-import 'package:csi_app/screens/home_screens/more.dart';
+import 'package:csi_app/screens/home_screens/more/more.dart';
 import 'package:csi_app/utils/colors.dart';
 import 'package:flutter/material.dart';
 import 'package:google_nav_bar/google_nav_bar.dart';
 import 'package:provider/provider.dart';
+import '../../apis/CompetitiveProgrammingPlatformAPIs/CodeForcesAPIs/GeneralAPIs.dart';
 import '../../main.dart';
 import '../../providers/bottom_navigation_provider.dart';
 import '../../side_transition_effects/left_right.dart';
@@ -26,8 +27,11 @@ class HomeScreen extends StatefulWidget {
 class _HomeScreenState extends State<HomeScreen> {
   Widget screenname = PostsScreen();
 
+
+
   final FocusNode _focusNode = FocusNode();
   bool _isFirst = true;
+
 
   @override
   void initState() {
@@ -98,7 +102,7 @@ class _HomeScreenState extends State<HomeScreen> {
           leading: Padding(
             padding: const EdgeInsets.only(left: 8.0),
             child: InkWell(
-              onTap: () {
+              onTap: () async{
                 print("#app ${appUserProvider.user?.name}");
                 if (appUserProvider.user != null) {
                   Navigator.push(context, LeftToRight(UserProfileScreen()));
@@ -106,10 +110,10 @@ class _HomeScreenState extends State<HomeScreen> {
               },
               child: CircleAvatar(
                 radius: 10,
-                backgroundColor: AppColors.theme['secondaryBgColor'],
+                backgroundColor: AppColors.theme['primaryColor'],
                 child: Text(
                   appUserProvider.user?.name?[0].toUpperCase() ?? '',
-                  style: TextStyle(fontWeight: FontWeight.bold, fontSize: 20),
+                  style: TextStyle(fontWeight: FontWeight.bold, fontSize: 20,color: AppColors.theme['secondaryColor']),
                 ),
               ),
             ),

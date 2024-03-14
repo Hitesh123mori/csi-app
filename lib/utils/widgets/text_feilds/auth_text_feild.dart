@@ -13,10 +13,12 @@ class CustomAuthTextField extends StatelessWidget {
   final void Function(String?)? onSaved;
   final void Function(String?)? onChange;
   final FocusNode? focusNode;
+   bool? isEnabled = true;
 
-  const CustomAuthTextField({
+   CustomAuthTextField({
     Key? key,
     required this.hintText,
+      this.isEnabled ,
     this.controller,
     required this.isNumber,
     this.validator,
@@ -34,6 +36,7 @@ class CustomAuthTextField extends StatelessWidget {
       padding: const EdgeInsets.symmetric(vertical: 5),
       child: Center(
         child: TextFormField(
+          enabled: isEnabled,
           cursorColor: AppColors.theme['primaryColor'],
           onSaved: onSaved,
           focusNode: focusNode,

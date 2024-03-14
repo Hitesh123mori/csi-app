@@ -5,6 +5,9 @@ import 'package:csi_app/providers/post_provider.dart';
 import 'package:csi_app/screens/home_screens/home_screen.dart';
 import 'package:csi_app/screens/on_boading_screens/splash_screen.dart';
 import 'package:csi_app/utils/colors.dart';
+import 'package:csi_app/utils/shimmer_effects/notification_card_shimmer_effect.dart';
+import 'package:csi_app/utils/shimmer_effects/post_screen_shimmer_effect.dart';
+import 'package:csi_app/utils/shimmer_effects/users_card_shimmer_effect.dart';
 import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/material.dart' ;
 import 'package:provider/provider.dart';
@@ -53,6 +56,9 @@ class _MyAppState extends State<MyApp> {
           ),
           home: SplashScreen(appUser: appUserProvider,)
         // home: HomeScreen(),
+        // home:PostShimmerEffect(),
+        // home :UsersCardShimmerEffect(),
+        // home: NotificationCardShimmerEffect(),
       );
     }) ;
   }
