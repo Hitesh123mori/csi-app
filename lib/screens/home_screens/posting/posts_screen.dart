@@ -1,5 +1,4 @@
 import 'package:csi_app/apis/FirebaseAPIs.dart';
-import 'package:csi_app/apis/StorageAPIs/StorageAPI.dart';
 // import 'package:csi_app/apis/FirebaseDatabaseAPIs/PostAPI.dart';
 import 'package:csi_app/models/post_model/post.dart';
 import 'package:csi_app/side_transition_effects/bottom_top.dart';
@@ -35,18 +34,18 @@ class _PostsScreenState extends State<PostsScreen> {
           backgroundColor: AppColors.theme['primaryColor'],
         ),
         body: Padding(
-          padding: const EdgeInsets.symmetric(vertical:5),
-          // child: ListView.builder(
-          //   physics: BouncingScrollPhysics(),
-          //   shrinkWrap: true,
-          //   itemCount: posts.length,
-          //   itemBuilder: (context, index) {
-          //     print("#l${posts.length}");
-          //     return PostCard(
-          //       post: posts[index],
-          //     );
-          //   },
-          // ),
+            padding: const EdgeInsets.symmetric(vertical:5),
+            // child: ListView.builder(
+            //   physics: BouncingScrollPhysics(),
+            //   shrinkWrap: true,
+            //   itemCount: posts.length,
+            //   itemBuilder: (context, index) {
+            //     print("#l${posts.length}");
+            //     return PostCard(
+            //       post: posts[index],
+            //     );
+            //   },
+            // ),
 
             child: StreamBuilder(
               stream: FirebaseAPIs.rtdbRef.child("post").onValue,
@@ -60,6 +59,7 @@ class _PostsScreenState extends State<PostsScreen> {
                   } else {
                     List<Post> posts = [];
                     val.forEach((key, value) {
+                      print("#key : $key");
                       posts.add(Post.fromJson(value));
                     });
                     return ListView.builder(
@@ -82,6 +82,6 @@ class _PostsScreenState extends State<PostsScreen> {
               },
             )
         )
-        );
+    );
   }
 }

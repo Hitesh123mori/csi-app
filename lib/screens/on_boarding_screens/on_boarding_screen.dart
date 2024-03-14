@@ -1,5 +1,4 @@
 import 'package:csi_app/screens/auth_sceens/login_screen.dart';
-import 'package:csi_app/screens/home_screens/home_screen.dart';
 import 'package:flutter/material.dart' ;
 import 'package:introduction_screen/introduction_screen.dart';
 

@@ -43,12 +43,13 @@ dependencies:
   flutter_polls: ^0.1.5
   like_button: ^2.0.5
   shared_preferences:
-#  fluttertoast: ^8.2.4
+
   url_launcher: ^6.2.4
   fluttertoast: ^8.2.4
   flutter_emoji: ^2.5.1
   shimmer: ^3.0.0
   audioplayers:
+  syncfusion_flutter_charts: ^24.2.9
   # The following adds the Cupertino Icons font to your application.
   # Use with the CupertinoIcons class for iOS style icons.
   cupertino_icons: ^1.0.2
@@ -58,14 +59,14 @@ dependencies:
   uri:
 
 
-  firebase_core: ^2.25.5
-  firebase_storage:
-  flutter_notification_channel: ^2.0.0
-  firebase_messaging: ^14.7.4
-  firebase_auth: ^4.10.1
-  cloud_firestore: ^4.9.3
-  firebase_database: ^10.4.7
-  googleapis: ^13.0.0
+  firebase_core: ^2.27.0
+  firebase_storage: ^11.6.9
+#  flutter_notification_channel: ^3.0.0
+  firebase_messaging: ^14.7.19
+  firebase_auth: ^4.17.8
+  cloud_firestore: ^4.15.8
+  firebase_database: ^10.4.9
+  googleapis: ^13.1.0
   googleapis_auth: ^1.5.0
 
   path_provider:
@@ -79,6 +80,10 @@ dependencies:
   uuid: ^4.3.3
 
   pinput: ^4.0.0
+
+
+  syncfusion_flutter_calendar: 24.1.45
+  syncfusion_flutter_datepicker: 24.1.45
 
 dev_dependencies:
   flutter_test:

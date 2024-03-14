@@ -4,12 +4,10 @@ import 'package:csi_app/providers/CurrentUser.dart';
 import 'package:csi_app/providers/post_provider.dart';
 import 'package:csi_app/screens/home_screens/home_screen.dart';
 import 'package:csi_app/utils/colors.dart';
-import 'package:csi_app/utils/widgets/posting/post_card.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 import 'package:csi_app/side_transition_effects/TopToBottom.dart';
-import 'package:csi_app/screens/home_screens/posting/posts_screen.dart';
 
 import '../../../../main.dart';
 import '../../../../models/user_model/AppUser.dart';
@@ -74,12 +72,22 @@ class _CommentScreenState extends State<CommentScreen> {
                                 color: Colors.grey,
                               ),
                             ),
-                          ) : ListView.builder(
-                            physics: BouncingScrollPhysics(),
-                              itemCount: postProvider.post?.comment!.length,
+                          ) :ListView.builder(
+                              physics: BouncingScrollPhysics(),
+                              itemCount: postProvider.post?.comment?.length ?? 0, // Null check added here
                               itemBuilder: (BuildContext context, int index) {
-                            return CommentCard(cmnt: postProvider.post!.comment![index], postCreatorId: postProvider.post?.createBy??"",);
-                          }),
+                                // Check if postProvider.post and postProvider.post.comment are not null
+                                if (postProvider.post != null && postProvider.post!.comment != null) {
+                                  // Access comment only if it's not null
+                                  final comment = postProvider.post!.comment![index];
+                                  return CommentCard(cmnt: comment, postCreatorId: postProvider.post?.createBy ?? "",);
+                                } else {
+                                  // Return a placeholder widget if comment or postProvider.post is null
+                                  return SizedBox();
+                                }
+                              }
+                          )
+
                         ),
                         buildChatInput(appUserProvider.user!,postProvider.post!),
                       ],

@@ -8,9 +8,7 @@ import 'package:provider/provider.dart';
 
 import '../../../side_transition_effects/TopToBottom.dart';
 import '../../../utils/colors.dart';
-import '../../../utils/widgets/buttons/auth_button.dart';
 import '../../../utils/widgets/posting/poll_text_field.dart';
-import '../home_screen.dart';
 
 class PollScreen extends StatefulWidget {
   const PollScreen({super.key});

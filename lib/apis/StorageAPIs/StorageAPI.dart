@@ -1,5 +1,4 @@
 import 'package:csi_app/apis/FirebaseAPIs.dart';
-import 'package:csi_app/models/post_model/post.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 
 import '../../models/post_model/image_model.dart';
@@ -16,6 +15,12 @@ class StorageAPI {
     }).onError((error, stackTrace) {
       print("#upload E: ${error}, \n $stackTrace");
       return null;
+    });
+  }
+
+  static Future deletePostImg(List<ImageModel>? imageModelList) async {
+    imageModelList?.forEach((element) async {
+      await element.delete();
     });
   }
 

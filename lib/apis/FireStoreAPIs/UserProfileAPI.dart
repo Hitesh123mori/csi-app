@@ -1,3 +1,4 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:csi_app/apis/FirebaseAPIs.dart';
 import 'package:csi_app/models/user_model/AppUser.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -43,4 +44,10 @@ class UserProfile {
         .then((value) => value.data())
         .onError((error, stackTrace) => {"error": error, "stackTrace": stackTrace});
   }
+
+  static Stream<QuerySnapshot<Map<String, dynamic>>> getAllAppUsers()  {
+    return _collectionRef.snapshots();
+   }
+
 }
+

@@ -1,6 +1,5 @@
 import 'package:csi_app/utils/colors.dart';
 import 'package:flutter/material.dart';
-import '../../../main.dart';
 
 class AuthButton extends StatelessWidget {
   final Future<void> Function()? onpressed;

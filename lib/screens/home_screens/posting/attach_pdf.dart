@@ -1,7 +1,7 @@
 import 'package:csi_app/providers/post_provider.dart';
 import 'package:csi_app/utils/colors.dart';
+import 'package:csi_app/utils/helper_functions/function.dart';
 import 'package:flutter/material.dart';
-import 'package:googleapis/drive/v3.dart';
 import 'package:provider/provider.dart';
 import 'package:syncfusion_flutter_pdfviewer/pdfviewer.dart';
 import '../../../apis/googleAIPs/drive/DriveApi.dart';
@@ -32,7 +32,7 @@ class _AttachPdfState extends State<AttachPdf> {
   void initState() {
     super.initState();
     _pdfnameController.addListener(updateButtonState);
-    _textFieldFocusNode = FocusNode(); // Initialize FocusNode
+    _textFieldFocusNode = FocusNode();
   }
 
   @override
@@ -146,37 +146,55 @@ class _AttachPdfState extends State<AttachPdf> {
                   ),
 
                   if (downloadUrl != "")
+                Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      "Preview",
+                      style: TextStyle(
+                          fontSize: 16,
+                          fontWeight: FontWeight.bold,
+                          color: AppColors.theme['tertiaryColor']),
+                    ),
+                    SizedBox(
+                      height: 5,
+                    ),
                     Padding(
-                      padding: const EdgeInsets.all(8.0).copyWith(
-                        top: 0,
-                      ),
-                      child: Container(
-                        height: 500,
-                        width: mq.width*1,
-                        decoration: BoxDecoration(
-                          color: AppColors.theme['backgroundColor'],
+                        padding: const EdgeInsets.all(8.0).copyWith(
+                          top: 0,
                         ),
-                        child: Padding(
-                          padding: const EdgeInsets.all(8.0),
-                          child: SfPdfViewer.network(
-                            downloadUrl,
-                            pageLayoutMode: PdfPageLayoutMode.continuous,
-                            canShowScrollHead: false,
-                            pageSpacing: 2,
-                            canShowPageLoadingIndicator: false,
-                            key: _pdfViewerKey,
-                            scrollDirection: PdfScrollDirection.horizontal,
+                        child: Container(
+                          height: 500,
+                          width: mq.width*1,
+                          decoration: BoxDecoration(
+                            color: AppColors.theme['backgroundColor'],
+                          ),
+                          child: Padding(
+                            padding: const EdgeInsets.all(8.0),
+                            child: SfPdfViewer.network(
+                              downloadUrl,
+                              pageLayoutMode: PdfPageLayoutMode.continuous,
+                              canShowScrollHead: false,
+                              pageSpacing: 2,
+                              canShowPageLoadingIndicator: false,
+                              key: _pdfViewerKey,
+                              scrollDirection: PdfScrollDirection.horizontal,
+                            ),
                           ),
                         ),
                       ),
-                    ),
-
+                  ],
+                ),
                   OutlinedButton(
                     onPressed: () async {
-                      _textFieldFocusNode.requestFocus();
-                      setState(() {
-                          _isLoading = true ;
-                      });
+                      FocusScope.of(context).unfocus();
+                        setState(() {
+                          _isLoading = true;
+                        });
+
+                        if(value.post?.pdfLink != "" && value.post?.pdfLink != null)
+                          await DriveAPI.deleteFileFromDrive(value.post?.pdfLink);
+
                       Map<String, String>? uploadResult =
                       await DriveAPI.uploadFile();
 
@@ -188,21 +206,24 @@ class _AttachPdfState extends State<AttachPdf> {
                           uploadResult.containsKey("File uploaded")) {
                         downloadUrl = uploadResult["File uploaded"]!;
                         isPdfAttached = true ;
+                        HelperFunctions.showToast("File Attached") ;
+                        _textFieldFocusNode.requestFocus();
                         // value.notify();
                         setState(() {});
-
                       } else if (uploadResult != null &&
                           uploadResult.containsKey("Error")) {
                         String errorMessage = uploadResult["Error"]!;
                         print(
                           'Error occurred during file upload: $errorMessage',
                         );
+                        HelperFunctions.showToast("Error occurred during file upload") ;
                       } else {
                         print(
                           'Error: File upload failed or user canceled the file picking',
                         );
+                        HelperFunctions.showToast("File upload failed or user canceled the file picking") ;
                       }
-                      updateButtonState(); // Update button state after choosing PDF
+                      updateButtonState();
                     },
                     style: ButtonStyle(
                       shape: MaterialStateProperty.all<RoundedRectangleBorder>(
@@ -236,7 +257,7 @@ class _AttachPdfState extends State<AttachPdf> {
                         SizedBox(width:  10),
                         Center(
                           child: Text(
-                            "Uploading...",
+                            "Please wait...",
                             style: TextStyle(
                               color: AppColors.theme['tertiaryColor'],
                               fontSize: 18,

@@ -13,7 +13,9 @@ class AppUser {
       this.isSuperuser, 
       this.expiryDate, 
       this.isActive, 
-      this.notificationToken,});
+      this.notificationToken,
+      this.createdAt,
+  });
 
   AppUser.fromJson(dynamic json) {
     userID = json['userID'];
@@ -30,6 +32,8 @@ class AppUser {
     expiryDate = json['expiry_date'];
     isActive = json['is_active'];
     notificationToken = json['notification_token'];
+    createdAt  = json['createdAt'] ;
+
   }
   String? userID;
   String? name;
@@ -45,6 +49,7 @@ class AppUser {
   num? expiryDate;
   bool? isActive;
   String? notificationToken;
+  String? createdAt;
 
   Map<String, dynamic> toJson() {
     final map = <String, dynamic>{};
@@ -62,6 +67,7 @@ class AppUser {
     map['expiry_date'] = expiryDate;
     map['is_active'] = isActive;
     map['notification_token'] = notificationToken;
+    map['createdAt'] = createdAt ;
     return map;
   }
 

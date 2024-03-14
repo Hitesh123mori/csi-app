@@ -3,10 +3,11 @@ import 'package:csi_app/providers/CurrentUser.dart';
 import 'package:csi_app/utils/colors.dart';
 import 'package:csi_app/utils/helper_functions/date_format.dart';
 import 'package:csi_app/utils/helper_functions/function.dart';
+import 'package:csi_app/utils/shimmer_effects/comment_screen_shimmer_effect.dart';
 import 'package:flutter/material.dart';
-import 'package:googleapis/admob/v1.dart';
 import 'package:like_button/like_button.dart';
 import 'package:provider/provider.dart';
+import '../../../apis/FireStoreAPIs/PostUserProfile.dart';
 import '../../../main.dart';
 import '../../../models/post_model/post.dart';
 
@@ -35,95 +36,139 @@ class _CommentCardState extends State<CommentCard> {
               color: AppColors.theme['secondaryColor'],
               borderRadius: BorderRadius.circular(10),
             ),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                ListTile(
-                  leading: CircleAvatar(
-                    backgroundColor: AppColors.theme['secondaryBgColor'],
-                    child: Center(
-                        child: Text(
-                      HelperFunctions.getInitials(appUserProvider.user?.name ?? ""),
-                      style: TextStyle(color: AppColors.theme['tertiaryColor'], fontWeight: FontWeight.bold),
-                    )),
-                  ),
-                  title: Text(
-                    appUserProvider.user?.name ?? "",
-                    style: TextStyle(color: AppColors.theme['tertiaryColor'], fontWeight: FontWeight.bold),
-                  ),
-                  subtitle: Text(
-                    appUserProvider.user?.about ?? "",
-                    style: TextStyle(color: AppColors.theme['tertiaryColor'], fontWeight: FontWeight.w500),
-                  ),
-                  trailing: appUserProvider.user?.userID == widget.postCreatorId
-                      ? Row(
-                    mainAxisSize: MainAxisSize.min,
+            child: StreamBuilder(
+              stream: PostUserProfile.getPostCreator(widget.cmnt.userId ?? "").asStream(),
+              builder: (context, snapshot) {
+                if (snapshot.hasData) {
+                  PostCreator commentCreator = PostCreator.fromJson(snapshot.data);
+                  return Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      Container(
-                        decoration: BoxDecoration(
-                          color: AppColors.theme['primaryColor'],
-                          borderRadius: BorderRadius.circular(4),
-                        ),
-                        padding: EdgeInsets.symmetric(horizontal: 5, vertical: 2),
-                        child: Text(
-                          "Creator",
-                          style: TextStyle(
-                            color: AppColors.theme['secondaryColor'],
-                            fontSize: 12,
+                      ListTile(
+                        contentPadding: EdgeInsets.only(left: 8),
+                        dense: true,
+                        leading: CircleAvatar(
+                          backgroundColor: AppColors.theme['secondaryBgColor'],
+                          child: Center(
+                            child: Text(
+                              HelperFunctions.getInitials(commentCreator.name ?? ""),
+                              style: TextStyle(color: AppColors.theme['tertiaryColor'], fontWeight: FontWeight.bold),
+                            ),
                           ),
                         ),
+                        title: Text(
+                          commentCreator.name ?? "",
+                          style: TextStyle(color: AppColors.theme['tertiaryColor'], fontWeight: FontWeight.bold),
+                        ),
+                        subtitle: Text(
+                          commentCreator.about ?? "",
+                          style: TextStyle(color: AppColors.theme['tertiaryColor'], fontWeight: FontWeight.w500),
+                        ),
+                        trailing: Container(
+                          width: 100,
+                          child: widget.cmnt.userId == widget.postCreatorId
+                              ? Row(
+                            mainAxisSize: MainAxisSize.min,
+                            children: [
+                              Container(
+                                decoration: BoxDecoration(
+                                  color: AppColors.theme['primaryColor'],
+                                  borderRadius: BorderRadius.circular(4),
+                                ),
+                                padding: EdgeInsets.symmetric(horizontal: 5, vertical: 2),
+                                child: Text(
+                                  "Creator",
+                                  style: TextStyle(
+                                    color: AppColors.theme['secondaryColor'],
+                                    fontSize: 12,
+                                  ),
+                                ),
+                              ),
+                            ],
+                          )
+                              : Container(),
+                        ),
                       ),
-                    ],
-                  )
-                      : Container(),
-
-                ),
-                Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 20.0, vertical: 10),
-                  child: Text(
-                    widget.cmnt!.message ?? "",
-                    style: TextStyle(color: AppColors.theme['tertiaryColor'], fontWeight: FontWeight.w500),
-                  ),
-                ),
-                Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 20.0, vertical: 10),
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      //todo: fix like button
                       Padding(
-                        padding: const EdgeInsets.all(8.0),
-                        child: LikeButton(
-                          likeCount: 23,
-                          likeBuilder: (bool isLiked) {
-                            return isLiked
-                                ? Icon(
+                        padding: const EdgeInsets.symmetric(horizontal: 20.0, vertical: 10),
+                        child: Text(
+                          widget.cmnt.message ?? "",
+                          style: TextStyle(color: AppColors.theme['tertiaryColor'], fontWeight: FontWeight.w500),
+                        ),
+                      ),
+                      Padding(
+                        padding: const EdgeInsets.symmetric(horizontal: 20.0, vertical: 10),
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            Padding(
+                              padding: const EdgeInsets.all(8.0),
+                              child: LikeButton(
+                                likeCount: 23,
+                                likeBuilder: (bool isLiked) {
+                                  return isLiked
+                                      ? Icon(
                                     Icons.thumb_up,
                                     color: AppColors.theme["primaryColor"],
                                   )
-                                : Icon(
+                                      : Icon(
                                     Icons.thumb_up_alt_outlined,
                                     color: AppColors.theme["primaryColor"],
                                   );
-                          },
-                          bubblesColor: BubblesColor(
-                            dotPrimaryColor: AppColors.theme["primaryColor"],
-                            dotSecondaryColor: AppColors.theme["secondaryBgColor"],
-                          ),
-                          circleColor: CircleColor(start: AppColors.theme["primaryColor"], end: AppColors.theme["secondaryBgColor"]),
-                          onTap: (bool isLiked) async {},
+                                },
+                                bubblesColor: BubblesColor(
+                                  dotPrimaryColor: AppColors.theme["primaryColor"],
+                                  dotSecondaryColor: AppColors.theme["secondaryBgColor"],
+                                ),
+                                circleColor: CircleColor(start: AppColors.theme["primaryColor"], end: AppColors.theme["secondaryBgColor"]),
+                                onTap: (bool isLiked) async {
+                                  return null;
+                                },
+                              ),
+                            ),
+                            Text(
+                              MyDateUtil.getMessageTime(context: context, time: widget.cmnt.createdTime ?? ""), // Use the null-aware operator (??) to provide a fallback value
+                            ),
+                          ],
                         ),
-                      ),
+                      )
 
-                      Text(MyDateUtil.getMessageTime(context: context, time: widget.cmnt.createdTime! ?? "")),
                     ],
-                  ),
-                )
-              ],
+                  );
+                }
+                else if(snapshot.hasError){
+                  return _buildErrorCard(context);
+                }
+                else {
+                  return CommentShimmerEffect();
+                }
+              },
             ),
           ),
         ),
       );
     });
+  }
+
+  Widget _buildErrorCard(BuildContext context) {
+    return Card(
+      elevation: 0,
+      surfaceTintColor: AppColors.theme['secondaryColor'],
+      color: AppColors.theme['secondaryColor'],
+      child: ListTile(
+        title: Text(
+          "Error Occurred",
+          style: TextStyle(fontWeight: FontWeight.bold),
+        ),
+        subtitle: Text(
+          "There was an error fetching data",
+          style: TextStyle(color: AppColors.theme['tertiaryColor']),
+        ),
+        leading: CircleAvatar(
+          child: Icon(Icons.error, color: Colors.white),
+          backgroundColor: Colors.red,
+        ),
+      ),
+    );
   }
 }
