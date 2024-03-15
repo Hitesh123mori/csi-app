@@ -100,6 +100,7 @@ class _AllAdminsState extends State<AllAdmins> {
                             if(users[index].userID == appUserProvider.user?.userID ) return Container();
                             return AdminCard(
                               appUser: users[index],
+                              currentUser: appUserProvider.user ?? AppUser(),
                             );
                           },
                         );

@@ -6,7 +6,9 @@ import '../../helper_functions/function.dart';
 
 class AdminCard extends StatelessWidget {
   final AppUser appUser;
- const AdminCard({super.key, required this.appUser,});
+  final AppUser currentUser;
+
+ const AdminCard({super.key, required this.appUser, required this.currentUser});
 
   @override
   Widget build(BuildContext context) {
@@ -80,7 +82,7 @@ class AdminCard extends StatelessWidget {
                   color: Colors.blue, // Change background color
                   child: InkWell(
                     onTap: () async {
-                      bool succ = await UserControl.makeSuperuser(appUser.userID);
+                      bool succ = await UserControl.makeSuperuser(appUser.userID, currentUser.userID);
                       if(succ){
                         HelperFunctions.showToast("${appUser.name} has been promoted to superuser");
                       }
