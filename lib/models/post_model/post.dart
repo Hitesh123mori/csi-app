@@ -103,7 +103,7 @@ class PostComment {
   PostComment.fromJson(dynamic json) {
     commentId = json['commentId'];
     message = json['message'];
-    like = json['like'];
+    like = json['like'] ?? {};
     userId = json['userId'];
     createdTime = json['createdTime'];
   }

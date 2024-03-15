@@ -439,7 +439,7 @@ class _PostCardState extends State<PostCard> {
             circleColor: CircleColor(start: AppColors.theme["primaryColor"], end: AppColors.theme["secondaryBgColor"]),
             onTap: (bool isLiked) async {
               // bool successful = await PostAPI.onLikeButtonTap(widget.post.postId, appUserProvider.user?.userID ?? "noUser", isLiked);
-              PostAPI.onLikeButtonTap(widget.post.postId, appUserProvider.user?.userID ?? "noUser", isLiked).then((value) {
+              PostAPI.onPostLikeButtonTap(widget.post.postId, appUserProvider.user?.userID ?? "noUser", isLiked).then((value) {
                 _isSuccLike = true;
                 setState(() {});
                   if (isLiked)

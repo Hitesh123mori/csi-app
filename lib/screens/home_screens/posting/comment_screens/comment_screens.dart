@@ -80,7 +80,7 @@ class _CommentScreenState extends State<CommentScreen> {
                                 if (postProvider.post != null && postProvider.post!.comment != null) {
                                   // Access comment only if it's not null
                                   final comment = postProvider.post!.comment![index];
-                                  return CommentCard(cmnt: comment, postCreatorId: postProvider.post?.createBy ?? "",);
+                                  return CommentCard(postComment: comment, postCreatorId: postProvider.post?.createBy ?? "", postId: postProvider.post?.postId ?? "",);
                                 } else {
                                   // Return a placeholder widget if comment or postProvider.post is null
                                   return SizedBox();
@@ -166,14 +166,10 @@ class _CommentScreenState extends State<CommentScreen> {
             minWidth: 0,
             shape: CircleBorder(),
             onPressed: () async {
-              Map<String, dynamic>? likes = {
-                'user1': true,
-                'user2': false,
-              };
+
 
               PostComment pc = PostComment(
                 message: _textController.text,
-                like: likes,
                 userId: user.userID,
                 createdTime: DateTime.now().millisecondsSinceEpoch.toString(),
               );
