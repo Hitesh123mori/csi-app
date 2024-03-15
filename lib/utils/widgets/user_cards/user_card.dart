@@ -18,7 +18,7 @@ class UserCard extends StatelessWidget {
   Widget build(BuildContext context) {
     return InkWell(
       onTap: ()async{
-        NotificationApi.sendPushNotification(appUser,"Hello ${appUser.name} How are you ? " ,currentUser ) ;
+        await NotificationApi.sendPushNotification(appUser,"Hello ${appUser.name} How are you ? " ,currentUser ) ;
       },
       borderRadius: BorderRadius.circular(10),
       splashColor: AppColors.theme['backgroundColor'],
