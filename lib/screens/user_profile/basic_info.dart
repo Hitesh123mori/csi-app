@@ -1,4 +1,6 @@
+import 'package:csi_app/apis/FireStoreAPIs/UserProfileAPI.dart';
 import 'package:csi_app/providers/CurrentUser.dart';
+import 'package:csi_app/utils/helper_functions/function.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:provider/provider.dart';
@@ -238,6 +240,24 @@ class _BasicInfoState extends State<BasicInfo> {
                                 print("About: ${appUserProvider.user?.about}");
                                 print("Codeforces id: ${appUserProvider.user?.cfId}");
                                 print("Year: ${appUserProvider.user?.year}");
+                                Map<String, dynamic> fields = {
+                                  "name": appUserProvider.user?.name,
+                                  "about": appUserProvider.user?.about,
+                                  "cf_id": appUserProvider.user?.cfId,
+                                  "year": appUserProvider.user?.year,
+                                };
+
+                                bool succ = await UserProfile.updateUserProfile(appUserProvider.user?.userID, fields);
+
+                                if(succ){
+                                  HelperFunctions.showToast("Profile Updated");
+                                  appUserProvider.notify();
+                                  Navigator.pop(context);
+
+                                }
+                                else{
+                                  HelperFunctions.showToast("Something went wrong please try again later");
+                                }
 
 
                               }
