@@ -9,7 +9,6 @@ import 'package:flutter_polls/flutter_polls.dart';
 import 'package:like_button/like_button.dart';
 import 'package:syncfusion_flutter_pdfviewer/pdfviewer.dart';
 
-
 import 'package:csi_app/apis/FireStoreAPIs/PostUserProfile.dart';
 import 'package:csi_app/apis/FirebaseDatabaseAPIs/PostAPI.dart';
 import 'package:csi_app/apis/StorageAPIs/StorageAPI.dart';
@@ -75,11 +74,9 @@ class _PostCardState extends State<PostCard> {
                         _buildReactionSection(appUserProvider, postProvider),
                       ],
                     );
-                  }
-                  else if(snapshot.hasError){
+                  } else if (snapshot.hasError) {
                     return _buildErrorCard(context);
-                  }
-                  else {
+                  } else {
                     return PostShimmerEffect();
                   }
                 },
@@ -114,7 +111,6 @@ class _PostCardState extends State<PostCard> {
   }
 
   Widget _buildPostHeader(BuildContext context, PostCreator postCreator, String appUserId, PostProvider postProvider) {
-
     return Card(
       elevation: 0,
       surfaceTintColor: AppColors.theme['secondaryColor'],
@@ -146,44 +142,41 @@ class _PostCardState extends State<PostCard> {
         contentPadding: EdgeInsets.only(left: 1),
         trailing: postCreator.userID == appUserId
             ? ThreeDotButton(
-          options: ["Edit", "Delete"],
-          onOptionSelected: (String option) async {
-            print("#selOpt $option");
+                options: ["Edit", "Delete"],
+                onOptionSelected: (String option) async {
+                  print("#selOpt $option");
 
-            switch (option) {
-              case "edit":
-                print("Editing");
-                postProvider.post = widget.post;
-                postProvider.forEdit = true;
+                  switch (option) {
+                    case "edit":
+                      print("Editing");
+                      postProvider.post = widget.post;
+                      postProvider.forEdit = true;
 
-                postProvider.notify();
-                Navigator.push(context, RightToLeft(AddPostScreen()));
-                break;
-              case "delete":
-                print("Deleting");
+                      postProvider.notify();
+                      Navigator.push(context, RightToLeft(AddPostScreen()));
+                      break;
+                    case "delete":
+                      print("Deleting");
 
-                if(widget.post.isThereImage ?? false)
-                  StorageAPI.deletePostImg(widget.post.imageModelList);
+                      if (widget.post.isThereImage ?? false) StorageAPI.deletePostImg(widget.post.imageModelList);
 
-                if(widget.post.pdfLink != "" && widget.post.pdfLink != null)
-                  await DriveAPI.deleteFileFromDrive(widget.post.pdfLink);
+                      if (widget.post.pdfLink != "" && widget.post.pdfLink != null) await DriveAPI.deleteFileFromDrive(widget.post.pdfLink);
 
-                final res = await PostAPI.deletePost(widget.post.postId ?? "");
+                      final res = await PostAPI.deletePost(widget.post.postId ?? "");
 
-                if(res.containsKey("succ")){
-                  HelperFunctions.showToast(res["succ"] ?? "");
-                }
-                else{
-                  HelperFunctions.showToast("Error deleting post");
-                  print("#del-post-error ${res["Error deleting post"]}");
-                }
+                      if (res.containsKey("succ")) {
+                        HelperFunctions.showToast(res["succ"] ?? "");
+                      } else {
+                        HelperFunctions.showToast("Error deleting post");
+                        print("#del-post-error ${res["Error deleting post"]}");
+                      }
 
-                break;
-            }
-          },
-        )
-            :Container(),
-            // : ThreeDotButton(options: ["Report"], onOptionSelected: (String option) {print("#optSel $option");}),
+                      break;
+                  }
+                },
+              )
+            : Container(),
+        // : ThreeDotButton(options: ["Report"], onOptionSelected: (String option) {print("#optSel $option");}),
       ),
     );
   }
@@ -194,13 +187,13 @@ class _PostCardState extends State<PostCard> {
       children: [
         showMore
             ? Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 8.0),
-          child: HelperFunctions.buildContent(widget.post.description ?? ""),
-        )
+                padding: const EdgeInsets.symmetric(horizontal: 8.0),
+                child: HelperFunctions.buildContent(widget.post.description ?? ""),
+              )
             : Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 8.0),
-          child: HelperFunctions.buildContent(HelperFunctions.truncateDescription(widget.post.description ?? "")),
-        ),
+                padding: const EdgeInsets.symmetric(horizontal: 8.0),
+                child: HelperFunctions.buildContent(HelperFunctions.truncateDescription(widget.post.description ?? "")),
+              ),
         if (widget.post.description!.length > 100)
           TextButton(
             onPressed: () {
@@ -290,8 +283,9 @@ class _PostCardState extends State<PostCard> {
                                 decoration: BoxDecoration(
                                   shape: BoxShape.circle,
                                   color: (Theme.of(context).brightness == Brightness.dark
-                                      ? AppColors.theme['secondaryColor']
-                                      : AppColors.theme['primaryColor']).withOpacity(_current == entry.key ? 0.9 : 0.4),
+                                          ? AppColors.theme['secondaryColor']
+                                          : AppColors.theme['primaryColor'])
+                                      .withOpacity(_current == entry.key ? 0.9 : 0.4),
                                 ),
                               ),
                             );
@@ -402,7 +396,7 @@ class _PostCardState extends State<PostCard> {
           ),
           pollOptions: List<PollOption>.from(
             widget.post.poll!.options!.map(
-                  (option) {
+              (option) {
                 var a = PollOption(
                   id: option.optionId,
                   title: Text(
@@ -430,7 +424,9 @@ class _PostCardState extends State<PostCard> {
             isLiked: widget.post.like?[appUserProvider.user?.userID] ?? false,
             likeCount: widget.post.like?.length ?? 0,
             likeBuilder: (bool isLiked) {
-              return isLiked ? Icon(Icons.thumb_up, color: AppColors.theme["primaryColor"]) : Icon(Icons.thumb_up_alt_outlined, color: AppColors.theme["primaryColor"]);
+              return isLiked
+                  ? Icon(Icons.thumb_up, color: AppColors.theme["primaryColor"])
+                  : Icon(Icons.thumb_up_alt_outlined, color: AppColors.theme["primaryColor"]);
             },
             bubblesColor: BubblesColor(
               dotPrimaryColor: AppColors.theme["primaryColor"],
@@ -438,22 +434,19 @@ class _PostCardState extends State<PostCard> {
             ),
             circleColor: CircleColor(start: AppColors.theme["primaryColor"], end: AppColors.theme["secondaryBgColor"]),
             onTap: (bool isLiked) async {
-              // bool successful = await PostAPI.onLikeButtonTap(widget.post.postId, appUserProvider.user?.userID ?? "noUser", isLiked);
               PostAPI.onPostLikeButtonTap(widget.post.postId, appUserProvider.user?.userID ?? "noUser", isLiked).then((value) {
                 _isSuccLike = true;
+                if (isLiked)
+                  widget.post.like?.remove(appUserProvider.user?.userID ?? "noUser");
+                else {
+                  if (widget.post.like == null) widget.post.like = {};
+                  widget.post.like?[appUserProvider.user?.userID ?? "noUser"] = true;
+                }
                 setState(() {});
-                  if (isLiked)
-                    widget.post.like?.remove(appUserProvider.user?.userID ?? "noUser");
-                  else
-                    widget.post.like?[appUserProvider.user?.userID ?? "noUser"] = true;
-                return null;
+              }).onError((error, stackTrace) {
+                _isSuccLike = false;
               });
-              // if (successful) {
-              //   if (isLiked)
-              //     widget.post.like?.remove(appUserProvider.user?.userID ?? "noUser");
-              //   else
-              //     widget.post.like?[appUserProvider.user?.userID ?? "noUser"] = true;
-              // }
+
               return _isSuccLike ? !isLiked : isLiked;
             },
           ),
@@ -486,6 +479,4 @@ class _PostCardState extends State<PostCard> {
       ],
     );
   }
-
 }
-

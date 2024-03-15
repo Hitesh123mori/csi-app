@@ -141,11 +141,8 @@ class _CommentCardState extends State<CommentCard> {
                                     }
 
                                     setState(() {});
-                                    return null;
                                   }).onError((error, stackTrace) {
-                                    // print(object)
                                     _isSuccLike = false;
-                                    return null;
                                   });
 
                                   return _isSuccLike ? !isLiked : isLiked;
