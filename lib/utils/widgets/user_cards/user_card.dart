@@ -7,13 +7,19 @@ import 'package:csi_app/utils/helper_functions/function.dart';
 import 'package:flutter/material.dart';
 import 'package:googleapis/admob/v1.dart';
 
+import '../../../apis/notification_apis/notifications_api.dart';
+
 class UserCard extends StatelessWidget {
   final AppUser appUser ;
-  const UserCard({Key? key, required this.appUser});
+  final AppUser currentUser ;
+  const UserCard({Key? key, required this.appUser, required this.currentUser});
 
   @override
   Widget build(BuildContext context) {
     return InkWell(
+      onTap: ()async{
+        NotificationApi.sendPushNotification(appUser,"Hello ${appUser.name} How are you ? " ,currentUser ) ;
+      },
       borderRadius: BorderRadius.circular(10),
       splashColor: AppColors.theme['backgroundColor'],
       onLongPress: () {

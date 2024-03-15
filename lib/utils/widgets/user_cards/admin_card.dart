@@ -1,23 +1,17 @@
 import 'package:csi_app/apis/FireStoreAPIs/UserControl.dart';
 import 'package:csi_app/models/user_model/AppUser.dart';
 import 'package:flutter/material.dart';
-
-import '../../../apis/notification_apis/notifications_api.dart';
 import '../../colors.dart';
 import '../../helper_functions/function.dart';
 
 class AdminCard extends StatelessWidget {
   final AppUser appUser;
-  final AppUser currentUser ;
-
- const AdminCard({super.key, required this.appUser, required this.currentUser});
+ const AdminCard({super.key, required this.appUser,});
 
   @override
   Widget build(BuildContext context) {
     return InkWell(
-      onTap: ()async{
-        NotificationApi.sendPushNotification(appUser,"Hello Niraj How are you ? " ,currentUser ) ;
-      },
+
       onLongPress: () {
         bottomSheet(context);
       },

@@ -99,6 +99,7 @@ class _AllUsersState extends State<AllUsers> {
                           if(users[index].userID == appUserProvider.user?.userID ) return Container();
                           return UserCard(
                             appUser: users[index],
+                            currentUser: appUserProvider.user!,
                           );
                         },
                       );
