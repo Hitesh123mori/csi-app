@@ -146,19 +146,21 @@ class _AddImageState extends State<AddImage> {
                     if (_imageList?.isNotEmpty ?? false)
                       CarouselSlider(
                         options: CarouselOptions(
-                          height: 400.0,
-                          enlargeCenterPage: true,
                           autoPlay: true,
-                          aspectRatio: 16 / 9,
-                          autoPlayCurve: Curves.fastOutSlowIn,
+                          enlargeCenterPage: true,
+                          viewportFraction: 1,
+                          aspectRatio: 1.0,
+                          height: MediaQuery.of(context).size.height*.4,
                           enableInfiniteScroll: true,
+                          autoPlayCurve: Curves.fastOutSlowIn,
                           autoPlayAnimationDuration: Duration(milliseconds: 800),
-                          viewportFraction: 0.8,
+
                         ),
                         items: _imageList!.map((image) {
                           return Builder(
                             builder: (BuildContext context) {
                               return Container(
+                                height: MediaQuery.of(context).size.height*.4,
                                 width: MediaQuery.of(context).size.width,
                                 margin: EdgeInsets.symmetric(horizontal: 5.0),
                                 decoration: BoxDecoration(
@@ -175,8 +177,9 @@ class _AddImageState extends State<AddImage> {
                                         },
                                         icon: Icon(Icons.close)),
                                     Image.file(
+                                      height: MediaQuery.of(context).size.height*.4,
                                       File(image.path),
-                                      fit: BoxFit.cover,
+                                      fit: BoxFit.scaleDown,
                                     ),
                                   ],
                                 ),

@@ -11,8 +11,8 @@ class ThreeDotButton extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return PopupMenuButton<String>(
-      color: AppColors.theme["secondaryBgColor"],
-      surfaceTintColor: AppColors.theme["secondaryBgColor"],
+      color: AppColors.theme["secondaryColor"],
+      surfaceTintColor: AppColors.theme["secondaryColor"],
       itemBuilder: (BuildContext context) => options.map((option) {
         return PopupMenuItem<String>(
           value: option.toLowerCase(),
