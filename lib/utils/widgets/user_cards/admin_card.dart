@@ -22,8 +22,8 @@ class AdminCard extends StatelessWidget {
         color: AppColors.theme['secondaryColor'],
         child: ListTile(
           leading: CircleAvatar(
-            backgroundColor: AppColors.theme['secondaryBgColor'],
-            child: Text(HelperFunctions.getInitials(appUser.name ?? "A B")),
+            backgroundColor: AppColors.theme['primaryColor'],
+            child: Text(HelperFunctions.getInitials(appUser.name ?? "A B"),style:TextStyle(color:AppColors.theme['secondaryColor'])),
           ),
           title: Text("${appUser.name}"),
           subtitle: Text("${appUser.about}"),

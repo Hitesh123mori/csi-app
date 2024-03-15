@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 
 
 class AddEventScreen extends StatefulWidget {
-  final Function(Event) onEventAdded;
+  final Function(CSIEvent) onEventAdded;
 
   const AddEventScreen({Key? key, required this.onEventAdded}) : super(key: key);
 
@@ -110,7 +110,7 @@ class _AddEventScreenState extends State<AddEventScreen> {
             SizedBox(height: 16.0),
             ElevatedButton(
               onPressed: () {
-                final newEvent = Event(
+                final newEvent = CSIEvent(
                   eventName: titleController.text,
                   description: descriptionController.text,
                   startTime: DateTime(

@@ -11,7 +11,7 @@ class UpcomingEvents extends StatefulWidget {
 }
 
 class _UpcomingEventsState extends State<UpcomingEvents> {
-  List<Event> events = [];
+  List<CSIEvent> events = [];
   DateTime? selectedDate;
 
   @override
@@ -51,7 +51,7 @@ class _UpcomingEventsState extends State<UpcomingEvents> {
     );
   }
 
-  List<Event> _getEventsForDate(DateTime? date) {
+  List<CSIEvent> _getEventsForDate(DateTime? date) {
     if (date == null) {
       return [];
     }
@@ -87,7 +87,7 @@ class _UpcomingEventsState extends State<UpcomingEvents> {
 
 
 class EventList extends StatelessWidget {
-  final List<Event> events;
+  final List<CSIEvent> events;
 
   EventList({required this.events});
 
@@ -124,7 +124,7 @@ class EventCalendar extends StatelessWidget {
 }
 
 class EventCard extends StatelessWidget {
-  final Event event;
+  final CSIEvent event;
 
   const EventCard({Key? key, required this.event}) : super(key: key);
 
