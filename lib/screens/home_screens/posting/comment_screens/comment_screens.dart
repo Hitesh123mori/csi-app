@@ -181,6 +181,7 @@ class _CommentScreenState extends State<CommentScreen> {
               final res = await PostAPI.addComment(post.postId,pc);
 
               if (res.containsKey("success")){
+                if(post.comment == null) post.comment = [];
                 post.comment?.add(pc);
               }
               setState(() {});

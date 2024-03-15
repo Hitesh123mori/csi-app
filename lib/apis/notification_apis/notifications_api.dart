@@ -79,11 +79,11 @@ class NotificationApi {
         },
       };
 
-      Announcement announcement = Announcement(message: "$msg + private", fromUserId: fromUser.userID, toUserId: toUser.userID, time: DateTime.now().millisecondsSinceEpoch.toString());
-      Announcement announcement2 = Announcement(message: "$msg + public", fromUserId: fromUser.userID, toUserId: toUser.userID, time: DateTime.now().millisecondsSinceEpoch.toString());
-
-      await storeNotification(announcement, true);
-      await storeNotification(announcement2, false);
+      // Announcement announcement = Announcement(message: "$msg + private", fromUserId: fromUser.userID, toUserId: toUser.userID, time: DateTime.now().millisecondsSinceEpoch.toString());
+      // Announcement announcement2 = Announcement(message: "$msg + public", fromUserId: fromUser.userID, toUserId: toUser.userID, time: DateTime.now().millisecondsSinceEpoch.toString());
+      //
+      // await storeNotification(announcement, true);
+      // await storeNotification(announcement2, false);
 
       // await getNotification(fromUser.userID ?? "");
 

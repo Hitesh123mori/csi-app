@@ -41,6 +41,7 @@ class _PostCardState extends State<PostCard> {
   final CarouselController _controller = CarouselController();
   final GlobalKey<SfPdfViewerState> _pdfViewerKey = GlobalKey();
   bool isFirst = true;
+  bool _isSuccLike = false;
 
   @override
   Widget build(BuildContext context) {
@@ -264,7 +265,7 @@ class _PostCardState extends State<PostCard> {
                           },
                           options: CarouselOptions(
                             scrollDirection: Axis.horizontal,
-                            autoPlay: widget.post.images?.length != 1,
+                            autoPlay: widget.post.imageModelList?.length != 1,
                             enlargeCenterPage: true,
                             viewportFraction: 1,
                             aspectRatio: 1.0,
@@ -437,14 +438,23 @@ class _PostCardState extends State<PostCard> {
             ),
             circleColor: CircleColor(start: AppColors.theme["primaryColor"], end: AppColors.theme["secondaryBgColor"]),
             onTap: (bool isLiked) async {
-              bool successful = await PostAPI.onLikeButtonTap(widget.post.postId, appUserProvider.user?.userID ?? "noUser", isLiked);
-              if (successful) {
-                if (isLiked)
-                  widget.post.like?.remove(appUserProvider.user?.userID ?? "noUser");
-                else
-                  widget.post.like?[appUserProvider.user?.userID ?? "noUser"] = true;
-              }
-              return successful ? !isLiked : isLiked;
+              // bool successful = await PostAPI.onLikeButtonTap(widget.post.postId, appUserProvider.user?.userID ?? "noUser", isLiked);
+              PostAPI.onLikeButtonTap(widget.post.postId, appUserProvider.user?.userID ?? "noUser", isLiked).then((value) {
+                _isSuccLike = true;
+                setState(() {});
+                  if (isLiked)
+                    widget.post.like?.remove(appUserProvider.user?.userID ?? "noUser");
+                  else
+                    widget.post.like?[appUserProvider.user?.userID ?? "noUser"] = true;
+                return null;
+              });
+              // if (successful) {
+              //   if (isLiked)
+              //     widget.post.like?.remove(appUserProvider.user?.userID ?? "noUser");
+              //   else
+              //     widget.post.like?[appUserProvider.user?.userID ?? "noUser"] = true;
+              // }
+              return _isSuccLike ? !isLiked : isLiked;
             },
           ),
         ),
