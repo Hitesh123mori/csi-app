@@ -129,7 +129,8 @@ class _HomeScreenState extends State<HomeScreen> {
                     color: AppColors.theme['tertiaryColor'],
                   ),
                   onPressed: () {
-                    Navigator.push(context, RightToLeft(Notifications()));
+                    NotificationApi.getNotification(appUserProvider.user?.userID ?? "");
+                    // Navigator.push(context, RightToLeft(Notifications()));
                   },
                 ))
           ],

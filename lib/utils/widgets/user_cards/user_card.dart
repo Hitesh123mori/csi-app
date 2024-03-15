@@ -118,7 +118,7 @@ class UserCard extends StatelessWidget {
                   color: Colors.blue, // Change background color
                   child: InkWell(
                     onTap: () async {
-                        bool succ = await UserControl.makeSuperuser(appUser.userID);
+                        bool succ = await UserControl.makeSuperuser(appUser.userID, currentUser.userID);
                         if(succ){
                           HelperFunctions.showToast("${appUser.name} has been promoted to superuser");
                         }
