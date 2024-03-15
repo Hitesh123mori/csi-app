@@ -1,3 +1,4 @@
+import 'package:csi_app/apis/FirebaseDatabaseAPIs/PostAPI.dart';
 import 'package:csi_app/models/user_model/post_creator.dart';
 import 'package:csi_app/providers/CurrentUser.dart';
 import 'package:csi_app/utils/colors.dart';
@@ -5,6 +6,7 @@ import 'package:csi_app/utils/helper_functions/date_format.dart';
 import 'package:csi_app/utils/helper_functions/function.dart';
 import 'package:csi_app/utils/shimmer_effects/comment_screen_shimmer_effect.dart';
 import 'package:flutter/material.dart';
+import 'package:googleapis/shared.dart';
 import 'package:like_button/like_button.dart';
 import 'package:provider/provider.dart';
 import '../../../apis/FireStoreAPIs/PostUserProfile.dart';
@@ -12,15 +14,18 @@ import '../../../main.dart';
 import '../../../models/post_model/post.dart';
 
 class CommentCard extends StatefulWidget {
-  final PostComment cmnt;
-  final String postCreatorId ;
-  const CommentCard({super.key, required this.cmnt, required this.postCreatorId});
+  final PostComment postComment;
+  final String postId;
+  final String postCreatorId;
+  const CommentCard({super.key, required this.postComment, required this.postCreatorId, required this.postId});
 
   @override
   State<CommentCard> createState() => _CommentCardState();
 }
 
 class _CommentCardState extends State<CommentCard> {
+  bool _isSuccLike = false;
+
   @override
   Widget build(BuildContext context) {
     mq = MediaQuery.of(context).size;
@@ -37,7 +42,7 @@ class _CommentCardState extends State<CommentCard> {
               borderRadius: BorderRadius.circular(10),
             ),
             child: StreamBuilder(
-              stream: PostUserProfile.getPostCreator(widget.cmnt.userId ?? "").asStream(),
+              stream: PostUserProfile.getPostCreator(widget.postComment.userId ?? "").asStream(),
               builder: (context, snapshot) {
                 if (snapshot.hasData) {
                   PostCreator commentCreator = PostCreator.fromJson(snapshot.data);
@@ -66,33 +71,33 @@ class _CommentCardState extends State<CommentCard> {
                         ),
                         trailing: Container(
                           width: 100,
-                          child: widget.cmnt.userId == widget.postCreatorId
+                          child: widget.postComment.userId == widget.postCreatorId
                               ? Row(
-                            mainAxisSize: MainAxisSize.min,
-                            children: [
-                              Container(
-                                decoration: BoxDecoration(
-                                  color: AppColors.theme['primaryColor'],
-                                  borderRadius: BorderRadius.circular(4),
-                                ),
-                                padding: EdgeInsets.symmetric(horizontal: 5, vertical: 2),
-                                child: Text(
-                                  "Creator",
-                                  style: TextStyle(
-                                    color: AppColors.theme['secondaryColor'],
-                                    fontSize: 12,
-                                  ),
-                                ),
-                              ),
-                            ],
-                          )
+                                  mainAxisSize: MainAxisSize.min,
+                                  children: [
+                                    Container(
+                                      decoration: BoxDecoration(
+                                        color: AppColors.theme['primaryColor'],
+                                        borderRadius: BorderRadius.circular(4),
+                                      ),
+                                      padding: EdgeInsets.symmetric(horizontal: 5, vertical: 2),
+                                      child: Text(
+                                        "Creator",
+                                        style: TextStyle(
+                                          color: AppColors.theme['secondaryColor'],
+                                          fontSize: 12,
+                                        ),
+                                      ),
+                                    ),
+                                  ],
+                                )
                               : Container(),
                         ),
                       ),
                       Padding(
                         padding: const EdgeInsets.symmetric(horizontal: 20.0, vertical: 10),
                         child: Text(
-                          widget.cmnt.message ?? "",
+                          widget.postComment.message ?? "",
                           style: TextStyle(color: AppColors.theme['tertiaryColor'], fontWeight: FontWeight.w500),
                         ),
                       ),
@@ -104,17 +109,18 @@ class _CommentCardState extends State<CommentCard> {
                             Padding(
                               padding: const EdgeInsets.all(8.0),
                               child: LikeButton(
-                                likeCount: 23,
+                                likeCount: widget.postComment.like?.length ?? 0,
+                                isLiked: widget.postComment.like?[appUserProvider.user?.userID] ?? false,
                                 likeBuilder: (bool isLiked) {
                                   return isLiked
                                       ? Icon(
-                                    Icons.thumb_up,
-                                    color: AppColors.theme["primaryColor"],
-                                  )
+                                          Icons.thumb_up,
+                                          color: AppColors.theme["primaryColor"],
+                                        )
                                       : Icon(
-                                    Icons.thumb_up_alt_outlined,
-                                    color: AppColors.theme["primaryColor"],
-                                  );
+                                          Icons.thumb_up_alt_outlined,
+                                          color: AppColors.theme["primaryColor"],
+                                        );
                                 },
                                 bubblesColor: BubblesColor(
                                   dotPrimaryColor: AppColors.theme["primaryColor"],
@@ -122,24 +128,40 @@ class _CommentCardState extends State<CommentCard> {
                                 ),
                                 circleColor: CircleColor(start: AppColors.theme["primaryColor"], end: AppColors.theme["secondaryBgColor"]),
                                 onTap: (bool isLiked) async {
-                                  return null;
+                                  PostAPI.onCommentLikeButtonTap(
+                                          widget.postId, widget.postComment.commentId ?? "", appUserProvider.user?.userID ?? "", isLiked)
+                                      .then((value) {
+                                    _isSuccLike = true;
+
+                                    if (isLiked)
+                                      widget.postComment.like?.remove(appUserProvider.user?.userID ?? "noUser");
+                                    else {
+                                      if (widget.postComment.like == null) widget.postComment.like = {};
+                                      widget.postComment.like?[appUserProvider.user?.userID ?? "noUser"] = true;
+                                    }
+
+                                    setState(() {});
+                                  }).onError((error, stackTrace) {
+                                    _isSuccLike = false;
+                                  });
+
+                                  return _isSuccLike ? !isLiked : isLiked;
                                 },
                               ),
                             ),
                             Text(
-                              MyDateUtil.getMessageTime(context: context, time: widget.cmnt.createdTime ?? ""), // Use the null-aware operator (??) to provide a fallback value
+                              MyDateUtil.getMessageTime(
+                                  context: context,
+                                  time: widget.postComment.createdTime ?? ""), // Use the null-aware operator (??) to provide a fallback value
                             ),
                           ],
                         ),
                       )
-
                     ],
                   );
-                }
-                else if(snapshot.hasError){
+                } else if (snapshot.hasError) {
                   return _buildErrorCard(context);
-                }
-                else {
+                } else {
                   return CommentShimmerEffect();
                 }
               },
