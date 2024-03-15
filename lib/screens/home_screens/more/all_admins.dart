@@ -78,7 +78,6 @@ class _AllAdminsState extends State<AllAdmins> {
                   ),
                 ),
               ),
-
               Expanded(
                 child: StreamBuilder<QuerySnapshot>(
                   stream: UserControl.getAllAdmins(),
@@ -101,6 +100,7 @@ class _AllAdminsState extends State<AllAdmins> {
                             if(users[index].userID == appUserProvider.user?.userID ) return Container();
                             return AdminCard(
                               appUser: users[index],
+                                currentUser: appUserProvider.user!,
                             );
                           },
                         );

@@ -240,6 +240,7 @@ class _BasicInfoState extends State<BasicInfo> {
                                 print("About: ${appUserProvider.user?.about}");
                                 print("Codeforces id: ${appUserProvider.user?.cfId}");
                                 print("Year: ${appUserProvider.user?.year}");
+
                                 Map<String, dynamic> fields = {
                                   "name": appUserProvider.user?.name,
                                   "about": appUserProvider.user?.about,
@@ -253,12 +254,10 @@ class _BasicInfoState extends State<BasicInfo> {
                                   HelperFunctions.showToast("Profile Updated");
                                   appUserProvider.notify();
                                   Navigator.pop(context);
-
                                 }
                                 else{
                                   HelperFunctions.showToast("Something went wrong please try again later");
                                 }
-
 
                               }
                               setState(() {

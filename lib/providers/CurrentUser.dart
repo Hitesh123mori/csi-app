@@ -4,6 +4,8 @@ import 'package:csi_app/models/user_model/AppUser.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
+import '../apis/notification_apis/notifications_api.dart';
+
 class AppUserProvider extends ChangeNotifier{
   AppUser? user;
 
@@ -14,8 +16,10 @@ class AppUserProvider extends ChangeNotifier{
   Future initUser() async {
     String? uid = FirebaseAPIs.auth.currentUser?.uid;
     print("#authId: $uid");
-    if(uid != null)
+    if(uid != null){
       user = AppUser.fromJson(await UserProfile.getUser(uid));
+      await NotificationApi.getFirebaseMessagingToken(uid) ;
+    }
     notifyListeners();
     print("#initUser complete");
   }

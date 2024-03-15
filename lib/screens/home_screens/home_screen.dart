@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:google_nav_bar/google_nav_bar.dart';
 import 'package:provider/provider.dart';
 import '../../apis/CompetitiveProgrammingPlatformAPIs/CodeForcesAPIs/GeneralAPIs.dart';
+import '../../apis/notification_apis/notifications_api.dart';
 import '../../main.dart';
 import '../../providers/bottom_navigation_provider.dart';
 import '../../side_transition_effects/left_right.dart';
