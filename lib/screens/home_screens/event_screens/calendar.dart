@@ -36,8 +36,6 @@ class _AcadCalendarState extends State<AcadCalendar> {
           cellBorderColor: AppColors.theme['primaryColor'],
         view: CalendarView.month,
       ),
-
-
         ],
       )
     );
