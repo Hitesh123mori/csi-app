@@ -1,9 +1,11 @@
 import 'package:csi_app/apis/googleAIPs/drive/DriveApi.dart';
 import 'package:csi_app/side_transition_effects/right_left.dart';
 import 'package:csi_app/utils/shimmer_effects/post_screen_shimmer_effect.dart';
+import 'package:csi_app/utils/widgets/ProfilePhoto.dart';
 import 'package:csi_app/utils/widgets/buttons/three_dot_button.dart';
 import 'package:flutter/material.dart';
 import 'package:carousel_slider/carousel_slider.dart';
+import 'package:http/http.dart';
 import 'package:provider/provider.dart';
 import 'package:flutter_polls/flutter_polls.dart';
 import 'package:like_button/like_button.dart';
@@ -131,11 +133,7 @@ class _PostCardState extends State<PostCard> {
       ),
       leading: Padding(
         padding: const EdgeInsets.only(left: 8.0),
-        child: CircleAvatar(
-          child: Text("${postCreator.name?[0].toUpperCase()}"),
-          radius: 25,
-          backgroundColor: AppColors.theme["secondaryBgColor"],
-        ),
+        child:  ProfilePhoto(url: postCreator.profilePhotoUrl, name: postCreator.name, radius: 20,),
       ),
       contentPadding: EdgeInsets.only(left: 1),
       trailing: postCreator.userID == appUserId

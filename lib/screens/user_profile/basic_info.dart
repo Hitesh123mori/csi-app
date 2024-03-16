@@ -1,13 +1,14 @@
+import 'dart:typed_data';
 import 'package:csi_app/apis/FireStoreAPIs/UserProfileAPI.dart';
+import 'package:csi_app/apis/googleAIPs/drive/DriveApi.dart';
 import 'package:csi_app/providers/CurrentUser.dart';
 import 'package:csi_app/utils/helper_functions/function.dart';
+import 'package:csi_app/utils/widgets/ProfilePhoto.dart';
 import 'package:flutter/material.dart';
-import 'package:image_picker/image_picker.dart';
 import 'package:provider/provider.dart';
 
 import '../../main.dart';
 import '../../utils/colors.dart';
-import 'dart:io';
 
 import '../../utils/widgets/buttons/auth_button.dart';
 import '../../utils/widgets/text_feilds/auth_text_feild.dart';
@@ -23,8 +24,9 @@ class _BasicInfoState extends State<BasicInfo> {
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
   List<String> _items = ['1', '2', '3', '4'];
   TextEditingController _yearController = TextEditingController();
-  String? _image;
   bool _isLoading = false;
+
+
 
   @override
   void initState() {
@@ -34,7 +36,7 @@ class _BasicInfoState extends State<BasicInfo> {
 
   @override
   Widget build(BuildContext context) {
-     mq = MediaQuery.of(context).size;
+    mq = MediaQuery.of(context).size;
     return Consumer<AppUserProvider>(
       builder: (context, appUserProvider, child) {
         return Form(
@@ -75,35 +77,32 @@ class _BasicInfoState extends State<BasicInfo> {
                       child: Stack(
                         alignment: AlignmentDirectional.bottomEnd,
                         children: [
-                          _image != null
-                              ? ClipRRect(
-                            borderRadius: BorderRadius.circular(90),
-                            child: Image.file(
-                              File(_image!),
-                              width: mq.width * 0.4,
-                              height: mq.width * 0.4,
-                              fit: BoxFit.cover,
-                            ),
-                          )
-                              : CircleAvatar(
-                            radius: 75,
-                            backgroundColor:
-                            AppColors.theme['secondaryColor'],
-                            // backgroundImage: NetworkImage(),
-                          ),
+                          ProfilePhoto(url: appUserProvider.user?.profilePhotoUrl, name: appUserProvider.user?.name, radius: 70,),
                           InkWell(
+                            radius: 10,
                             onTap: () async {
-                              final ImagePicker picker = ImagePicker();
-                              final XFile? image = await picker.pickImage(
-                                source: ImageSource.gallery,
-                              );
-                              if (image != null) {
-                                print("path : " +
-                                    image.name +
-                                    "   Mime type : ${image.mimeType}");
-                                setState(() {
-                                  _image = image.path;
-                                });
+                              if ((appUserProvider.user?.profilePhotoUrl != "") ^ (appUserProvider.user?.profilePhotoUrl != null)) {
+                                print("#old-dp-url: ${appUserProvider.user?.profilePhotoUrl}");
+                                bool res = await DriveAPI.deleteFileFromDrive(appUserProvider.user?.profilePhotoUrl);
+                                if (!res) {
+                                  HelperFunctions.showToast("Unable to change profile photo at the moment");
+                                  return;
+                                }
+                              }
+                              Map<String, String> res = await DriveAPI.uploadImage();
+
+                              if (res.containsKey("Image uploaded")) {
+                                bool res2 =
+                                    await UserProfile.updateUserProfile(appUserProvider.user?.userID, {"profile_photo_url": res["Image uploaded"]});
+                                if (res2) {
+                                  HelperFunctions.showToast("Profile photo updated");
+                                  appUserProvider.user?.profilePhotoUrl = res["Image uploaded"];
+                                  appUserProvider.notify();
+                                } else {
+                                  HelperFunctions.showToast("Error updating profile photo");
+                                }
+                              } else {
+                                HelperFunctions.showToast(res["Error"] ?? "Something went wrong");
                               }
                             },
                             child: CircleAvatar(
@@ -175,8 +174,7 @@ class _BasicInfoState extends State<BasicInfo> {
                             child: DropdownButtonFormField<String>(
                               hint: Text("Choose Year"),
                               decoration: InputDecoration(
-                                prefixIconColor:
-                                AppColors.theme['tertiaryColor'],
+                                prefixIconColor: AppColors.theme['tertiaryColor'],
                                 prefixIcon: Icon(Icons.calendar_today_rounded),
                                 border: OutlineInputBorder(
                                   borderRadius: BorderRadius.circular(10),
@@ -198,9 +196,7 @@ class _BasicInfoState extends State<BasicInfo> {
                                 ),
                               ),
                               dropdownColor: AppColors.theme['secondaryBgColor'],
-                              value: _yearController.text.isNotEmpty
-                                  ? _yearController.text
-                                  : null,
+                              value: _yearController.text.isNotEmpty ? _yearController.text : null,
                               onChanged: (String? newValue) {
                                 setState(() {
                                   _yearController.text = newValue!;
@@ -215,10 +211,10 @@ class _BasicInfoState extends State<BasicInfo> {
                               items: _items
                                   .map<DropdownMenuItem<String>>(
                                     (String value) => DropdownMenuItem<String>(
-                                  value: value,
-                                  child: Text(value + " Year"),
-                                ),
-                              )
+                                      value: value,
+                                      child: Text(value + " Year"),
+                                    ),
+                                  )
                                   .toList(),
                             ),
                           ),
@@ -231,8 +227,6 @@ class _BasicInfoState extends State<BasicInfo> {
                               });
                               if (_formKey.currentState!.validate()) {
                                 _formKey.currentState!.save();
-
-
 
                                 // todo : save below data
                                 print("Updated data:");
@@ -250,15 +244,13 @@ class _BasicInfoState extends State<BasicInfo> {
 
                                 bool succ = await UserProfile.updateUserProfile(appUserProvider.user?.userID, fields);
 
-                                if(succ){
+                                if (succ) {
                                   HelperFunctions.showToast("Profile Updated");
                                   appUserProvider.notify();
                                   Navigator.pop(context);
-                                }
-                                else{
+                                } else {
                                   HelperFunctions.showToast("Something went wrong please try again later");
                                 }
-
                               }
                               setState(() {
                                 _isLoading = false;
@@ -282,4 +274,3 @@ class _BasicInfoState extends State<BasicInfo> {
     );
   }
 }
-

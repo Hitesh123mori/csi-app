@@ -1,6 +1,7 @@
 import 'package:csi_app/providers/CurrentUser.dart';
 import 'package:csi_app/screens/home_screens/more/more.dart';
 import 'package:csi_app/utils/colors.dart';
+import 'package:csi_app/utils/widgets/ProfilePhoto.dart';
 import 'package:flutter/material.dart';
 import 'package:google_nav_bar/google_nav_bar.dart';
 import 'package:provider/provider.dart';
@@ -109,14 +110,7 @@ class _HomeScreenState extends State<HomeScreen> {
                   Navigator.push(context, LeftToRight(UserProfileScreen()));
                 }
               },
-              child: CircleAvatar(
-                radius: 10,
-                backgroundColor: AppColors.theme['primaryColor'],
-                child: Text(
-                  appUserProvider.user?.name?[0].toUpperCase() ?? '',
-                  style: TextStyle(fontWeight: FontWeight.bold, fontSize: 20,color: AppColors.theme['secondaryColor']),
-                ),
-              ),
+              child: ProfilePhoto(url: appUserProvider.user?.profilePhotoUrl, name: appUserProvider.user?.name, radius: 35,)
             ),
           ),
           actions: [
