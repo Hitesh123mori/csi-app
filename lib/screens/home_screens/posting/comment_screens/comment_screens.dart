@@ -24,7 +24,6 @@ class _CommentScreenState extends State<CommentScreen> {
   // input field
   double _textFieldMaxHeight = 130.0;
   FocusNode _messageFocusNode = FocusNode();
-  ScrollController _scrollController = ScrollController();
   bool _isMessageTextFieldFocused = false;
   TextEditingController _textController = TextEditingController();
 
@@ -33,6 +32,8 @@ class _CommentScreenState extends State<CommentScreen> {
     mq = MediaQuery.of(context).size;
     return Consumer2<PostProvider, AppUserProvider>(
       builder: (context, postProvider, appUserProvider, child) {
+        if (postProvider.post?.comment != null) postProvider.post?.comment?.sort((a, b) => b.compareTo(a));
+
         return GestureDetector(
           onTap: () => FocusScope.of(context).unfocus(),
           child: MaterialApp(
@@ -43,10 +44,7 @@ class _CommentScreenState extends State<CommentScreen> {
                   surfaceTintColor: AppColors.theme['secondaryColor'],
                   title: Text(
                     "Comments",
-                    style: TextStyle(
-                        fontSize: 20,
-                        fontWeight: FontWeight.bold,
-                        color: AppColors.theme['tertiaryColor']),
+                    style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold, color: AppColors.theme['tertiaryColor']),
                   ),
                   backgroundColor: AppColors.theme['secondaryColor'],
                   leading: IconButton(
@@ -61,37 +59,37 @@ class _CommentScreenState extends State<CommentScreen> {
                 ),
                 body: SafeArea(
                   child: Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 10.0,vertical: 10),
+                    padding: const EdgeInsets.symmetric(horizontal: 10.0, vertical: 10),
                     child: Column(
                       children: [
-                        Expanded(
-                          child: (postProvider.post?.comment?.isEmpty ?? true )? Center(
-                            child: Text(
-                              'No comments yet',
-                              style: TextStyle(
-                                fontSize: 16,
-                                color: Colors.grey,
-                              ),
-                            ),
-                          ) :ListView.builder(
-                              controller: _scrollController,
-                              physics: BouncingScrollPhysics(),
-                              itemCount: postProvider.post?.comment?.length ?? 0, // Null check added here
-                              itemBuilder: (BuildContext context, int index) {
-                                // Check if postProvider.post and postProvider.post.comment are not null
-                                if (postProvider.post != null && postProvider.post!.comment != null) {
-                                  // Access comment only if it's not null
-                                  final comment = postProvider.post!.comment![index];
-                                  return CommentCard(postComment: comment, postCreatorId: postProvider.post?.createBy ?? "", postId: postProvider.post?.postId ?? "",);
-                                } else {
-                                  // Return a placeholder widget if comment or postProvider.post is null
-                                  return SizedBox();
-                                }
-                              }
-                          )
-
-                        ),
-                        buildChatInput(appUserProvider.user!,postProvider.post!),
+                        (postProvider.post?.comment?.isEmpty ?? true)
+                            ? Center(
+                                child: Text(
+                                  'No comments yet',
+                                  style: TextStyle(
+                                    fontSize: 16,
+                                    color: Colors.grey,
+                                  ),
+                                ),
+                              )
+                            : ListView.builder(
+                                itemCount: postProvider.post?.comment?.length ?? 0, // Null check added here
+                                itemBuilder: (BuildContext context, int index) {
+                                  // Check if postProvider.post and postProvider.post.comment are not null
+                                  if (postProvider.post != null && postProvider.post!.comment != null) {
+                                    // Access comment only if it's not null
+                                    final comment = postProvider.post!.comment![index];
+                                    return CommentCard(
+                                      postComment: comment,
+                                      postCreatorId: postProvider.post?.createBy ?? "",
+                                      postId: postProvider.post?.postId ?? "",
+                                    );
+                                  } else {
+                                    // Return a placeholder widget if comment or postProvider.post is null
+                                    return SizedBox();
+                                  }
+                                }),
+                        buildChatInput(appUserProvider.user!, postProvider.post!),
                       ],
                     ),
                   ),
@@ -104,7 +102,7 @@ class _CommentScreenState extends State<CommentScreen> {
 
   // custom input text filed
 
-  Widget buildChatInput(AppUser user,Post post) {
+  Widget buildChatInput(AppUser user, Post post) {
     return Padding(
       padding: EdgeInsets.symmetric(
         horizontal: mq.width * 0.01,
@@ -124,22 +122,19 @@ class _CommentScreenState extends State<CommentScreen> {
                   SizedBox(width: mq.width * 0.03),
                   Expanded(
                     child: Container(
-                      constraints:
-                          BoxConstraints(maxHeight: _textFieldMaxHeight),
+                      constraints: BoxConstraints(maxHeight: _textFieldMaxHeight),
                       child: SingleChildScrollView(
                         child: TextField(
                           controller: _textController,
                           focusNode: _messageFocusNode,
                           onChanged: (text) {
                             setState(() {
-                              _isMessageTextFieldFocused =
-                                  _messageFocusNode.hasFocus;
+                              _isMessageTextFieldFocused = _messageFocusNode.hasFocus;
                             });
                           },
                           onTap: () {
                             setState(() {
-                              _isMessageTextFieldFocused =
-                                  _messageFocusNode.hasFocus;
+                              _isMessageTextFieldFocused = _messageFocusNode.hasFocus;
                             });
                           },
                           maxLines: null,
@@ -168,22 +163,19 @@ class _CommentScreenState extends State<CommentScreen> {
             minWidth: 0,
             shape: CircleBorder(),
             onPressed: () async {
-
-
               PostComment pc = PostComment(
                 message: _textController.text,
                 userId: user.userID,
                 createdTime: DateTime.now().millisecondsSinceEpoch.toString(),
               );
 
-              final res = await PostAPI.addComment(post.postId,pc);
+              final res = await PostAPI.addComment(post.postId, pc);
 
-              if (res.containsKey("success")){
-                if(post.comment == null) post.comment = [];
+              if (res.containsKey("success")) {
+                if (post.comment == null) post.comment = [];
                 post.comment?.add(pc);
               }
               setState(() {});
-              _scrollDown();
 
               _textController.text = "";
             },
@@ -197,14 +189,6 @@ class _CommentScreenState extends State<CommentScreen> {
           ),
         ],
       ),
-    );
-  }
-
-  void _scrollDown() {
-    _scrollController.animateTo(
-      _scrollController.position.maxScrollExtent + 250,
-      duration: Duration(seconds: 2),
-      curve: Curves.fastOutSlowIn,
     );
   }
 }

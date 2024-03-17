@@ -83,6 +83,12 @@ class Post {
     return map;
   }
 
+  int compareTo(Post other){
+    int timeA = int.tryParse(this.createTime?? "0") ?? 0;
+    int timeB = int.tryParse(other.createTime?? "0") ?? 0;
+    return timeA.compareTo(timeB);
+  }
+
 }
 
 /// commentId : "cid-1"
@@ -123,6 +129,11 @@ class PostComment {
     return map;
   }
 
+  int compareTo(PostComment other){
+    int timeA = int.tryParse(this.createdTime?? "0") ?? 0;
+    int timeB = int.tryParse(other.createdTime?? "0") ?? 0;
+    return timeA.compareTo(timeB);
+  }
 }
 
 /// pollId : ""
