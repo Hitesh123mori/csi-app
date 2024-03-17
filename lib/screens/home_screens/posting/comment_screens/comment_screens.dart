@@ -24,6 +24,7 @@ class _CommentScreenState extends State<CommentScreen> {
   // input field
   double _textFieldMaxHeight = 130.0;
   FocusNode _messageFocusNode = FocusNode();
+  ScrollController _scrollController = ScrollController();
   bool _isMessageTextFieldFocused = false;
   TextEditingController _textController = TextEditingController();
 
@@ -73,6 +74,7 @@ class _CommentScreenState extends State<CommentScreen> {
                               ),
                             ),
                           ) :ListView.builder(
+                              controller: _scrollController,
                               physics: BouncingScrollPhysics(),
                               itemCount: postProvider.post?.comment?.length ?? 0, // Null check added here
                               itemBuilder: (BuildContext context, int index) {
@@ -181,6 +183,7 @@ class _CommentScreenState extends State<CommentScreen> {
                 post.comment?.add(pc);
               }
               setState(() {});
+              _scrollDown();
 
               _textController.text = "";
             },
@@ -194,6 +197,14 @@ class _CommentScreenState extends State<CommentScreen> {
           ),
         ],
       ),
+    );
+  }
+
+  void _scrollDown() {
+    _scrollController.animateTo(
+      _scrollController.position.maxScrollExtent + 250,
+      duration: Duration(seconds: 2),
+      curve: Curves.fastOutSlowIn,
     );
   }
 }

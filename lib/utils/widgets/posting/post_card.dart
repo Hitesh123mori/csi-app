@@ -1,9 +1,11 @@
 import 'package:csi_app/apis/googleAIPs/drive/DriveApi.dart';
 import 'package:csi_app/side_transition_effects/right_left.dart';
 import 'package:csi_app/utils/shimmer_effects/post_screen_shimmer_effect.dart';
+import 'package:csi_app/utils/widgets/ProfilePhoto.dart';
 import 'package:csi_app/utils/widgets/buttons/three_dot_button.dart';
 import 'package:flutter/material.dart';
 import 'package:carousel_slider/carousel_slider.dart';
+import 'package:http/http.dart';
 import 'package:provider/provider.dart';
 import 'package:flutter_polls/flutter_polls.dart';
 import 'package:like_button/like_button.dart';
@@ -49,9 +51,8 @@ class _PostCardState extends State<PostCard> {
       builder: (context, postProvider, appUserProvider, child) {
         return Padding(
           padding: EdgeInsets.all(5),
-          child: Material(
-            elevation: 0.2,
-            borderRadius: BorderRadius.circular(4),
+          child: Card(
+            elevation: 1,
             child: Container(
               decoration: BoxDecoration(
                 borderRadius: BorderRadius.circular(4),
@@ -111,73 +112,67 @@ class _PostCardState extends State<PostCard> {
   }
 
   Widget _buildPostHeader(BuildContext context, PostCreator postCreator, String appUserId, PostProvider postProvider) {
-    return Card(
-      elevation: 0,
-      surfaceTintColor: AppColors.theme['secondaryColor'],
-      color: AppColors.theme['secondaryColor'],
-      child: ListTile(
-        isThreeLine: true,
-        title: Text(
-          "${postCreator.name}",
-          style: TextStyle(fontWeight: FontWeight.bold),
-        ),
-        subtitle: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Text(
-              "${postCreator.about ?? ""}",
-              style: TextStyle(color: AppColors.theme['tertiaryColor']),
-            ),
-            Text(
-              "${MyDateUtil.getMessageTime(context: context, time: widget.post.createTime ?? "0")}",
-              style: TextStyle(color: AppColors.theme['tertiaryColor'], fontSize: 11),
-            )
-          ],
-        ),
-        leading: CircleAvatar(
-          child: Text("${postCreator.name?[0].toUpperCase()}"),
-          radius: 25,
-          backgroundColor: AppColors.theme["secondaryBgColor"],
-        ),
-        contentPadding: EdgeInsets.only(left: 1),
-        trailing: postCreator.userID == appUserId
-            ? ThreeDotButton(
-                options: ["Edit", "Delete"],
-                onOptionSelected: (String option) async {
-                  print("#selOpt $option");
-
-                  switch (option) {
-                    case "edit":
-                      print("Editing");
-                      postProvider.post = widget.post;
-                      postProvider.forEdit = true;
-
-                      postProvider.notify();
-                      Navigator.push(context, RightToLeft(AddPostScreen()));
-                      break;
-                    case "delete":
-                      print("Deleting");
-
-                      if (widget.post.isThereImage ?? false) StorageAPI.deletePostImg(widget.post.imageModelList);
-
-                      if (widget.post.pdfLink != "" && widget.post.pdfLink != null) await DriveAPI.deleteFileFromDrive(widget.post.pdfLink);
-
-                      final res = await PostAPI.deletePost(widget.post.postId ?? "");
-
-                      if (res.containsKey("succ")) {
-                        HelperFunctions.showToast(res["succ"] ?? "");
-                      } else {
-                        HelperFunctions.showToast("Error deleting post");
-                        print("#del-post-error ${res["Error deleting post"]}");
-                      }
-
-                      break;
-                  }
-                },
-              )
-            : Container(),
-        // : ThreeDotButton(options: ["Report"], onOptionSelected: (String option) {print("#optSel $option");}),
+    return ListTile(
+      isThreeLine: true,
+      title: Text(
+        "${postCreator.name}",
+        style: TextStyle(fontWeight: FontWeight.bold),
       ),
+      subtitle: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Text(
+            "${postCreator.about ?? ""}",
+            style: TextStyle(color: AppColors.theme['tertiaryColor']),
+          ),
+          Text(
+            "${MyDateUtil.getMessageTime(context: context, time: widget.post.createTime ?? "0")}",
+            style: TextStyle(color: AppColors.theme['tertiaryColor'], fontSize: 11),
+          )
+        ],
+      ),
+      leading: Padding(
+        padding: const EdgeInsets.only(left: 8.0),
+        child:  ProfilePhoto(url: postCreator.profilePhotoUrl, name: postCreator.name, radius: 20,),
+      ),
+      contentPadding: EdgeInsets.only(left: 1),
+      trailing: postCreator.userID == appUserId
+          ? ThreeDotButton(
+              options: ["Edit", "Delete"],
+              onOptionSelected: (String option) async {
+                print("#selOpt $option");
+
+                switch (option) {
+                  case "edit":
+                    print("Editing");
+                    postProvider.post = widget.post;
+                    postProvider.forEdit = true;
+
+                    postProvider.notify();
+                    Navigator.push(context, RightToLeft(AddPostScreen()));
+                    break;
+                  case "delete":
+                    print("Deleting");
+
+                    if (widget.post.isThereImage ?? false) StorageAPI.deletePostImg(widget.post.imageModelList);
+
+                    if (widget.post.pdfLink != "" && widget.post.pdfLink != null) await DriveAPI.deleteFileFromDrive(widget.post.pdfLink);
+
+                    final res = await PostAPI.deletePost(widget.post.postId ?? "");
+
+                    if (res.containsKey("succ")) {
+                      HelperFunctions.showToast(res["succ"] ?? "");
+                    } else {
+                      HelperFunctions.showToast("Error deleting post");
+                      print("#del-post-error ${res["Error deleting post"]}");
+                    }
+
+                    break;
+                }
+              },
+            )
+          : Container(width: 1, height: 1,),
+      // : ThreeDotButton(options: ["Report"], onOptionSelected: (String option) {print("#optSel $option");}),
     );
   }
 
