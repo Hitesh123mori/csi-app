@@ -44,8 +44,9 @@ class NotificationApi {
     });
 
 
+    notifications.sort((a, b) => b.compareTo(a));
 
-
+    return notifications;
   }
 
 

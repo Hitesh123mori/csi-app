@@ -22,33 +22,30 @@ class PostsScreen extends StatefulWidget {
 }
 
 class _PostsScreenState extends State<PostsScreen> {
-
-
   Widget build(BuildContext context) {
     mq = MediaQuery.of(context).size;
     return Consumer<AppUserProvider>(
       builder: (context, appUserProvider, child) {
-
-        if(appUserProvider.user == null) return Scaffold(
-          body: Text("Something went wrong"),
-        );
+        if (appUserProvider.user == null)
+          return Scaffold(
+            body: Text("Something went wrong"),
+          );
         return Scaffold(
             backgroundColor: AppColors.theme['backgroundColor'],
-            floatingActionButton:
-              (appUserProvider.user?.isAdmin ?? false) || (appUserProvider.user?.isSuperuser ?? false)
-                ?FloatingActionButton(
-              onPressed: (){
-                Navigator.push(context, BottomToTop(AddPostScreen()));
-              },
-              child: Icon(Icons.add,color: AppColors.theme['secondaryColor'],),
-              backgroundColor: AppColors.theme['primaryColor'],
-            )
-                :null,
-
+            floatingActionButton: (appUserProvider.user?.isAdmin ?? false) || (appUserProvider.user?.isSuperuser ?? false)
+                ? FloatingActionButton(
+                    onPressed: () {
+                      Navigator.push(context, BottomToTop(AddPostScreen()));
+                    },
+                    child: Icon(
+                      Icons.add,
+                      color: AppColors.theme['secondaryColor'],
+                    ),
+                    backgroundColor: AppColors.theme['primaryColor'],
+                  )
+                : null,
             body: Padding(
-                padding: const EdgeInsets.symmetric(vertical:5),
-
-
+                padding: const EdgeInsets.symmetric(vertical: 5),
                 child: StreamBuilder(
                   stream: FirebaseAPIs.rtdbRef.child("post").onValue,
                   builder: (context, snap) {
@@ -64,6 +61,8 @@ class _PostsScreenState extends State<PostsScreen> {
                           print("#key : $key");
                           posts.add(Post.fromJson(value));
                         });
+                        posts.sort((a, b) => b.compareTo(a));
+
                         return ListView.builder(
                           physics: BouncingScrollPhysics(),
                           shrinkWrap: true,
@@ -82,9 +81,7 @@ class _PostsScreenState extends State<PostsScreen> {
                       return PostShimmerEffect();
                     }
                   },
-                )
-            )
-        );
+                )));
       },
     );
   }

@@ -40,4 +40,10 @@ class Announcement {
     return map;
   }
 
+  int compareTo(Announcement other){
+    int timeA = int.tryParse(this.time?? "0") ?? 0;
+    int timeB = int.tryParse(other.time?? "0") ?? 0;
+    return timeA.compareTo(timeB);
+  }
+
 }
