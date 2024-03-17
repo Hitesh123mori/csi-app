@@ -72,23 +72,14 @@ class _CommentScreenState extends State<CommentScreen> {
                                   ),
                                 ),
                               )
-                            : ListView.builder(
-                                itemCount: postProvider.post?.comment?.length ?? 0, // Null check added here
-                                itemBuilder: (BuildContext context, int index) {
-                                  // Check if postProvider.post and postProvider.post.comment are not null
-                                  if (postProvider.post != null && postProvider.post!.comment != null) {
-                                    // Access comment only if it's not null
-                                    final comment = postProvider.post!.comment![index];
-                                    return CommentCard(
-                                      postComment: comment,
-                                      postCreatorId: postProvider.post?.createBy ?? "",
-                                      postId: postProvider.post?.postId ?? "",
-                                    );
-                                  } else {
-                                    // Return a placeholder widget if comment or postProvider.post is null
-                                    return SizedBox();
-                                  }
-                                }),
+                            : Expanded(child: SingleChildScrollView(
+                              child: Column(
+                                                        children: List.generate(postProvider.post?.comment?.length ?? 0, (index) {
+                              return CommentCard(postComment: postProvider.post!.comment![index], postCreatorId: postProvider.post?.createBy??"", postId: postProvider.post?.postId ?? "");
+                                                        }
+                                                        ).toList(),
+                                                      ),
+                            )),
                         buildChatInput(appUserProvider.user!, postProvider.post!),
                       ],
                     ),
