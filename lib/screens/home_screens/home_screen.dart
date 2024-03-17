@@ -110,7 +110,7 @@ class _HomeScreenState extends State<HomeScreen> {
                   Navigator.push(context, LeftToRight(UserProfileScreen()));
                 }
               },
-              child: ProfilePhoto(url: appUserProvider.user?.profilePhotoUrl, name: appUserProvider.user?.name, radius: 35,)
+              child: ProfilePhoto(url: appUserProvider.user?.profilePhotoUrl, name: appUserProvider.user?.name, radius: 20,)
             ),
           ),
           actions: [
