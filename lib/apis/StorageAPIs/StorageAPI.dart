@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:csi_app/apis/FirebaseAPIs.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 
@@ -10,10 +12,10 @@ class StorageAPI {
     final imgRef = _postFolder.child("${postId}/${FirebaseAPIs.uuid.v1()}");
 
     await imgRef.putData(img).then((p0) {
-      print("#upload: ${p0.toString()}");
+      log("#upload: ${p0.toString()}");
       return null;
     }).onError((error, stackTrace) {
-      print("#upload E: ${error}, \n $stackTrace");
+      log("#upload E: ${error}, \n $stackTrace");
       return null;
     });
   }
@@ -31,8 +33,8 @@ class StorageAPI {
     return imgRef.list().then((value) {
       List<Reference> refs = value.items;
 
-      print("#res: ${refs.map((e) => e.name)}");
-      print("#");
+      log("#res: ${refs.map((e) => e.name)}");
+      log("#");
       return refs.map((e) => ImageModel(fullPath: e.fullPath, uri: e.getDownloadURL(), callback: () => (){})).toList();
     });
 

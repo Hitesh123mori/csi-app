@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'dart:developer';
 
 import 'package:csi_app/apis/CompetitiveProgrammingPlatformAPIs/CodeForcesAPIs/CodeForcesURLs.dart';
 import 'package:http/http.dart' as http;
@@ -10,8 +11,8 @@ class CFAuthAPIs {
     String uri = CodeForcesURLs.contestStanding(id: contestId);
 
     http.Response res = await http.get(Uri.parse(uri));
-    print("res-status: ${res.statusCode}");
-    print("res: ${res.body}");
+    log("res-status: ${res.statusCode}");
+    log("res: ${res.body}");
 
     if (res.statusCode == 200) {
       final Map<String, dynamic> data = json.decode(res.body);
@@ -22,7 +23,7 @@ class CFAuthAPIs {
         (index) => Contestant.fromJson(rows[index]),
       );
     } else {
-      print("#Error-cf: ${res.statusCode}");
+      log("#Error-cf: ${res.statusCode}");
       return null;
     }
 

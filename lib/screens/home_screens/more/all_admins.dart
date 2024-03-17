@@ -10,6 +10,7 @@ import '../../../utils/colors.dart';
 import '../../../utils/widgets/user_cards/admin_card.dart';
 
 
+import 'dart:developer';
 class AllAdmins extends StatefulWidget {
   const AllAdmins({super.key});
 
@@ -106,7 +107,7 @@ class _AllAdminsState extends State<AllAdmins> {
                         );
                       }
                     } else if (snapshot.hasError) {
-                      print("#error-postScreen: ${snapshot.error.toString()}");
+                      log("#error-postScreen: ${snapshot.error.toString()}");
                       return Text("${snapshot.error.toString()}");
                     } else {
                       return UsersCardShimmerEffect();

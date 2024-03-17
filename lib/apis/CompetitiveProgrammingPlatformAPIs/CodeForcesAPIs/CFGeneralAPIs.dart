@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'dart:developer';
 import 'package:csi_app/apis/CompetitiveProgrammingPlatformAPIs/CodeForcesAPIs/CodeForcesURLs.dart';
 import 'package:http/http.dart' as http;
 
@@ -21,7 +22,7 @@ class CFGeneralAPIs{
     final Set<String> done = {};
 
     for (final submission in acSubmissions) {
-      print("p : ${submission['problem']}");
+      log("p : ${submission['problem']}");
       if(submission['problem']['rating'] == null) continue;
       final problemRating = submission['problem']['rating'] as int;
       final problemName = submission['problem']['name'] as String;
@@ -52,7 +53,7 @@ class CFGeneralAPIs{
       count+= resMap[rating]!.length;
     }
 
-    print("#c : ${count}");
+    log("#c : ${count}");
     return {'problems': resMap, 'ratingCount': ratingCountMap, "totalCount": count};
   }
 

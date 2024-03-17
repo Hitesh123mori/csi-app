@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:flutter/material.dart';
 
 import '../../colors.dart';
@@ -22,7 +24,7 @@ class ThreeDotButton extends StatelessWidget {
       onSelected: (String value) {
         // Handle option selection by calling the provided callback
         onOptionSelected(value);
-        print("object");
+        log("object");
       },
       icon: Icon(Icons.more_vert),
     );

@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:csi_app/models/user_model/AppUser.dart';
 import 'package:csi_app/providers/CurrentUser.dart';
@@ -105,7 +107,7 @@ class _AllUsersState extends State<AllUsers> {
                       );
                     }
                   } else if (snapshot.hasError) {
-                    print("#error-postScreen: ${snapshot.error.toString()}");
+                    log("#error-postScreen: ${snapshot.error.toString()}");
                     return Text("${snapshot.error.toString()}");
                   } else {
                     return UsersCardShimmerEffect();

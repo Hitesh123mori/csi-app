@@ -1,3 +1,4 @@
+import 'dart:developer';
 import 'dart:typed_data';
 import 'package:csi_app/apis/FireStoreAPIs/UserProfileAPI.dart';
 import 'package:csi_app/apis/googleAIPs/drive/DriveApi.dart';
@@ -82,7 +83,7 @@ class _BasicInfoState extends State<BasicInfo> {
                             radius: 10,
                             onTap: () async {
                               if ((appUserProvider.user?.profilePhotoUrl != "") ^ (appUserProvider.user?.profilePhotoUrl != null)) {
-                                print("#old-dp-url: ${appUserProvider.user?.profilePhotoUrl}");
+                                log("#old-dp-url: ${appUserProvider.user?.profilePhotoUrl}");
                                 bool res = await DriveAPI.deleteFileFromDrive(appUserProvider.user?.profilePhotoUrl);
                                 if (!res) {
                                   HelperFunctions.showToast("Unable to change profile photo at the moment");
@@ -229,11 +230,11 @@ class _BasicInfoState extends State<BasicInfo> {
                                 _formKey.currentState!.save();
 
                                 // todo : save below data
-                                print("Updated data:");
-                                print("Name: ${appUserProvider.user?.name}");
-                                print("About: ${appUserProvider.user?.about}");
-                                print("Codeforces id: ${appUserProvider.user?.cfId}");
-                                print("Year: ${appUserProvider.user?.year}");
+                                log("Updated data:");
+                                log("Name: ${appUserProvider.user?.name}");
+                                log("About: ${appUserProvider.user?.about}");
+                                log("Codeforces id: ${appUserProvider.user?.cfId}");
+                                log("Year: ${appUserProvider.user?.year}");
 
                                 Map<String, dynamic> fields = {
                                   "name": appUserProvider.user?.name,

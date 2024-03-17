@@ -1,3 +1,5 @@
+import 'dart:math';
+
 import 'package:csi_app/apis/FirebaseDatabaseAPIs/PostAPI.dart';
 import 'package:csi_app/models/post_model/post.dart';
 import 'package:csi_app/providers/CurrentUser.dart';
@@ -63,23 +65,31 @@ class _CommentScreenState extends State<CommentScreen> {
                     child: Column(
                       children: [
                         (postProvider.post?.comment?.isEmpty ?? true)
-                            ? Center(
-                                child: Text(
-                                  'No comments yet',
-                                  style: TextStyle(
-                                    fontSize: 16,
-                                    color: Colors.grey,
+                            ? Expanded(
+                                child: Center(
+                                  child: Text(
+                                    'No comments yet',
+                                    style: TextStyle(
+                                      fontSize: 16,
+                                      color: Colors.grey,
+                                    ),
                                   ),
                                 ),
                               )
-                            : Expanded(child: SingleChildScrollView(
-                              child: Column(
-                                                        children: List.generate(postProvider.post?.comment?.length ?? 0, (index) {
-                              return CommentCard(postComment: postProvider.post!.comment![index], postCreatorId: postProvider.post?.createBy??"", postId: postProvider.post?.postId ?? "");
-                                                        }
-                                                        ).toList(),
-                                                      ),
-                            )),
+                            : Expanded(
+                                child: Container(
+                                  child: SingleChildScrollView(
+                                    child: Column(
+                                      children: List.generate(postProvider.post?.comment?.length ?? 0, (index) {
+                                        return CommentCard(
+                                            postComment: postProvider.post!.comment![index],
+                                            postCreatorId: postProvider.post?.createBy ?? "",
+                                            postId: postProvider.post?.postId ?? "");
+                                      }).toList(),
+                                    ),
+                                  ),
+                                ),
+                              ),
                         buildChatInput(appUserProvider.user!, postProvider.post!),
                       ],
                     ),

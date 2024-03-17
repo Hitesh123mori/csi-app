@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:csi_app/apis/FireStoreAPIs/UserProfileAPI.dart';
 import 'package:csi_app/apis/FirebaseAPIs.dart';
 import 'package:csi_app/models/user_model/AppUser.dart';
@@ -15,13 +17,13 @@ class AppUserProvider extends ChangeNotifier{
 
   Future initUser() async {
     String? uid = FirebaseAPIs.auth.currentUser?.uid;
-    print("#authId: $uid");
+    log("#authId: $uid");
     if(uid != null){
       user = AppUser.fromJson(await UserProfile.getUser(uid));
       await NotificationApi.getFirebaseMessagingToken(uid) ;
     }
     notifyListeners();
-    print("#initUser complete");
+    log("#initUser complete");
   }
 
   Future logOut() async {

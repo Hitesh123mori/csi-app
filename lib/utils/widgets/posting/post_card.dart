@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:csi_app/apis/googleAIPs/drive/DriveApi.dart';
 import 'package:csi_app/side_transition_effects/right_left.dart';
 import 'package:csi_app/utils/shimmer_effects/post_screen_shimmer_effect.dart';
@@ -140,11 +142,11 @@ class _PostCardState extends State<PostCard> {
           ? ThreeDotButton(
               options: ["Edit", "Delete"],
               onOptionSelected: (String option) async {
-                print("#selOpt $option");
+                log("#selOpt $option");
 
                 switch (option) {
                   case "edit":
-                    print("Editing");
+                    log("Editing");
                     postProvider.post = widget.post;
                     postProvider.forEdit = true;
 
@@ -152,7 +154,7 @@ class _PostCardState extends State<PostCard> {
                     Navigator.push(context, RightToLeft(AddPostScreen()));
                     break;
                   case "delete":
-                    print("Deleting");
+                    log("Deleting");
 
                     if (widget.post.isThereImage ?? false) StorageAPI.deletePostImg(widget.post.imageModelList);
 
@@ -164,7 +166,7 @@ class _PostCardState extends State<PostCard> {
                       HelperFunctions.showToast(res["succ"] ?? "");
                     } else {
                       HelperFunctions.showToast("Error deleting post");
-                      print("#del-post-error ${res["Error deleting post"]}");
+                      log("#del-post-error ${res["Error deleting post"]}");
                     }
 
                     break;
@@ -172,7 +174,7 @@ class _PostCardState extends State<PostCard> {
               },
             )
           : Container(width: 1, height: 1,),
-      // : ThreeDotButton(options: ["Report"], onOptionSelected: (String option) {print("#optSel $option");}),
+      // : ThreeDotButton(options: ["Report"], onOptionSelected: (String option) {log("#optSel $option");}),
     );
   }
 
@@ -240,7 +242,7 @@ class _PostCardState extends State<PostCard> {
                 stream: StorageAPI.getImage(widget.post.postId).asStream(),
                 builder: (context, snap) {
                   if (snap.hasData) {
-                    print("#hd: ${snap.data}");
+                    log("#hd: ${snap.data}");
                     widget.post.imageModelList = snap.data;
                     if (widget.post.imageModelList?.isEmpty ?? true) return PostShimmerEffect();
                     return Column(
@@ -248,7 +250,7 @@ class _PostCardState extends State<PostCard> {
                         CarouselSlider.builder(
                           itemCount: widget.post.imageModelList?.length,
                           itemBuilder: (BuildContext context, int itemIndex, int pageViewIndex) {
-                            print("#imgUrl-home-screen: ${widget.post.imageModelList?[itemIndex]}");
+                            log("#imgUrl-home-screen: ${widget.post.imageModelList?[itemIndex]}");
                             return ImageFrame(imageModel: widget.post.imageModelList?[itemIndex] ?? ImageModel(), provider: null);
                           },
                           options: CarouselOptions(

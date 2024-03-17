@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:csi_app/apis/FirebaseAPIs.dart';
 import 'package:csi_app/models/post_model/image_model.dart';
 import 'package:csi_app/utils/helper_functions/function.dart';
@@ -34,7 +36,7 @@ class Post {
     postId = json['postId'];
     createBy = json['createBy'];
     createTime = json['createTime'];
-    print("#like = : ${json['like']}");
+    log("#like = : ${json['like']}");
     like = json['like'];
     description = HelperFunctions.base64ToString(json['description']??"");
     attachmentName = json['attachmentName'];
@@ -42,11 +44,11 @@ class Post {
     isThereImage = json['isThereImage'];
     poll = json['poll'] != null
         ? Poll.fromJson(json['poll']) : null;
-    print("#poll: ${poll}");
+    log("#poll: ${poll}");
     if (json['comment'] != null) {
       comment = [];
       json['comment'].forEach((k, v) {
-        print("#cm: $k, $v");
+        log("#cm: $k, $v");
         comment?.add(PostComment.fromJson(v));
       });
     }
@@ -157,7 +159,7 @@ class Poll {
     if (json['options'] != null) {
       options = [];
       json['options'].forEach((k, v) {
-        print("#option: $k, $v");
+        log("#option: $k, $v");
         options?.add(Options.fromJson(v));
       });
     }
@@ -172,15 +174,15 @@ class Poll {
     map['pollId'] = pollId;
     map['question'] = question;
     map['endTime'] = endTime;
-    // print("#opt? $options");
+    // log("#opt? $options");
     if (options != null) {
-      print("#if");
+      log("#if");
       map['options'] = {}; // Initialize options as an empty map
       options?.forEach((v) { // Iterate over each element in options
         Map<String, dynamic> m = v.toJson(); // Convert each element to a map
         map['options'][m['optionId']] = m; // Assign each element to map['options']
       });
-      print("#opt ${map['options']}"); // Print the contents of map['options']
+      log("#opt ${map['options']}"); // log the contents of map['options']
 
     }
     return map;
@@ -200,7 +202,7 @@ class Options {
   }
 
   Options.fromJson(dynamic json) {
-    print("#option-option: $json");
+    log("#option-option: $json");
     optionId = json['optionId'];
     title = json['title'];
     votes = json['votes'];

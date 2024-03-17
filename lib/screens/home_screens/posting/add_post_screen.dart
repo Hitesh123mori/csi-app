@@ -1,3 +1,4 @@
+import 'dart:developer';
 import 'dart:typed_data';
 
 import 'package:carousel_slider/carousel_slider.dart';
@@ -338,7 +339,7 @@ class _AddPostScreenState extends State<AddPostScreen> {
         stream: StorageAPI.getImage(postProvider.post!.postId).asStream(),
         builder: (context, snap) {
           if (snap.hasData) {
-            print("#hd: ${snap.data}");
+            log("#hd: ${snap.data}");
             postProvider.post?.imageModelList = snap.data;
             if (postProvider.post?.imageModelList?.isEmpty ?? true) return PostShimmerEffect();
             return Column(
@@ -346,7 +347,7 @@ class _AddPostScreenState extends State<AddPostScreen> {
                 CarouselSlider.builder(
                   itemCount: postProvider.post?.imageModelList?.length,
                   itemBuilder: (BuildContext context, int itemIndex, int pageViewIndex) {
-                    print("#imgUrl-home-screen: ${postProvider.post?.imageModelList?[itemIndex]}");
+                    log("#imgUrl-home-screen: ${postProvider.post?.imageModelList?[itemIndex]}");
                     return ImageFrame(imageModel: postProvider.post?.imageModelList?[itemIndex] ?? ImageModel(), provider: postProvider);
                   },
                   options: CarouselOptions(
@@ -531,7 +532,7 @@ class _AddPostScreenState extends State<AddPostScreen> {
     AppUserProvider appUserProvider,
   ) async {
 
-    print("#Updating...");
+    log("#Updating...");
 
     postProvider.post?.isThereImage = (postProvider.post?.images?.isNotEmpty ?? false ) || (postProvider.post?.imageModelList?.isNotEmpty ?? false);
     postProvider.post?.createBy = appUserProvider.user!.userID;
@@ -541,7 +542,7 @@ class _AddPostScreenState extends State<AddPostScreen> {
       await StorageAPI.uploadPostImg(postProvider.post!.postId, await element.readAsBytes());
     });
     final res = await PostAPI.postUpload(postProvider.post!);
-    print("#res: $res");
+    log("#res: $res");
     if(res == "Posted") {
       postProvider.post = null;
       Navigator.push(context, RightToLeft(HomeScreen()));

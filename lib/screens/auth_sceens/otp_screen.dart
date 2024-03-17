@@ -11,6 +11,7 @@ import 'package:csi_app/utils/widgets/buttons/auth_button.dart';
 import 'package:csi_app/utils/widgets/text_feilds/auth_text_feild.dart';
 import 'login_screen.dart';
 
+import 'dart:developer';
 class OtpScreen extends StatefulWidget {
   const OtpScreen({Key? key}) : super(key: key);
 
@@ -197,7 +198,7 @@ class _OtpScreenState extends State<OtpScreen> {
                                     isPinFilled = true;
                                     updateButtonState();
                                   });
-                                  print(pin);
+                                  log(pin);
                                   _verifyOTP = pin;
                                 },
                               ),
@@ -212,7 +213,7 @@ class _OtpScreenState extends State<OtpScreen> {
                                           _isLoading = true;
                                         });
                                         bool isValid = FirebaseAuth.verifyOTP(_verifyOTP);
-                                        print("#val ${isValid}") ;
+                                        log("#val ${isValid}") ;
                                         setState(() {
                                           _isLoading = false;
                                         });
@@ -247,7 +248,7 @@ class _OtpScreenState extends State<OtpScreen> {
                                         });
                                         if (_formKey.currentState!.validate()) {
                                           var res = await FirebaseAuth.sendOTP(_emailController.text);
-                                          print("#res-otp-screen: $res");
+                                          log("#res-otp-screen: $res");
                                           HelperFunctions.showToast(res);
                                           setState(() {
                                             _isLoading = false;
@@ -290,7 +291,7 @@ class _OtpScreenState extends State<OtpScreen> {
                                     if (_formKey.currentState!.validate()) {
 
                                       var res = await FirebaseAuth.sendOTP(_emailController.text.trim());
-                                      print("#res-otp-screen: $res");
+                                      log("#res-otp-screen: $res");
                                       HelperFunctions.showToast(res);
                                       setState(() {
                                         _isLoading = false;

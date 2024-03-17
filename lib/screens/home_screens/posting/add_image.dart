@@ -12,6 +12,8 @@ import '../../../utils/colors.dart';
 import '../../../utils/widgets/text_feilds/auth_text_feild.dart';
 import 'add_post_screen.dart';
 
+import 'dart:developer';
+
 class AddImage extends StatefulWidget {
   const AddImage({super.key});
 
@@ -36,7 +38,7 @@ class _AddImageState extends State<AddImage> {
       // imagePaths = _imageList!.map((XFile file) => file.path).toList();
       isImageUploaded = true;
     });
-      print("#images uploaded ${_imageList!.length} images");
+      log("#images uploaded ${_imageList!.length} images");
   }
 
   @override
