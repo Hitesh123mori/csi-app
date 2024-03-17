@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 
 class MyDateUtil {
   // for getting formatted time from milliSecondsSinceEpochs String
@@ -101,5 +102,17 @@ class MyDateUtil {
         return 'Dec';
     }
     return 'NA';
+  }
+
+  static String formatMillisecondsToDateString(String milliseconds) {
+
+    int millisecondsInt = int.parse(milliseconds);
+
+
+    DateTime dateTime = DateTime.fromMillisecondsSinceEpoch(millisecondsInt);
+
+    String formattedDate = DateFormat('dd/MM/yyyy').format(dateTime);
+
+    return formattedDate;
   }
 }

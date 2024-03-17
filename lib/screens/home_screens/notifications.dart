@@ -2,6 +2,7 @@ import 'package:flutter/material.dart' ;
 import '../../main.dart';
 import '../../utils/colors.dart';
 import '../../utils/shimmer_effects/notification_card_shimmer_effect.dart';
+import '../../utils/widgets/notificationns/notification_card.dart';
 
 class Notifications extends StatefulWidget {
   const Notifications({super.key});
@@ -15,6 +16,7 @@ class _NotificationsState extends State<Notifications> {
   Widget build(BuildContext context) {
     mq = MediaQuery.of(context).size ;
     return Scaffold(
+      backgroundColor: AppColors.theme['backgroundColor'],
       appBar : AppBar(
         surfaceTintColor: Colors.white,
         elevation: 0.3,
@@ -36,10 +38,21 @@ class _NotificationsState extends State<Notifications> {
               fontSize: 18),
         ),
       ),
-      body: Padding(
-        padding:  EdgeInsets.symmetric(vertical: mq.height*0.34,horizontal: mq.width*0.35),
-        child: Text("Notifications",style: TextStyle(fontWeight: FontWeight.bold),),
-      ),
+      body:SingleChildScrollView(
+        physics: BouncingScrollPhysics(),
+        child: Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 5.0,vertical: 5),
+          child: Column(
+            children: [
+
+              // todo: take this card , already created shimmer effect just use it
+              NotificationCard(),
+
+
+            ],
+          ),
+        ),
+      )
     );
 
   }

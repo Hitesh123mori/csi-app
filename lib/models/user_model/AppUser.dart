@@ -33,8 +33,8 @@ class AppUser {
     isActive = json['is_active'];
     notificationToken = json['notification_token'];
     createdAt  = json['createdAt'] ;
-
   }
+
   String? userID;
   String? name;
   String?about ;

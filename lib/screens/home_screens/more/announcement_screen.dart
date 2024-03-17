@@ -1,6 +1,7 @@
 import 'package:csi_app/models/user_model/AppUser.dart';
 import 'package:csi_app/providers/CurrentUser.dart';
 import 'package:csi_app/utils/colors.dart';
+import 'package:csi_app/utils/helper_functions/function.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -68,9 +69,22 @@ class _AnnouncementScreenState extends State<AnnouncementScreen> {
               //todo add inkwell and store description and userId
               child: InkWell(
                 onTap: ()async{
-                  // Announcement announcement2 = Announcement(message: _textController.text, fromUserId:appUserProvider.user?.userID, toUserId: toUser.userID, time: DateTime.now().millisecondsSinceEpoch.toString());
-                  //
-                  // await NotificationApi.storeNotification()
+                  setState(() {
+                    _isLoading = true;
+                  });
+                  Announcement announcement  = Announcement(
+                    message: _textController.text,
+                    fromUserId: appUserProvider.user?.userID,
+                    toUserId: "ALL",
+                    time: DateTime.now().millisecondsSinceEpoch.toString(),
+                  );
+                  await NotificationApi.sendMassNotificationToAllUsers(_textController.text) ;
+                  await NotificationApi.storeNotification(announcement,false) ;
+                  setState(() {
+                    _isLoading = false;
+                  });
+                  _textController.text = "";
+                  HelperFunctions.showToast("Message sent") ;
                 },
                 child: AnimatedContainer(
                   duration: Duration(milliseconds: 500),
@@ -94,7 +108,7 @@ class _AnnouncementScreenState extends State<AnnouncementScreen> {
                           width: 25,
                           child: CircularProgressIndicator(
                             strokeWidth: 2.6,
-                            color: AppColors.theme['primaryColor'],
+                            color: AppColors.theme['secondaryColor'],
                           ))),
                   decoration: BoxDecoration(
                     color: isButtonEnabled

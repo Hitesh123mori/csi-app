@@ -89,6 +89,7 @@ class _CommentScreenState extends State<CommentScreen> {
                                     return SizedBox();
                                   }
                                 }),
+                        Expanded(child:Container()),
                         buildChatInput(appUserProvider.user!, postProvider.post!),
                       ],
                     ),
