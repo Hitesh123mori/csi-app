@@ -1,15 +1,13 @@
 import 'package:csi_app/apis/FireStoreAPIs/UserControl.dart';
-import 'package:csi_app/apis/FireStoreAPIs/UserProfileAPI.dart';
 import 'package:csi_app/models/user_model/AppUser.dart';
 import 'package:csi_app/utils/colors.dart';
 import 'package:csi_app/utils/helper_functions/date_format.dart';
 import 'package:csi_app/utils/helper_functions/function.dart';
 import 'package:flutter/material.dart';
-import 'package:googleapis/admob/v1.dart';
-
 import '../../../apis/notification_apis/notifications_api.dart';
 
 class UserCard extends StatelessWidget {
+
   final AppUser appUser ;
   final AppUser currentUser ;
   const UserCard({Key? key, required this.appUser, required this.currentUser});
@@ -18,7 +16,7 @@ class UserCard extends StatelessWidget {
   Widget build(BuildContext context) {
     return InkWell(
       onTap: ()async{
-        NotificationApi.sendPushNotification(appUser,"Hello ${appUser.name} How are you ? " ,currentUser ) ;
+        await NotificationApi.sendMassNotificationToAllUsers("Hello Everyone");
       },
       borderRadius: BorderRadius.circular(10),
       splashColor: AppColors.theme['backgroundColor'],
@@ -114,8 +112,8 @@ class UserCard extends StatelessWidget {
                 ),
                 trailing: Material(
                   borderRadius: BorderRadius.circular(
-                      10), // Adjust border radius as needed
-                  color: Colors.blue, // Change background color
+                      10),
+                  color: Colors.blue,
                   child: InkWell(
                     onTap: () async {
                         bool succ = await UserControl.makeSuperuser(appUser.userID, currentUser.userID);

@@ -37,7 +37,7 @@ class _AllUsersState extends State<AllUsers> {
               style: TextStyle(
                   color: AppColors.theme['tertiaryColor'],
                   fontWeight: FontWeight.bold,
-                  fontSize: 18)),
+                  fontSize: 20)),
           leading: IconButton(
               onPressed: () {
                 Navigator.pop(context);

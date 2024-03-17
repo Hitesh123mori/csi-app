@@ -55,7 +55,28 @@ class _PostsScreenState extends State<PostsScreen> {
                       Map<dynamic, dynamic>? val = snap.data?.snapshot.value as Map<dynamic, dynamic>?;
                       if (val == null || val.isEmpty) {
                         return Center(
-                          child: Text("No posts"),
+                          child:Column(
+                              crossAxisAlignment: CrossAxisAlignment.center,
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [
+                                Image.asset(
+                                  "assets/images/no_item.png",
+                                  height: 200,
+                                  width: 200,
+                                ),
+                                SizedBox(
+                                  height: 10,
+                                ),
+                                Padding(
+                                  padding: EdgeInsets.symmetric(horizontal: mq.width * 0.2),
+                                  child: Text(
+                                    "No Items",
+                                    style: TextStyle(
+                                        color: AppColors.theme['disableButtonColor'],
+                                        fontSize: 25),
+                                  ),
+                                ),
+                              ]),
                         );
                       } else {
                         List<Post> posts = [];
