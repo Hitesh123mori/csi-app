@@ -2,6 +2,7 @@ import 'CFAuth.dart';
 import 'package:http/http.dart' as http;
 import 'config.dart';
 
+import 'dart:developer';
 
 class CodeForcesURLs{
 
@@ -29,8 +30,8 @@ void main () async {
 
   http.Response res = await http.get(Uri.parse(uri));
   
-  print("res-status: ${res.statusCode}");
-  print("res: ${res.body}");
+  log("res-status: ${res.statusCode}");
+  log("res: ${res.body}");
 
   
 }

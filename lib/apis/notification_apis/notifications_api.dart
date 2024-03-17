@@ -27,19 +27,19 @@ class NotificationApi {
 
   static Future getNotification (String userId) async {
     List<Announcement> notifications = [];
-    print("#getting notifications .. ");
+    log("#getting notifications .. ");
 
     final res = await _publicNotificationColRef.get();
-    print("${res.docs}");
+    log("${res.docs}");
     res.docs.forEach((element) {
-      print("${element.data()}");
+      log("${element.data()}");
       notifications.add(Announcement.fromJson(element.data()));
     });
 
     final res2 = await _privateNotificationColRef.where("to_user_id", isEqualTo: userId).get();
-    print("${res2.docs}");
+    log("${res2.docs}");
     res2.docs.forEach((element) {
-      print("${element.data()}");
+      log("${element.data()}");
       notifications.add(Announcement.fromJson(element.data()));
     });
 

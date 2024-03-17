@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:csi_app/apis/FirebaseAPIs.dart';
 // import 'package:csi_app/apis/FirebaseDatabaseAPIs/PostAPI.dart';
 import 'package:csi_app/models/post_model/post.dart';
@@ -58,7 +60,7 @@ class _PostsScreenState extends State<PostsScreen> {
                       } else {
                         List<Post> posts = [];
                         val.forEach((key, value) {
-                          print("#key : $key");
+                          log("#key : $key");
                           posts.add(Post.fromJson(value));
                         });
                         posts.sort((a, b) => b.compareTo(a));
@@ -75,7 +77,7 @@ class _PostsScreenState extends State<PostsScreen> {
                         );
                       }
                     } else if (snap.hasError) {
-                      print("#error-postScreen: ${snap.error.toString()}");
+                      log("#error-postScreen: ${snap.error.toString()}");
                       return Text("${snap.error.toString()}");
                     } else {
                       return PostShimmerEffect();

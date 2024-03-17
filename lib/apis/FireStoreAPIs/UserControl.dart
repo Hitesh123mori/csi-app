@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:csi_app/apis/FirebaseAPIs.dart';
 
@@ -9,7 +11,7 @@ class UserControl {
     return await _userColRef.doc("$userId").update({"is_admin": true}).then((value) {
       return true;
     }).onError((error, stackTrace) {
-      print("#makeAdmin-error : $error \n $stackTrace");
+      log("#makeAdmin-error : $error \n $stackTrace");
       return false;
     });
   }
@@ -25,7 +27,7 @@ class UserControl {
       });
       
     } catch (e) {
-      print("#promotion-tf :superuser $e");
+      log("#promotion-tf :superuser $e");
       return false;
     }
   }
@@ -39,7 +41,7 @@ class UserControl {
         return true;          
       });
     } catch (e) {
-      print("#demotion-tf :admin :$e");
+      log("#demotion-tf :admin :$e");
       return false;
     }
   }

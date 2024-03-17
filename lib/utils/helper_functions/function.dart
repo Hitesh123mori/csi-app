@@ -99,5 +99,5 @@ class HelperFunctions{
 }
 
 // main (){
-//   print("#e ${HelperFunctions.stringToBase64("https://drive.usercontent.google.com/u/0/uc?id=1UDvG0vMZUncEBU820ubJxr8mOmfvCNjU&export=download")}");
+//   log("#e ${HelperFunctions.stringToBase64("https://drive.usercontent.google.com/u/0/uc?id=1UDvG0vMZUncEBU820ubJxr8mOmfvCNjU&export=download")}");
 // }

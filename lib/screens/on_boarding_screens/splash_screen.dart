@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:csi_app/apis/FirebaseAPIs.dart';
 import 'package:csi_app/providers/CurrentUser.dart';
 import 'package:csi_app/side_transition_effects/right_left.dart';
@@ -22,11 +24,11 @@ class _SplashScreenState extends State<SplashScreen> {
 
   // Future initUser() async {
   //   String? uid = FirebaseAPIs.auth.currentUser?.uid;
-  //   print("#authId: $uid");
+  //   log("#authId: $uid");
   //   if (uid != null) {
   //     Navigator.pushReplacement(context, LeftToRight(HomeScreen()));
   //   }
-  //   print("#initUser complete");
+  //   log("#initUser complete");
   // }
 
   @override
@@ -46,7 +48,7 @@ class _SplashScreenState extends State<SplashScreen> {
           Navigator.pushReplacement(context, LeftToRight(HomeScreen()));
         }
         catch (e){
-          print("#Error: $e");
+          log("#Error: $e");
           widget.appUser.logOut();
           Navigator.pushReplacement(context, RightToLeft(OnboardingScreen()));
 

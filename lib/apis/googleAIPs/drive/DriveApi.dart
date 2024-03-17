@@ -36,15 +36,15 @@ class DriveAPI {
         final response = await driveApi.files.create(fileToUpload, uploadMedia: drive.Media(file.openRead(), file.lengthSync()));
 
         final downloadUrl = "https://drive.usercontent.google.com/u/0/uc?id=${response.id}&export=download";
-        print('#File uploaded! File download url: ${downloadUrl}');
+        log('#File uploaded! File download url: ${downloadUrl}');
         return {"File uploaded": downloadUrl};
       } catch (error, stackTrace) {
-        print("#error-file-upload: $error \n $stackTrace");
+        log("#error-file-upload: $error \n $stackTrace");
         return {"Error": "Something went wrong retry again later"};
       }
     } else {
       // User canceled the picker
-      print('#Error: User canceled the file picking');
+      log('#Error: User canceled the file picking');
       return {"Error": "You cancelled file selection"};
     }
   }
@@ -72,15 +72,15 @@ class DriveAPI {
         final response = await driveApi.files.create(fileToUpload, uploadMedia: drive.Media(file.openRead(), file.lengthSync()));
 
         final downloadUrl = "https://drive.usercontent.google.com/u/0/uc?id=${response.id}&export=download";
-        print('#Image uploaded! Image download url: ${downloadUrl}');
+        log('#Image uploaded! Image download url: ${downloadUrl}');
         return {"Image uploaded": downloadUrl};
       } catch (error, stackTrace) {
-        print("#error-image-upload: $error \n $stackTrace");
+        log("#error-image-upload: $error \n $stackTrace");
         return {"Error": "Something went wrong retry again later"};
       }
     } else {
       // User canceled the picker
-      print('#Error: User canceled the Image picking');
+      log('#Error: User canceled the Image picking');
       return {"Error": "You cancelled Image selection"};
     }
   }
@@ -132,10 +132,10 @@ class DriveAPI {
       // Delete the file
       await driveApi.files.delete(extractIdFromUrl(url));
 
-      print('File deleted successfully.');
+      log('File deleted successfully.');
       return true;
     } catch (e) {
-      print('Error deleting file: $e');
+      log('Error deleting file: $e');
       return false;
     } finally {
       // Close the HTTP client to release resources

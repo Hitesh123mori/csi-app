@@ -4,6 +4,8 @@ import 'package:crypto/crypto.dart';
 import 'package:http/http.dart' as http;
 import 'config.dart';
 
+import 'dart:developer';
+
 class CodeforcesApi {
   static const String baseUrl = 'https://codeforces.com/api/';
   String apiKey;
@@ -41,7 +43,7 @@ class CodeforcesApi {
     if (response.statusCode == 200) {
       return jsonDecode(response.body);
     } else {
-      print("#res: ${response.body}");
+      log("#res: ${response.body}");
       throw Exception(
           'Failed to load data. Status code: ${response.statusCode}');
     }
@@ -68,5 +70,5 @@ void main() async {
   Map<String, dynamic> userInfo = await codeforcesApi.makeAuthenticatedRequest(
       'user.info', {'handles': 'tourist'});
 
-  print(userInfo);
+  log(userInfo.toString());
 }

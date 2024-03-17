@@ -51,7 +51,7 @@ class _CommentCardState extends State<CommentCard> {
                     children: [
                       ListTile(
                         contentPadding: EdgeInsets.only(left: 8),
-                        dense: true,
+                        // dense: true,
                         leading: CircleAvatar(
                           backgroundColor: AppColors.theme['secondaryBgColor'],
                           child: Center(
@@ -69,35 +69,30 @@ class _CommentCardState extends State<CommentCard> {
                           commentCreator.about ?? "",
                           style: TextStyle(color: AppColors.theme['tertiaryColor'], fontWeight: FontWeight.w500),
                         ),
-                        trailing: Container(
-                          width: 100,
+                        trailing: Padding(
+                          padding: EdgeInsets.only(right: MediaQuery.of(context).size.width*0.05),
                           child: widget.postComment.userId == widget.postCreatorId
-                              ? Row(
-                                  mainAxisSize: MainAxisSize.min,
-                                  children: [
-                                    Container(
-                                      decoration: BoxDecoration(
-                                        color: AppColors.theme['primaryColor'],
-                                        borderRadius: BorderRadius.circular(4),
-                                      ),
-                                      padding: EdgeInsets.symmetric(horizontal: 5, vertical: 2),
-                                      child: Text(
-                                        "Creator",
-                                        style: TextStyle(
-                                          color: AppColors.theme['secondaryColor'],
-                                          fontSize: 12,
-                                        ),
-                                      ),
-                                    ),
-                                  ],
-                                )
+                              ? Container(
+                                decoration: BoxDecoration(
+                                  color: AppColors.theme['primaryColor'],
+                                  borderRadius: BorderRadius.circular(4),
+                                ),
+                                padding: EdgeInsets.symmetric(horizontal: 5, vertical: 2),
+                                child: Text(
+                                  "Creator",
+                                  style: TextStyle(
+                                    color: AppColors.theme['secondaryColor'],
+                                    fontSize: 12,
+                                  ),
+                                ),
+                              )
                               : Container(),
                         ),
                       ),
                       Padding(
                         padding: const EdgeInsets.symmetric(horizontal: 20.0, vertical: 10),
                         child: Text(
-                          widget.postComment.message ?? "",
+                          widget.postComment.message?.trim() ?? "",
                           style: TextStyle(color: AppColors.theme['tertiaryColor'], fontWeight: FontWeight.w500),
                         ),
                       ),

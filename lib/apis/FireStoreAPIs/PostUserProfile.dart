@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:csi_app/apis/FirebaseAPIs.dart';
 
 class PostUserProfile{
@@ -14,7 +16,7 @@ class PostUserProfile{
       throw Exception(postCreator);
     }
     else {
-      print("#pc: $postCreator");
+      log("#pc: $postCreator");
       return postCreator;
     }
 

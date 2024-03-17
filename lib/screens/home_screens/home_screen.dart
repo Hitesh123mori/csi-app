@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:csi_app/providers/CurrentUser.dart';
 import 'package:csi_app/screens/home_screens/more/more.dart';
 import 'package:csi_app/utils/colors.dart';
@@ -58,7 +60,7 @@ class _HomeScreenState extends State<HomeScreen> {
         initUser(appUserProvider);
         _isFirst = false;
       }
-      print("#user :  ${appUserProvider.user?.name}");
+      log("#user :  ${appUserProvider.user?.name}");
       return Scaffold(
         appBar: AppBar(
           surfaceTintColor: AppColors.theme['secondaryColor'],
@@ -105,7 +107,7 @@ class _HomeScreenState extends State<HomeScreen> {
             padding: const EdgeInsets.only(left: 8.0),
             child: InkWell(
               onTap: () async{
-                print("#app ${appUserProvider.user?.name}");
+                log("#app ${appUserProvider.user?.name}");
                 if (appUserProvider.user != null) {
                   Navigator.push(context, LeftToRight(UserProfileScreen()));
                 }

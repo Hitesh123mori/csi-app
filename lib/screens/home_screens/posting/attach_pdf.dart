@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:csi_app/providers/post_provider.dart';
 import 'package:csi_app/utils/colors.dart';
 import 'package:csi_app/utils/helper_functions/function.dart';
@@ -82,7 +84,7 @@ class _AttachPdfState extends State<AttachPdf> {
                     onTap: isAttachpdfButtonEnabled
                         ? () {
                       if (_formKey.currentState!.validate()) {
-                        print("#urlPdf : ${value.post?.pdfLink}");
+                        log("#urlPdf : ${value.post?.pdfLink}");
                         value.post?.pdfLink = downloadUrl;
                         value.post?.isThereImage = false;
                         value.post?.attachmentName  = _pdfnameController.text ;
@@ -213,12 +215,12 @@ class _AttachPdfState extends State<AttachPdf> {
                       } else if (uploadResult != null &&
                           uploadResult.containsKey("Error")) {
                         String errorMessage = uploadResult["Error"]!;
-                        print(
+                        log(
                           'Error occurred during file upload: $errorMessage',
                         );
                         HelperFunctions.showToast("Error occurred during file upload") ;
                       } else {
-                        print(
+                        log(
                           'Error: File upload failed or user canceled the file picking',
                         );
                         HelperFunctions.showToast("File upload failed or user canceled the file picking") ;
