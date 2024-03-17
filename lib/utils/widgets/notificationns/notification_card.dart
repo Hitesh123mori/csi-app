@@ -1,11 +1,14 @@
+import 'package:csi_app/models/notification_model/Announcement.dart';
 import 'package:csi_app/utils/colors.dart';
+import 'package:csi_app/utils/helper_functions/date_format.dart';
 import 'package:flutter/material.dart';
 
 import '../../helper_functions/function.dart';
 
 
 class NotificationCard extends StatelessWidget {
-  const NotificationCard({super.key});
+  Announcement announcement;
+  NotificationCard({super.key, required this.announcement});
 
   @override
   Widget build(BuildContext context) {
@@ -13,12 +16,12 @@ class NotificationCard extends StatelessWidget {
       color: AppColors.theme['secondaryColor'],
       child: ListTile(
         contentPadding: EdgeInsets.only(right: 1),
-        title: Text("User Name",style: TextStyle(color: AppColors.theme['tertiaryColor'],fontWeight: FontWeight.bold),),
-        subtitle: Text(truncateDescription("Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum.")),
+        title: Text("${announcement.fromUserName}",style: TextStyle(color: AppColors.theme['tertiaryColor'],fontWeight: FontWeight.bold),),
+        subtitle: Text(truncateDescription("${announcement.message}")),
         leading: CircleAvatar(
           radius: 40,
           backgroundColor: AppColors.theme['secondaryBgColor'],
-          child: Text("H"),
+          child: Text(HelperFunctions.getInitials(announcement.fromUserName ?? "A B")),
         ),
         trailing: Column(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -26,7 +29,7 @@ class NotificationCard extends StatelessWidget {
             SizedBox(
 
             ),
-            Text("Time here"),
+            Text("${MyDateUtil.getMessageTime(context: context, time: announcement.time??"0")}"),
           ],
         ),
 

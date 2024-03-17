@@ -474,10 +474,11 @@ class _AddEventScreenState extends State<AddEventScreen> {
                       });
 
                       Announcement announcement  = Announcement(
-                        message: "${_nameController.text} Added",
+                        message: "New event ${_nameController.text}",
                         fromUserId: appUserProvider.user?.userID,
                         toUserId: "ALL",
                         time: DateTime.now().millisecondsSinceEpoch.toString(),
+                        fromUserName: appUserProvider.user?.name,
                       );
 
                       await NotificationApi.sendMassNotificationToAllUsers("${_nameController.text} Added") ;

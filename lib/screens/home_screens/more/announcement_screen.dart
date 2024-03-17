@@ -77,6 +77,7 @@ class _AnnouncementScreenState extends State<AnnouncementScreen> {
                     fromUserId: appUserProvider.user?.userID,
                     toUserId: "ALL",
                     time: DateTime.now().millisecondsSinceEpoch.toString(),
+                    fromUserName: appUserProvider.user?.name
                   );
                   await NotificationApi.sendMassNotificationToAllUsers(_textController.text) ;
                   await NotificationApi.storeNotification(announcement,false) ;

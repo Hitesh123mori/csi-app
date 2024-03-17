@@ -9,7 +9,8 @@ import 'package:csi_app/apis/FirebaseAPIs.dart';
 class Announcement {
   Announcement({
       this.message, 
-      this.fromUserId, 
+      this.fromUserId,
+    this.fromUserName,
       this.toUserId, 
       this.time,})
   {
@@ -20,6 +21,7 @@ class Announcement {
     id = json['id'];
     message = json['message'];
     fromUserId = json['from_user_id'];
+    fromUserName = json['from_user_name'];
     toUserId = json['to_user_id'];
     time = json['time'];
   }
@@ -27,6 +29,7 @@ class Announcement {
   String? id;
   String? message;
   String? fromUserId;
+  String? fromUserName;
   String? toUserId;
   String? time;
 
@@ -37,6 +40,7 @@ class Announcement {
     map['from_user_id'] = fromUserId;
     map['to_user_id'] = toUserId;
     map['time'] = time;
+    map['from_user_name'] = fromUserName;
     return map;
   }
 

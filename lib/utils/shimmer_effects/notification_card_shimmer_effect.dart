@@ -14,7 +14,7 @@ class NotificationCardShimmerEffect extends StatelessWidget {
         backgroundColor: AppColors.theme['backgroundColor'],
         body: SizedBox(
           child: ListView.builder(
-            itemCount: 12,
+            itemCount: 1,
             itemBuilder: (context, index) {
               return Padding(
                 padding: const EdgeInsets.symmetric(vertical: 5.0),

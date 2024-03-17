@@ -19,7 +19,7 @@ class _EventCardState extends State<EventCard> {
   @override
   Widget build(BuildContext context) {
     return Container(
-      height: 170,
+      height: 155,
       child: Card(
         elevation: 1,
         color: AppColors.theme["secondaryBgColor"],
@@ -36,44 +36,42 @@ class _EventCardState extends State<EventCard> {
                             child: Image.asset(
                       "assets/images/event_images.jpg",
                       fit: BoxFit.fitWidth,
-                      height: 80,
+                      // max-height: 80,
                       alignment: Alignment.topCenter,
                     ))),
                   ],
                 ),
-                Expanded(
-                    child:
-                        Container(color: AppColors.theme["secondaryBgColor"]))
+                Expanded(child: Container(color: AppColors.theme["secondaryBgColor"]))
               ],
             ),
             Container(
-                child: ListTile(
-              leading: CircleAvatar(
-                backgroundColor: AppColors.theme["primaryColor"],
-                child: Icon(
-                  Icons.calendar_month,
-                  color: AppColors.theme["secondaryColor"],
-                ),
-              ),
-              title: Text(
-                widget.csiEvent.eventName ?? "Event",
-                style: TextStyle(fontWeight: FontWeight.w800),
-              ),
-              subtitle: Text(
-                  "${MyDateUtil.formatMillisecondsToDateString(widget.csiEvent.startDate ?? "")} to ${MyDateUtil.formatMillisecondsToDateString(widget.csiEvent.endDate ?? "")}"),
-              trailing: ElevatedButton(
-                  child: Text(
-                    "Resigter",
-                    style: TextStyle(color: AppColors.theme["secondaryColor"]),
+              child: ListTile(
+                leading: CircleAvatar(
+                  backgroundColor: AppColors.theme["primaryColor"],
+                  child: Icon(
+                    Icons.calendar_month,
+                    color: AppColors.theme["secondaryColor"],
                   ),
-                  onPressed: () {
-                    HelperFunctions.launchURL(widget.csiEvent.registerUrl ?? "");
-                  },
-                  style: ButtonStyle(
-                    backgroundColor: MaterialStateProperty.all(
-                        AppColors.theme["primaryColor"]),
-                  )),
-            ))
+                ),
+                title: Text(
+                  widget.csiEvent.eventName ?? "Event",
+                  style: TextStyle(fontWeight: FontWeight.w800),
+                ),
+                subtitle: Text(
+                    "${MyDateUtil.formatMillisecondsToDateString(widget.csiEvent.startDate ?? "")} to ${MyDateUtil.formatMillisecondsToDateString(widget.csiEvent.endDate ?? "")}"),
+                trailing: ElevatedButton(
+                    child: Text(
+                      "Resigter",
+                      style: TextStyle(color: AppColors.theme["secondaryColor"]),
+                    ),
+                    onPressed: () {
+                      HelperFunctions.launchURL(widget.csiEvent.registerUrl ?? "");
+                    },
+                    style: ButtonStyle(
+                      backgroundColor: MaterialStateProperty.all(AppColors.theme["primaryColor"]),
+                    )),
+              ),
+            ),
           ],
         ),
       ),
