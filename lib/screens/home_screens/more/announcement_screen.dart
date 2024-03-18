@@ -1,10 +1,12 @@
+import 'package:csi_app/models/user_model/AppUser.dart';
+import 'package:csi_app/providers/CurrentUser.dart';
 import 'package:csi_app/utils/colors.dart';
-import 'package:csi_app/utils/widgets/buttons/common_button.dart';
+import 'package:csi_app/utils/helper_functions/function.dart';
 import 'package:flutter/material.dart';
-import 'package:googleapis/admob/v1.dart';
-import 'package:googleapis/servicecontrol/v2.dart';
+import 'package:provider/provider.dart';
 
-import '../../../utils/widgets/buttons/auth_button.dart';
+import '../../../apis/notification_apis/notifications_api.dart';
+import '../../../models/notification_model/Announcement.dart';
 
 class AnnouncementScreen extends StatefulWidget {
   const AnnouncementScreen({super.key});
@@ -38,7 +40,8 @@ class _AnnouncementScreenState extends State<AnnouncementScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
+    return Consumer<AppUserProvider>(builder: (context,appUserProvider,child){
+      return MaterialApp(
       debugShowCheckedModeBanner: false,
       home: Scaffold(
         backgroundColor: AppColors.theme['backgroundColor'],
@@ -63,35 +66,57 @@ class _AnnouncementScreenState extends State<AnnouncementScreen> {
           actions: [
             Padding(
               padding: EdgeInsets.symmetric(horizontal: !_isLoading ? 7.0 : 20),
-              child: AnimatedContainer(
-                duration: Duration(milliseconds: 500),
-                curve: Curves.easeInOut,
-                height: 40,
-                width: !_isLoading ? 100 : 70,
-                child: !_isLoading
-                    ? Center(
-                        child: Text(
+              //todo add inkwell and store description and userId
+              child: InkWell(
+                onTap: ()async{
+                  setState(() {
+                    _isLoading = true;
+                  });
+                  Announcement announcement  = Announcement(
+                    message: _textController.text,
+                    fromUserId: appUserProvider.user?.userID,
+                    toUserId: "ALL",
+                    time: DateTime.now().millisecondsSinceEpoch.toString(),
+                    fromUserName: appUserProvider.user?.name
+                  );
+                  await NotificationApi.sendMassNotificationToAllUsers(_textController.text) ;
+                  await NotificationApi.storeNotification(announcement,false) ;
+                  setState(() {
+                    _isLoading = false;
+                  });
+                  _textController.text = "";
+                  HelperFunctions.showToast("Message sent") ;
+                },
+                child: AnimatedContainer(
+                  duration: Duration(milliseconds: 500),
+                  curve: Curves.easeInOut,
+                  height: 40,
+                  width: !_isLoading ? 100 : 70,
+                  child: !_isLoading
+                      ? Center(
+                      child: Text(
                         "Send",
                         style: TextStyle(
                           color: isButtonEnabled
                               ? AppColors.theme['secondaryColor']
                               : AppColors.theme['tertiaryColor']
-                                  .withOpacity(0.5),
+                              .withOpacity(0.5),
                         ),
                       ))
-                    : Center(
-                        child: Container(
-                            height: 25,
-                            width: 25,
-                            child: CircularProgressIndicator(
-                              strokeWidth: 2.6,
-                              color: AppColors.theme['primaryColor'],
-                            ))),
-                decoration: BoxDecoration(
-                  color: isButtonEnabled
-                      ? AppColors.theme['primaryColor']
-                      : AppColors.theme['disableButtonColor'],
-                  borderRadius: BorderRadius.circular(20),
+                      : Center(
+                      child: Container(
+                          height: 25,
+                          width: 25,
+                          child: CircularProgressIndicator(
+                            strokeWidth: 2.6,
+                            color: AppColors.theme['secondaryColor'],
+                          ))),
+                  decoration: BoxDecoration(
+                    color: isButtonEnabled
+                        ? AppColors.theme['primaryColor']
+                        : AppColors.theme['disableButtonColor'],
+                    borderRadius: BorderRadius.circular(20),
+                  ),
                 ),
               ),
             ),
@@ -126,6 +151,6 @@ class _AnnouncementScreenState extends State<AnnouncementScreen> {
           ),
         ),
       ),
-    );
+    );}) ;
   }
 }

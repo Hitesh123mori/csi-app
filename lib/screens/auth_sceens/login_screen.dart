@@ -10,6 +10,7 @@ import 'package:csi_app/utils/colors.dart';
 import 'package:csi_app/utils/widgets/buttons/auth_button.dart';
 import 'package:csi_app/utils/widgets/text_feilds/auth_text_feild.dart';
 
+import 'dart:developer';
 class LoginScreen extends StatefulWidget {
   const LoginScreen({Key? key}) : super(key: key);
 
@@ -195,7 +196,7 @@ class _LoginScreenState extends State<LoginScreen> {
                                     if (_formKey.currentState!.validate()) {
                                       String res = await FirebaseAuth.signIn(
                                           _emailController.text, _passController.text);
-                                      print("res-logIN: $res");
+                                      log("res-logIN: $res");
                                       HelperFunctions.showToast(res);
                                       if (res == 'Welcome! to CSI') {
                                         await appUserProvider.initUser();
@@ -233,7 +234,7 @@ class _LoginScreenState extends State<LoginScreen> {
                                 //       await FirebaseAuth.signIn(
                                 //           _emailController.text,
                                 //           _passController.text);
-                                //       print("res-logIN: $res");
+                                //       log("res-logIN: $res");
                                 //       if (res == 'Logged In') {
                                 //         await appUserProvider.initUser();
                                 //         Navigator.pushReplacement(

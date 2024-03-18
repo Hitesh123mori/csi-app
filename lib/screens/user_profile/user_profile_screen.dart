@@ -1,4 +1,6 @@
-import 'package:csi_app/apis/CompetitiveProgrammingPlatformAPIs/CodeForcesAPIs/GeneralAPIs.dart';
+import 'dart:developer';
+
+import 'package:csi_app/apis/CompetitiveProgrammingPlatformAPIs/CodeForcesAPIs/CFGeneralAPIs.dart';
 import 'package:csi_app/models/user_model/post_creator.dart';
 import 'package:csi_app/providers/CurrentUser.dart';
 import 'package:csi_app/screens/auth_sceens/login_screen.dart';
@@ -31,7 +33,7 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
     return Consumer<AppUserProvider>(
         builder: (context, appUserProvider, child) {
       // appUserProvider.initUser();
-      print("#user ${appUserProvider.user?.cfId}");
+      log("#user ${appUserProvider.user?.cfId}");
       return MaterialApp(
           debugShowCheckedModeBanner: false,
           home: Scaffold(
@@ -126,9 +128,7 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
                             height: mq.height * 0.8,
                             child: TabBarView(
                               children: [
-                                CodeforcesView(
-                                  appUserProvider: appUserProvider,
-                                ),
+                                CodeforcesView(),
                                 CsiAchievements(),
                               ],
                             ),

@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:csi_app/apis/FirebaseAPIs.dart';
 import 'package:csi_app/models/user_model/AppUser.dart';
@@ -28,8 +30,9 @@ class UserProfile {
         isSuperuser: false,
         notificationToken: "",
         year: year,
+        createdAt: DateTime.now().millisecondsSinceEpoch.toString()
       );
-      print("#UP: ${appUser.toJson().toString()}");
+      log("#UP: ${appUser.toJson().toString()}");
       return await _collectionRef.doc(user.uid)
           .set(appUser.toJson())
           .then((value) => 'Registered')
@@ -49,5 +52,16 @@ class UserProfile {
     return _collectionRef.snapshots();
    }
 
+  static Future<bool> updateUserProfile(String? userId, Map<String, dynamic> fields) async {
+    return await _collectionRef.doc("$userId").update(fields)
+        .then((value) {
+          log("#updated");
+          return true;
+        })
+        .onError((error, stackTrace) {
+          log("#update-e: $error, $stackTrace");
+          return false;
+        });
+  }
 }
 

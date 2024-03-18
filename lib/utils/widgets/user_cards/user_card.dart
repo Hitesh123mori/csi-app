@@ -1,17 +1,23 @@
+import 'package:csi_app/apis/FireStoreAPIs/UserControl.dart';
 import 'package:csi_app/models/user_model/AppUser.dart';
 import 'package:csi_app/utils/colors.dart';
 import 'package:csi_app/utils/helper_functions/date_format.dart';
 import 'package:csi_app/utils/helper_functions/function.dart';
 import 'package:flutter/material.dart';
-import 'package:googleapis/admob/v1.dart';
+import '../../../apis/notification_apis/notifications_api.dart';
 
 class UserCard extends StatelessWidget {
+
   final AppUser appUser ;
-  const UserCard({Key? key, required this.appUser});
+  final AppUser currentUser ;
+  const UserCard({Key? key, required this.appUser, required this.currentUser});
 
   @override
   Widget build(BuildContext context) {
     return InkWell(
+      onTap: ()async{
+        await NotificationApi.sendMassNotificationToAllUsers("Hello Everyone");
+      },
       borderRadius: BorderRadius.circular(10),
       splashColor: AppColors.theme['backgroundColor'],
       onLongPress: () {
@@ -78,7 +84,7 @@ class UserCard extends StatelessWidget {
             ),
             CircleAvatar(
               radius: 60,
-              child:Text(HelperFunctions.getInitials("Hitesh"), style: TextStyle(
+              child:Text(HelperFunctions.getInitials(appUser.name ?? "A"), style: TextStyle(
                   color: AppColors.theme['secondaryColor'],
                   fontWeight: FontWeight.bold,fontSize: 40)),
               backgroundColor: AppColors.theme['primaryColor'],
@@ -88,7 +94,7 @@ class UserCard extends StatelessWidget {
             ),
             Center(
               child: Text(
-                "Hitesh Mori",
+                "${appUser.name}",
                 style: TextStyle(
                     color: AppColors.theme['tertiaryColors'],
                     fontWeight: FontWeight.bold,fontSize: 25),
@@ -106,10 +112,19 @@ class UserCard extends StatelessWidget {
                 ),
                 trailing: Material(
                   borderRadius: BorderRadius.circular(
-                      10), // Adjust border radius as needed
-                  color: Colors.blue, // Change background color
+                      10),
+                  color: Colors.blue,
                   child: InkWell(
-                    onTap: () {},
+                    onTap: () async {
+                        bool succ = await UserControl.makeSuperuser(appUser.userID, currentUser.userID);
+                        if(succ){
+                          HelperFunctions.showToast("${appUser.name} has been promoted to superuser");
+                        }
+                        else{
+                          HelperFunctions.showToast("Unable to promote at the moment");
+                        }
+                        Navigator.pop(context);
+                      },
                     child: Container(
                       decoration: BoxDecoration(
                           color: AppColors.theme['primaryColor'],
@@ -138,7 +153,16 @@ class UserCard extends StatelessWidget {
                     BorderRadius.circular(10), // Adjust border radius as needed
                 color: Colors.blue, // Change background color
                 child: InkWell(
-                  onTap: () {},
+                  onTap: () async {
+                    bool succ = await UserControl.makeAdmin(appUser.userID);
+                    if(succ){
+                      HelperFunctions.showToast("${appUser.name} has been promoted to admin");
+                    }
+                    else{
+                      HelperFunctions.showToast("Unable to promote at the moment");
+                    }
+                    Navigator.pop(context);
+                  },
                   child: Container(
                     decoration: BoxDecoration(
                         color: AppColors.theme['primaryColor'],

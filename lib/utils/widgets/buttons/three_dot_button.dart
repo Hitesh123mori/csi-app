@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:flutter/material.dart';
 
 import '../../colors.dart';
@@ -11,8 +13,8 @@ class ThreeDotButton extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return PopupMenuButton<String>(
-      color: AppColors.theme["secondaryBgColor"],
-      surfaceTintColor: AppColors.theme["secondaryBgColor"],
+      color: AppColors.theme["secondaryColor"],
+      surfaceTintColor: AppColors.theme["secondaryColor"],
       itemBuilder: (BuildContext context) => options.map((option) {
         return PopupMenuItem<String>(
           value: option.toLowerCase(),
@@ -22,7 +24,7 @@ class ThreeDotButton extends StatelessWidget {
       onSelected: (String value) {
         // Handle option selection by calling the provided callback
         onOptionSelected(value);
-        print("object");
+        log("object");
       },
       icon: Icon(Icons.more_vert),
     );

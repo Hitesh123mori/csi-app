@@ -1,14 +1,17 @@
+import 'dart:developer';
+
 import 'package:csi_app/apis/googleAIPs/drive/DriveApi.dart';
 import 'package:csi_app/side_transition_effects/right_left.dart';
 import 'package:csi_app/utils/shimmer_effects/post_screen_shimmer_effect.dart';
+import 'package:csi_app/utils/widgets/ProfilePhoto.dart';
 import 'package:csi_app/utils/widgets/buttons/three_dot_button.dart';
 import 'package:flutter/material.dart';
 import 'package:carousel_slider/carousel_slider.dart';
+import 'package:http/http.dart';
 import 'package:provider/provider.dart';
 import 'package:flutter_polls/flutter_polls.dart';
 import 'package:like_button/like_button.dart';
 import 'package:syncfusion_flutter_pdfviewer/pdfviewer.dart';
-
 
 import 'package:csi_app/apis/FireStoreAPIs/PostUserProfile.dart';
 import 'package:csi_app/apis/FirebaseDatabaseAPIs/PostAPI.dart';
@@ -41,6 +44,7 @@ class _PostCardState extends State<PostCard> {
   final CarouselController _controller = CarouselController();
   final GlobalKey<SfPdfViewerState> _pdfViewerKey = GlobalKey();
   bool isFirst = true;
+  bool _isSuccLike = false;
 
   @override
   Widget build(BuildContext context) {
@@ -49,9 +53,8 @@ class _PostCardState extends State<PostCard> {
       builder: (context, postProvider, appUserProvider, child) {
         return Padding(
           padding: EdgeInsets.all(5),
-          child: Material(
-            elevation: 0.2,
-            borderRadius: BorderRadius.circular(4),
+          child: Card(
+            elevation: 1,
             child: Container(
               decoration: BoxDecoration(
                 borderRadius: BorderRadius.circular(4),
@@ -74,11 +77,9 @@ class _PostCardState extends State<PostCard> {
                         _buildReactionSection(appUserProvider, postProvider),
                       ],
                     );
-                  }
-                  else if(snapshot.hasError){
+                  } else if (snapshot.hasError) {
                     return _buildErrorCard(context);
-                  }
-                  else {
+                  } else {
                     return PostShimmerEffect();
                   }
                 },
@@ -113,76 +114,67 @@ class _PostCardState extends State<PostCard> {
   }
 
   Widget _buildPostHeader(BuildContext context, PostCreator postCreator, String appUserId, PostProvider postProvider) {
-    return Card(
-      elevation: 0,
-      surfaceTintColor: AppColors.theme['secondaryColor'],
-      color: AppColors.theme['secondaryColor'],
-      child: ListTile(
-        isThreeLine: true,
-        title: Text(
-          "${postCreator.name}",
-          style: TextStyle(fontWeight: FontWeight.bold),
-        ),
-        subtitle: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Text(
-              "${postCreator.about ?? ""}",
-              style: TextStyle(color: AppColors.theme['tertiaryColor']),
-            ),
-            Text(
-              "${MyDateUtil.getMessageTime(context: context, time: widget.post.createTime ?? "0")}",
-              style: TextStyle(color: AppColors.theme['tertiaryColor'], fontSize: 11),
-            )
-          ],
-        ),
-        leading: CircleAvatar(
-          child: Text("${postCreator.name?[0].toUpperCase()}"),
-          radius: 25,
-          backgroundColor: AppColors.theme["secondaryBgColor"],
-        ),
-        contentPadding: EdgeInsets.only(left: 1),
-        trailing: postCreator.userID == appUserId
-            ? ThreeDotButton(
-          options: ["Edit", "Delete"],
-          onOptionSelected: (String option) async {
-            print("#selOpt $option");
-
-            switch (option) {
-              case "edit":
-                print("Editing");
-                postProvider.post = widget.post;
-                postProvider.forEdit = true;
-
-                postProvider.notify();
-                Navigator.push(context, RightToLeft(AddPostScreen()));
-                break;
-              case "delete":
-                print("Deleting");
-
-                if(widget.post.isThereImage ?? false)
-                  StorageAPI.deletePostImg(widget.post.imageModelList);
-
-                if(widget.post.pdfLink != "" && widget.post.pdfLink != null)
-                  await DriveAPI.deleteFileFromDrive(widget.post.pdfLink);
-
-                final res = await PostAPI.deletePost(widget.post.postId ?? "");
-
-                if(res.containsKey("succ")){
-                  HelperFunctions.showToast(res["succ"] ?? "");
-                }
-                else{
-                  HelperFunctions.showToast("Error deleting post");
-                  print("#del-post-error ${res["Error deleting post"]}");
-                }
-
-                break;
-            }
-          },
-        )
-            :Container(),
-            // : ThreeDotButton(options: ["Report"], onOptionSelected: (String option) {print("#optSel $option");}),
+    return ListTile(
+      isThreeLine: true,
+      title: Text(
+        "${postCreator.name}",
+        style: TextStyle(fontWeight: FontWeight.bold),
       ),
+      subtitle: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Text(
+            "${postCreator.about ?? ""}",
+            style: TextStyle(color: AppColors.theme['tertiaryColor']),
+          ),
+          Text(
+            "${MyDateUtil.getMessageTime(context: context, time: widget.post.createTime ?? "0")}",
+            style: TextStyle(color: AppColors.theme['tertiaryColor'], fontSize: 11),
+          )
+        ],
+      ),
+      leading: Padding(
+        padding: const EdgeInsets.only(left: 8.0),
+        child:  ProfilePhoto(url: postCreator.profilePhotoUrl, name: postCreator.name, radius: 20,),
+      ),
+      contentPadding: EdgeInsets.only(left: 1),
+      trailing: postCreator.userID == appUserId
+          ? ThreeDotButton(
+              options: ["Edit", "Delete"],
+              onOptionSelected: (String option) async {
+                log("#selOpt $option");
+
+                switch (option) {
+                  case "edit":
+                    log("Editing");
+                    postProvider.post = widget.post;
+                    postProvider.forEdit = true;
+
+                    postProvider.notify();
+                    Navigator.push(context, RightToLeft(AddPostScreen()));
+                    break;
+                  case "delete":
+                    log("Deleting");
+
+                    if (widget.post.isThereImage ?? false) StorageAPI.deletePostImg(widget.post.imageModelList);
+
+                    if (widget.post.pdfLink != "" && widget.post.pdfLink != null) await DriveAPI.deleteFileFromDrive(widget.post.pdfLink);
+
+                    final res = await PostAPI.deletePost(widget.post.postId ?? "");
+
+                    if (res.containsKey("succ")) {
+                      HelperFunctions.showToast(res["succ"] ?? "");
+                    } else {
+                      HelperFunctions.showToast("Error deleting post");
+                      log("#del-post-error ${res["Error deleting post"]}");
+                    }
+
+                    break;
+                }
+              },
+            )
+          : Container(width: 1, height: 1,),
+      // : ThreeDotButton(options: ["Report"], onOptionSelected: (String option) {log("#optSel $option");}),
     );
   }
 
@@ -192,13 +184,13 @@ class _PostCardState extends State<PostCard> {
       children: [
         showMore
             ? Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 8.0),
-          child: HelperFunctions.buildContent(widget.post.description ?? ""),
-        )
+                padding: const EdgeInsets.symmetric(horizontal: 8.0),
+                child: HelperFunctions.buildContent(widget.post.description ?? ""),
+              )
             : Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 8.0),
-          child: HelperFunctions.buildContent(HelperFunctions.truncateDescription(widget.post.description ?? "")),
-        ),
+                padding: const EdgeInsets.symmetric(horizontal: 8.0),
+                child: HelperFunctions.buildContent(HelperFunctions.truncateDescription(widget.post.description ?? "")),
+              ),
         if (widget.post.description!.length > 100)
           TextButton(
             onPressed: () {
@@ -250,7 +242,7 @@ class _PostCardState extends State<PostCard> {
                 stream: StorageAPI.getImage(widget.post.postId).asStream(),
                 builder: (context, snap) {
                   if (snap.hasData) {
-                    print("#hd: ${snap.data}");
+                    log("#hd: ${snap.data}");
                     widget.post.imageModelList = snap.data;
                     if (widget.post.imageModelList?.isEmpty ?? true) return PostShimmerEffect();
                     return Column(
@@ -258,12 +250,12 @@ class _PostCardState extends State<PostCard> {
                         CarouselSlider.builder(
                           itemCount: widget.post.imageModelList?.length,
                           itemBuilder: (BuildContext context, int itemIndex, int pageViewIndex) {
-                            print("#imgUrl-home-screen: ${widget.post.imageModelList?[itemIndex]}");
+                            log("#imgUrl-home-screen: ${widget.post.imageModelList?[itemIndex]}");
                             return ImageFrame(imageModel: widget.post.imageModelList?[itemIndex] ?? ImageModel(), provider: null);
                           },
                           options: CarouselOptions(
                             scrollDirection: Axis.horizontal,
-                            autoPlay: widget.post.images?.length != 1,
+                            autoPlay: widget.post.imageModelList?.length != 1,
                             enlargeCenterPage: true,
                             viewportFraction: 1,
                             aspectRatio: 1.0,
@@ -288,8 +280,9 @@ class _PostCardState extends State<PostCard> {
                                 decoration: BoxDecoration(
                                   shape: BoxShape.circle,
                                   color: (Theme.of(context).brightness == Brightness.dark
-                                      ? AppColors.theme['secondaryColor']
-                                      : AppColors.theme['primaryColor']).withOpacity(_current == entry.key ? 0.9 : 0.4),
+                                          ? AppColors.theme['secondaryColor']
+                                          : AppColors.theme['primaryColor'])
+                                      .withOpacity(_current == entry.key ? 0.9 : 0.4),
                                 ),
                               ),
                             );
@@ -400,7 +393,7 @@ class _PostCardState extends State<PostCard> {
           ),
           pollOptions: List<PollOption>.from(
             widget.post.poll!.options!.map(
-                  (option) {
+              (option) {
                 var a = PollOption(
                   id: option.optionId,
                   title: Text(
@@ -428,7 +421,9 @@ class _PostCardState extends State<PostCard> {
             isLiked: widget.post.like?[appUserProvider.user?.userID] ?? false,
             likeCount: widget.post.like?.length ?? 0,
             likeBuilder: (bool isLiked) {
-              return isLiked ? Icon(Icons.thumb_up, color: AppColors.theme["primaryColor"]) : Icon(Icons.thumb_up_alt_outlined, color: AppColors.theme["primaryColor"]);
+              return isLiked
+                  ? Icon(Icons.thumb_up, color: AppColors.theme["primaryColor"])
+                  : Icon(Icons.thumb_up_alt_outlined, color: AppColors.theme["primaryColor"]);
             },
             bubblesColor: BubblesColor(
               dotPrimaryColor: AppColors.theme["primaryColor"],
@@ -436,14 +431,20 @@ class _PostCardState extends State<PostCard> {
             ),
             circleColor: CircleColor(start: AppColors.theme["primaryColor"], end: AppColors.theme["secondaryBgColor"]),
             onTap: (bool isLiked) async {
-              bool successful = await PostAPI.onLikeButtonTap(widget.post.postId, appUserProvider.user?.userID ?? "noUser", isLiked);
-              if (successful) {
+              PostAPI.onPostLikeButtonTap(widget.post.postId, appUserProvider.user?.userID ?? "noUser", isLiked).then((value) {
+                _isSuccLike = true;
                 if (isLiked)
                   widget.post.like?.remove(appUserProvider.user?.userID ?? "noUser");
-                else
+                else {
+                  if (widget.post.like == null) widget.post.like = {};
                   widget.post.like?[appUserProvider.user?.userID ?? "noUser"] = true;
-              }
-              return successful ? !isLiked : isLiked;
+                }
+                setState(() {});
+              }).onError((error, stackTrace) {
+                _isSuccLike = false;
+              });
+
+              return _isSuccLike ? !isLiked : isLiked;
             },
           ),
         ),
@@ -475,6 +476,4 @@ class _PostCardState extends State<PostCard> {
       ],
     );
   }
-
 }
-

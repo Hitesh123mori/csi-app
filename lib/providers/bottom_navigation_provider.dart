@@ -4,7 +4,7 @@ class BottomNavigationProvider extends ChangeNotifier {
   Map<String, bool> homeScreenOptions = {
     "Home": true,
     "Upcoming": false,
-    "Calendar": false,
+    "Problems": false,
     "More Options" :false,
   };
 

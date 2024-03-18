@@ -1,6 +1,9 @@
 import 'dart:convert';
+import 'dart:developer';
 import 'package:csi_app/apis/CompetitiveProgrammingPlatformAPIs/CodeForcesAPIs/CodeForcesURLs.dart';
 import 'package:http/http.dart' as http;
+
+import '../../../models/ap_models/cf_models/contestants_model.dart';
 
 class CFGeneralAPIs{
 
@@ -21,7 +24,7 @@ class CFGeneralAPIs{
     final Set<String> done = {};
 
     for (final submission in acSubmissions) {
-      print("p : ${submission['problem']}");
+      log("p : ${submission['problem']}");
       if(submission['problem']['rating'] == null) continue;
       final problemRating = submission['problem']['rating'] as int;
       final problemName = submission['problem']['name'] as String;
@@ -52,7 +55,7 @@ class CFGeneralAPIs{
       count+= resMap[rating]!.length;
     }
 
-    print("#c : ${count}");
+    log("#c : ${count}");
     return {'problems': resMap, 'ratingCount': ratingCountMap, "totalCount": count};
   }
 
@@ -80,4 +83,27 @@ class CFGeneralAPIs{
     }
   }
 
+
+  static Future<List<Contestant>?> getContestStanding(int contestId) async {
+    String uri = await CodeForcesURLs.contestStanding(id: contestId);
+
+    http.Response res = await http.get(Uri.parse(uri));
+    log("res-status: ${res.statusCode}");
+    log("res: ${res.body}");
+
+    if (res.statusCode == 200) {
+      final Map<String, dynamic> data = json.decode(res.body);
+      final List<dynamic> rows = data['result']['rows'];
+
+      return List.generate(
+        rows.length,
+            (index) => Contestant.fromJson(rows[index]),
+      );
+    } else {
+      log("#Error-cf: ${res.statusCode}");
+      return null;
+    }
+
+    return null;
+  }
 }

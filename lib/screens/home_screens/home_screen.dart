@@ -1,16 +1,21 @@
+import 'dart:developer';
+
 import 'package:csi_app/providers/CurrentUser.dart';
 import 'package:csi_app/screens/home_screens/more/more.dart';
+import 'package:csi_app/screens/user_profile/codeforces_view.dart';
 import 'package:csi_app/utils/colors.dart';
+import 'package:csi_app/utils/widgets/ProfilePhoto.dart';
 import 'package:flutter/material.dart';
 import 'package:google_nav_bar/google_nav_bar.dart';
 import 'package:provider/provider.dart';
-import '../../apis/CompetitiveProgrammingPlatformAPIs/CodeForcesAPIs/GeneralAPIs.dart';
+import '../../apis/CompetitiveProgrammingPlatformAPIs/CodeForcesAPIs/CFGeneralAPIs.dart';
+import '../../apis/notification_apis/notifications_api.dart';
 import '../../main.dart';
 import '../../providers/bottom_navigation_provider.dart';
 import '../../side_transition_effects/left_right.dart';
 import '../../side_transition_effects/right_left.dart';
 import '../user_profile/user_profile_screen.dart';
-import 'calendar.dart';
+import 'event_screens/codeforrces_problem_set.dart';
 import 'event_screens/upcoming_events.dart';
 import 'notifications.dart';
 import 'posting/posts_screen.dart';
@@ -56,7 +61,7 @@ class _HomeScreenState extends State<HomeScreen> {
         initUser(appUserProvider);
         _isFirst = false;
       }
-      print("#user :  ${appUserProvider.user?.name}");
+      log("#user :  ${appUserProvider.user?.name}");
       return Scaffold(
         appBar: AppBar(
           surfaceTintColor: AppColors.theme['secondaryColor'],
@@ -103,19 +108,12 @@ class _HomeScreenState extends State<HomeScreen> {
             padding: const EdgeInsets.only(left: 8.0),
             child: InkWell(
               onTap: () async{
-                print("#app ${appUserProvider.user?.name}");
+                log("#app ${appUserProvider.user?.name}");
                 if (appUserProvider.user != null) {
                   Navigator.push(context, LeftToRight(UserProfileScreen()));
                 }
               },
-              child: CircleAvatar(
-                radius: 10,
-                backgroundColor: AppColors.theme['primaryColor'],
-                child: Text(
-                  appUserProvider.user?.name?[0].toUpperCase() ?? '',
-                  style: TextStyle(fontWeight: FontWeight.bold, fontSize: 20,color: AppColors.theme['secondaryColor']),
-                ),
-              ),
+              child: ProfilePhoto(url: appUserProvider.user?.profilePhotoUrl, name: appUserProvider.user?.name, radius: 40,)
             ),
           ),
           actions: [
@@ -128,6 +126,7 @@ class _HomeScreenState extends State<HomeScreen> {
                     color: AppColors.theme['tertiaryColor'],
                   ),
                   onPressed: () {
+                    // NotificationApi.getNotification(appUserProvider.user?.userID ?? "");
                     Navigator.push(context, RightToLeft(Notifications()));
                   },
                 ))
@@ -158,8 +157,8 @@ class _HomeScreenState extends State<HomeScreen> {
                           });
                         if (index == 2)
                           setState(() {
-                            bottomNavProvider.updateCurrent('Calendar');
-                            screenname = AcadCalendar();
+                            bottomNavProvider.updateCurrent('Problems');
+                            screenname = CodefocesProblems();
                           });
                         if (index == 3)
                           setState(() {
@@ -180,16 +179,16 @@ class _HomeScreenState extends State<HomeScreen> {
                           textColor: AppColors.theme['secondaryColor'],
                         ),
                         GButton(
-                          icon: Icons.chat,
+                          icon: Icons.event,
                           iconActiveColor: AppColors.theme['secondaryColor'],
                           text: "Upcoming",
                           iconColor: AppColors.theme['primaryColor'],
                           textColor: AppColors.theme['secondaryColor'],
                         ),
                         GButton(
-                          icon: Icons.event_available_sharp,
+                          icon: Icons.code,
                           iconActiveColor: AppColors.theme['secondaryColor'],
-                          text: "Calendar",
+                          text: "Problems",
                           iconColor: AppColors.theme['primaryColor'],
                           textColor: AppColors.theme['secondaryColor'],
                         ),

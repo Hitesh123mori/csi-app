@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:csi_app/models/post_model/post.dart';
 import 'package:csi_app/providers/post_provider.dart';
 import 'package:csi_app/screens/home_screens/posting/add_post_screen.dart';
@@ -100,10 +102,10 @@ class _PollScreenState extends State<PollScreen> {
                           postProvider.post?.poll?.question = _questionController.text;
                           postProvider.post?.poll?.options = [];
 
-                          print('Question: ${_questionController.text}');
+                          log('Question: ${_questionController.text}');
                           for (int i = 0; i < _optionControllers.length; i++) {
                             postProvider.post?.poll?.options?.add(Options(title: _optionControllers[i].text));
-                            print('Option ${i + 1}: ${_optionControllers[i].text}');
+                            log('Option ${i + 1}: ${_optionControllers[i].text}');
                           }
 
                           Navigator.pushReplacement(context, LeftToRight(AddPostScreen()));

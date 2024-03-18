@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:csi_app/models/user_model/AppUser.dart';
 import 'package:csi_app/providers/CurrentUser.dart';
@@ -35,7 +37,7 @@ class _AllUsersState extends State<AllUsers> {
               style: TextStyle(
                   color: AppColors.theme['tertiaryColor'],
                   fontWeight: FontWeight.bold,
-                  fontSize: 18)),
+                  fontSize: 20)),
           leading: IconButton(
               onPressed: () {
                 Navigator.pop(context);
@@ -96,14 +98,16 @@ class _AllUsersState extends State<AllUsers> {
                         shrinkWrap: true,
                         itemCount: users.length,
                         itemBuilder: (context, index) {
+                          if(users[index].userID == appUserProvider.user?.userID ) return Container();
                           return UserCard(
                             appUser: users[index],
+                            currentUser: appUserProvider.user!,
                           );
                         },
                       );
                     }
                   } else if (snapshot.hasError) {
-                    print("#error-postScreen: ${snapshot.error.toString()}");
+                    log("#error-postScreen: ${snapshot.error.toString()}");
                     return Text("${snapshot.error.toString()}");
                   } else {
                     return UsersCardShimmerEffect();

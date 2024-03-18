@@ -8,6 +8,7 @@ import 'package:csi_app/utils/colors.dart';
 import 'package:csi_app/utils/widgets/buttons/auth_button.dart';
 import 'package:csi_app/utils/widgets/text_feilds/auth_text_feild.dart';
 
+import 'dart:developer';
 class RegisterScreen extends StatefulWidget {
   String email;
   String password;
@@ -258,7 +259,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                                         // for signup
                                         final res = await FirebaseAuth.signUp(
                                             widget.email.trim(), widget.password);
-                                        print("#res-signup: $res, ${widget.email}");
+                                        log("#res-signup: $res, ${widget.email}");
 
                                         // for database
                                         final res2 =
@@ -267,7 +268,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                                                 _yearController.text,
                                                 _codeforcesController.text,
                                                 _aboutController.text);
-                                        print("#res2-signup: $res2");
+                                        log("#res2-signup: $res2");
 
                                         if (res == 'Welcome! to CSI' &&
                                             res2 == 'Registered' &&

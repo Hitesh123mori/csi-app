@@ -5,6 +5,7 @@ import 'package:mailer/mailer.dart';
 import 'package:mailer/smtp_server.dart';
 import 'package:otp/otp.dart';
 
+import 'dart:developer';
 
 class FirebaseAuth {
   static var _otp;
@@ -14,7 +15,7 @@ class FirebaseAuth {
         'HTYU2SNIDNVKS32N', DateTime.now().millisecondsSinceEpoch,
         algorithm: Algorithm.SHA1, interval: 10);
     _otp = otp1;
-    print("#opt: $otp1");
+    log("#opt: $otp1");
 
     try{
       String username = 'niraj.kc.128@gmail.com';
@@ -32,12 +33,12 @@ class FirebaseAuth {
 
       try {
         final sendReport = await send(message, smtpServer);
-        print('Message sent: ' + sendReport.toString());
+        log('Message sent: ' + sendReport.toString());
 
       } on MailerException catch (e) {
-        print('Message not sent.');
+        log('Message not sent.');
         for (var p in e.problems) {
-          print('Problem: ${p.code}: ${p.msg}');
+          log('Problem: ${p.code}: ${p.msg}');
         }
 
         return "Error while sending OTP.";
@@ -51,7 +52,7 @@ class FirebaseAuth {
     }
 
     catch (e) {
-      print("#error: $e");
+      log("#error: $e");
       return "Unknown Error occurred";
     }
 
@@ -85,11 +86,11 @@ class FirebaseAuth {
       // else if (e.code == 'internal-error') return 'Something want wrong. Please try again later.';
 
       else {
-        print("#error-signUp: ${ e.code.toString()}");
+        log("#error-signUp: ${ e.code.toString()}");
         return 'Something want wrong. Please try again later.';
       }
     } catch (e) {
-        print("#error-signUp: ${ e.toString()}");
+        log("#error-signUp: ${ e.toString()}");
       return 'Something want wrong. Please try again later.';
     }
   }
