@@ -15,6 +15,7 @@ import 'package:csi_app/side_transition_effects/bottom_top.dart';
 import 'package:csi_app/side_transition_effects/right_left.dart';
 import 'package:csi_app/utils/colors.dart';
 import 'package:csi_app/utils/helper_functions/function.dart';
+import 'package:csi_app/utils/shimmer_effects/image_shimmer_effect.dart';
 import 'package:csi_app/utils/widgets/posting/image_frame.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_polls/flutter_polls.dart';
@@ -387,7 +388,7 @@ class _AddPostScreenState extends State<AddPostScreen> {
               ],
             );
           } else {
-            return CircularProgressIndicator(color: AppColors.theme['primaryColor']);
+            return ImageShimmerEffect();
           }
         },
       ),

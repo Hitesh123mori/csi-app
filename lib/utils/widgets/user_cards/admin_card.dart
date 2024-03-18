@@ -1,6 +1,8 @@
 import 'package:csi_app/apis/FireStoreAPIs/UserControl.dart';
 import 'package:csi_app/models/user_model/AppUser.dart';
 import 'package:flutter/material.dart';
+import '../../../apis/notification_apis/notifications_api.dart';
+import '../../../models/notification_model/Announcement.dart';
 import '../../colors.dart';
 import '../../helper_functions/function.dart';
 
@@ -85,6 +87,19 @@ class AdminCard extends StatelessWidget {
                       bool succ = await UserControl.makeSuperuser(appUser.userID, currentUser.userID);
                       if(succ){
                         HelperFunctions.showToast("${appUser.name} has been promoted to superuser");
+                        await NotificationApi.sendPushNotification(appUser, "You has been promoted to superuser", currentUser);
+
+                        String encodedMessage = HelperFunctions.stringToBase64("You has been promoted to superuser");
+
+                        Announcement announcement  = Announcement(
+                            message: encodedMessage,
+                            fromUserId: currentUser.userID,
+                            toUserId: appUser.userID,
+                            time: DateTime.now().millisecondsSinceEpoch.toString(),
+                            fromUserName: currentUser.name
+                        );
+
+                        await NotificationApi.storeNotification(announcement, true) ;
                       }
                       else{
                         HelperFunctions.showToast("Unable to promote at the moment");
@@ -123,6 +138,19 @@ class AdminCard extends StatelessWidget {
                     bool succ = await UserControl.removeAdmin(appUser.userID);
                     if(succ){
                       HelperFunctions.showToast("${appUser.name} has been removed from admin");
+                      await NotificationApi.sendPushNotification(appUser, "You has been removed from admin", currentUser);
+
+                      String encodedMessage = HelperFunctions.stringToBase64("You has been removed from admin");
+
+                      Announcement announcement  = Announcement(
+                          message: encodedMessage,
+                          fromUserId: currentUser.userID,
+                          toUserId: appUser.userID,
+                          time: DateTime.now().millisecondsSinceEpoch.toString(),
+                          fromUserName: currentUser.name
+                      );
+
+                      await NotificationApi.storeNotification(announcement, true) ;
                     }
                     else{
                       HelperFunctions.showToast("Unable to remove at the moment");

@@ -27,7 +27,6 @@ class _NotificationsState extends State<Notifications> {
           backgroundColor: AppColors.theme['backgroundColor'],
           appBar : AppBar(
             surfaceTintColor: Colors.white,
-            elevation: 0.3,
             shadowColor: AppColors.theme['primaryColor'],
             backgroundColor: AppColors.theme['secondaryColor'],
             centerTitle: true,
@@ -46,29 +45,28 @@ class _NotificationsState extends State<Notifications> {
                   fontSize: 18),
             ),
           ),
-          body:SingleChildScrollView(
-            physics: BouncingScrollPhysics(),
-            child: Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 5.0,vertical: 5),
-              child: StreamBuilder<List<Announcement>>(
-                stream: NotificationApi.getNotification(appUserProvider.user?.userID ?? "").asStream(),
-                builder: (context, snapshot){
-                  if(snapshot.hasData){
-                    List<Announcement>? announcements = snapshot.data;
-                    return Column(
+          body:Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 5.0,vertical: 5),
+            child: StreamBuilder<List<Announcement>>(
+              stream: NotificationApi.getNotification(appUserProvider.user?.userID ?? "").asStream(),
+              builder: (context, snapshot){
+                if(snapshot.hasData){
+                  List<Announcement>? announcements = snapshot.data;
+                  return SingleChildScrollView(
+                    child: Column(
                       children: announcements?.map((e) => NotificationCard(announcement: e,)).toList() ?? [Text("No Notification")],
-                    );
-                  }
-                  else if (snapshot.hasError){
-                    log("#error: ${snapshot.error}");
+                    ),
+                  );
+                }
+                else if (snapshot.hasError){
+                  log("#error: ${snapshot.error}");
 
-                    return Text("Error occurred while getting notification");
-                  }
+                  return Text("Error occurred while getting notification");
+                }
 
-                  return NotificationCardShimmerEffect();
+                return NotificationCardShimmerEffect();
 
-                },
-              ),
+              },
             ),
           )
       );

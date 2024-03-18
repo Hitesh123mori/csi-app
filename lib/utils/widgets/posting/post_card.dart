@@ -29,6 +29,7 @@ import 'package:csi_app/utils/helper_functions/function.dart';
 import 'package:csi_app/utils/widgets/posting/image_frame.dart';
 
 import '../../../screens/home_screens/posting/add_post_screen.dart';
+import '../../shimmer_effects/image_shimmer_effect.dart';
 
 class PostCard extends StatefulWidget {
   final Post post;
@@ -51,39 +52,36 @@ class _PostCardState extends State<PostCard> {
     final mq = MediaQuery.of(context).size;
     return Consumer2<PostProvider, AppUserProvider>(
       builder: (context, postProvider, appUserProvider, child) {
-        return Padding(
-          padding: EdgeInsets.all(5),
-          child: Card(
-            elevation: 1,
-            child: Container(
-              decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(4),
-                color: AppColors.theme['secondaryColor'],
-              ),
-              width: mq.width,
-              child: StreamBuilder(
-                stream: PostUserProfile.getPostCreator(widget.post.createBy ?? "").asStream(),
-                builder: (context, snapshot) {
-                  if (snapshot.hasData) {
-                    PostCreator postCreator = PostCreator.fromJson(snapshot.data);
-                    return Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        _buildPostHeader(context, postCreator, appUserProvider.user?.userID ?? "", postProvider),
-                        if (widget.post.description != null) _buildDescription(),
-                        if (widget.post.isThereImage) _buildImageSection(),
-                        if (widget.post.pdfLink != "") _buildPdfSection(),
-                        if (widget.post.poll != null) _buildPollSection(),
-                        _buildReactionSection(appUserProvider, postProvider),
-                      ],
-                    );
-                  } else if (snapshot.hasError) {
-                    return _buildErrorCard(context);
-                  } else {
-                    return PostShimmerEffect();
-                  }
-                },
-              ),
+        return Card(
+          elevation: 0.5,
+          child: Container(
+            decoration: BoxDecoration(
+              borderRadius: BorderRadius.circular(4),
+              color: AppColors.theme['secondaryColor'],
+            ),
+            width: mq.width,
+            child: StreamBuilder(
+              stream: PostUserProfile.getPostCreator(widget.post.createBy ?? "").asStream(),
+              builder: (context, snapshot) {
+                if (snapshot.hasData) {
+                  PostCreator postCreator = PostCreator.fromJson(snapshot.data);
+                  return Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      _buildPostHeader(context, postCreator, appUserProvider.user?.userID ?? "", postProvider),
+                      if (widget.post.description != null) _buildDescription(),
+                      if (widget.post.isThereImage) _buildImageSection(),
+                      if (widget.post.pdfLink != "") _buildPdfSection(),
+                      if (widget.post.poll != null) _buildPollSection(),
+                      _buildReactionSection(appUserProvider, postProvider),
+                    ],
+                  );
+                } else if (snapshot.hasError) {
+                  return _buildErrorCard(context);
+                } else {
+                  return PostShimmerEffect();
+                }
+              },
             ),
           ),
         );
@@ -244,7 +242,7 @@ class _PostCardState extends State<PostCard> {
                   if (snap.hasData) {
                     log("#hd: ${snap.data}");
                     widget.post.imageModelList = snap.data;
-                    if (widget.post.imageModelList?.isEmpty ?? true) return PostShimmerEffect();
+                    if (widget.post.imageModelList?.isEmpty ?? true) return ImageShimmerEffect();
                     return Column(
                       children: [
                         CarouselSlider.builder(
@@ -291,7 +289,7 @@ class _PostCardState extends State<PostCard> {
                       ],
                     );
                   } else {
-                    return CircularProgressIndicator(color: AppColors.theme['primaryColor']);
+                    return ImageShimmerEffect();
                   }
                 },
               ),

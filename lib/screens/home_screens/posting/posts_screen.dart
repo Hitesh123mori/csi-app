@@ -47,7 +47,7 @@ class _PostsScreenState extends State<PostsScreen> {
                   )
                 : null,
             body: Padding(
-                padding: const EdgeInsets.symmetric(vertical: 5),
+                padding: const EdgeInsets.symmetric(vertical: 1),
                 child: StreamBuilder(
                   stream: FirebaseAPIs.rtdbRef.child("post").onValue,
                   builder: (context, snap) {
@@ -72,7 +72,7 @@ class _PostsScreenState extends State<PostsScreen> {
                                   child: Text(
                                     "No Items",
                                     style: TextStyle(
-                                        color: AppColors.theme['disableButtonColor'],
+                                        color: AppColors.theme['tertiaryColor'].withOpacity(0.5),
                                         fontSize: 25),
                                   ),
                                 ),

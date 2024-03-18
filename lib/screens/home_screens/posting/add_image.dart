@@ -140,7 +140,7 @@ class _AddImageState extends State<AddImage> {
                       isNumber: false,
                       prefixicon: Icon(Icons.drive_file_rename_outline),
                       obsecuretext: false,
-                      focusNode: _textFieldFocusNode, // Assign FocusNode
+                      focusNode: _textFieldFocusNode,
                     ),
                     SizedBox(
                       height: 20,
@@ -152,38 +152,44 @@ class _AddImageState extends State<AddImage> {
                           enlargeCenterPage: true,
                           viewportFraction: 1,
                           aspectRatio: 1.0,
-                          height: MediaQuery.of(context).size.height*.4,
+                          height: 500,
                           enableInfiniteScroll: true,
                           autoPlayCurve: Curves.fastOutSlowIn,
                           autoPlayAnimationDuration: Duration(milliseconds: 800),
-
                         ),
                         items: _imageList!.map((image) {
                           return Builder(
                             builder: (BuildContext context) {
                               return Container(
-                                height: MediaQuery.of(context).size.height*.4,
+                                height:500,
                                 width: MediaQuery.of(context).size.width,
                                 margin: EdgeInsets.symmetric(horizontal: 5.0),
                                 decoration: BoxDecoration(
                                   color: AppColors.theme['backgroundColor'],
                                 ),
-                                child: Column(
-                                  children: [
-                                    IconButton(
-                                        onPressed: () {
-                                          _imageList?.remove(image);
-                                          setState(() {
-
-                                          });
-                                        },
-                                        icon: Icon(Icons.close)),
-                                    Image.file(
-                                      height: MediaQuery.of(context).size.height*.4,
-                                      File(image.path),
-                                      fit: BoxFit.scaleDown,
+                                child: Container(
+                                  child: SingleChildScrollView(
+                                    child: Column(
+                                      children: [
+                                        CircleAvatar(
+                                          backgroundColor:AppColors.theme['primaryColor'],
+                                          child: IconButton(
+                                              onPressed: () {
+                                                _imageList?.remove(image);
+                                                setState(() {
+                                                                              
+                                                });
+                                              },
+                                              icon: Icon(Icons.close,color: AppColors.theme['secondaryColor'],)),
+                                        ),
+                                        SizedBox(height: 3,),
+                                        Image.file(
+                                          File(image.path),
+                                          fit: BoxFit.scaleDown,
+                                        ),
+                                      ],
                                     ),
-                                  ],
+                                  ),
                                 ),
                               );
                             },
