@@ -91,7 +91,7 @@ class NotificationApi {
       var requestBody = jsonEncode({
         "registration_ids": allUserTokens,
         "notification": {
-          "title": "Mass Notification",
+          "title": "Announcement",
           "body": message,
         },
       });

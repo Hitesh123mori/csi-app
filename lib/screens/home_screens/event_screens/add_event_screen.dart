@@ -473,8 +473,10 @@ class _AddEventScreenState extends State<AddEventScreen> {
                         _isLoading = true;
                       });
 
+                      String encodedMessage = HelperFunctions.stringToBase64("${_nameController.text} Launch! Join us for an exciting competition. Stay updated and be part of the action!");
+
                       Announcement announcement  = Announcement(
-                        message: "${_nameController.text} Alert! Join us for an exciting competition. Stay updated and be part of the action!",
+                        message: encodedMessage,
                         fromUserId: appUserProvider.user?.userID,
                         toUserId: "ALL",
                         time: DateTime.now().millisecondsSinceEpoch.toString(),

@@ -2,6 +2,7 @@ import 'package:csi_app/models/notification_model/Announcement.dart';
 import 'package:csi_app/side_transition_effects/left_right.dart';
 import 'package:csi_app/utils/colors.dart';
 import 'package:csi_app/utils/helper_functions/date_format.dart';
+import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 
 import '../../helper_functions/function.dart';
@@ -100,7 +101,7 @@ class _ExpandNotificationScreenState extends State<ExpandNotificationScreen> {
                 padding: const EdgeInsets.all(8.0),
                 child: Column(
                   children:[
-                   HelperFunctions.buildContent(HelperFunctions.base64ToString(widget.announcement.message ?? ""))
+                   buildContent(HelperFunctions.base64ToString(widget.announcement.message ?? ""))
                   ]
                 ),
               ),
@@ -110,4 +111,43 @@ class _ExpandNotificationScreenState extends State<ExpandNotificationScreen> {
       ),
     );
   }
+
+  Widget buildContent(String content) {
+    List<InlineSpan> children = [];
+
+    RegExp regex = RegExp(r'https?://\S+');
+    Iterable<RegExpMatch> matches = regex.allMatches(content);
+
+    int currentIndex = 0;
+
+    for (RegExpMatch match in matches) {
+      String url = match.group(0)!;
+      int start = match.start;
+      int end = match.end;
+
+      children.add(TextSpan(text: content.substring(currentIndex, start)));
+
+      children.add(
+        TextSpan(
+          text: url,
+          style: TextStyle(color: Colors.blue, fontWeight: FontWeight.bold),
+          recognizer: TapGestureRecognizer()
+            ..onTap = () {
+              HelperFunctions.launchURL(url);
+            },
+        ),
+      );
+
+      currentIndex = end;
+    }
+
+    children.add(TextSpan(text: content.substring(currentIndex)));
+
+    return RichText(
+        text: TextSpan(
+          children: children,
+          style: TextStyle(color: AppColors.theme['tertiaryColor'], fontSize: 18,fontWeight: FontWeight.bold),
+        ));
+  }
+
 }
