@@ -111,11 +111,15 @@ class _AddEventScreenState extends State<AddEventScreen> {
                     onPressed: () async {
                       await EventAPIs.deleteEvent(csiEventProvider.event?.eventId ?? "").then((value) {
                         csiEventProvider.event = null;
+                        csiEventProvider.forEditing = false;
                         HelperFunctions.showToast("Event deleted");
+
                         Navigator.pop(context);
+
                         return null;
                       }).onError((error, stackTrace) {
                         csiEventProvider.event = null;
+                        csiEventProvider.forEditing = false;
                         HelperFunctions.showToast("Error occurred while deleting event");
                         Navigator.pop(context);
                         return null;
@@ -530,6 +534,7 @@ class _AddEventScreenState extends State<AddEventScreen> {
                                   });
                                   HelperFunctions.showToast("Event updated");
                                   csiEventProvider.event = null;
+                                  csiEventProvider.forEditing = false;
                                   Navigator.pop(context);
                                 });
                               } else {
