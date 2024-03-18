@@ -56,8 +56,8 @@ class _CommentCardState extends State<CommentCard> {
                           backgroundColor: AppColors.theme['secondaryBgColor'],
                           child: Center(
                             child: Text(
-                              HelperFunctions.getInitials(commentCreator.name ?? ""),
-                              style: TextStyle(color: AppColors.theme['tertiaryColor'], fontWeight: FontWeight.bold),
+                              commentCreator.name?[0] ?? "",
+                              style: TextStyle(color: AppColors.theme['tertiaryColor'], fontWeight: FontWeight.bold,fontSize: 18),
                             ),
                           ),
                         ),

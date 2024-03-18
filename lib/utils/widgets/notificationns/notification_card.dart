@@ -77,7 +77,7 @@ class _ExpandNotificationScreenState extends State<ExpandNotificationScreen> {
       home: Scaffold(
         backgroundColor: AppColors.theme['secondaryColor'],
         appBar : AppBar(
-          elevation: 1,
+          elevation: 0.4,
           surfaceTintColor: Colors.white,
           shadowColor: AppColors.theme['primaryColor'],
           backgroundColor: AppColors.theme['secondaryColor'],
@@ -93,7 +93,7 @@ class _ExpandNotificationScreenState extends State<ExpandNotificationScreen> {
         body: SingleChildScrollView(
           physics: BouncingScrollPhysics(),
           child: Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 10.0,vertical: 10),
+            padding: const EdgeInsets.symmetric(horizontal: 10.0,vertical: 20),
             child: Container(
               color: AppColors.theme['secondaryColor'],
               child: Padding(

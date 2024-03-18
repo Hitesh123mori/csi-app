@@ -91,8 +91,7 @@ class _MoreScreenState extends State<MoreScreen> {
               ],
             ),
 
-            // for admins
-
+            // for admins and superuser
             if ((appUserProvider.user?.isSuperuser ?? false) ||
                 (appUserProvider.user?.isAdmin ?? false))
               Column(

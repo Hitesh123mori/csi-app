@@ -10,8 +10,9 @@ class ProfilePhoto extends StatefulWidget {
   String? url;
   String? name;
   double? radius;
+  bool isHomeScreen = false ;
 
-  ProfilePhoto({super.key, required this.url, required this.name, this.radius});
+  ProfilePhoto({super.key, required this.url, required this.name, this.radius,required this.isHomeScreen});
 
   @override
   State<ProfilePhoto> createState() => _ProfilePhotoState();
@@ -34,12 +35,12 @@ class _ProfilePhotoState extends State<ProfilePhoto> {
               return _showInitials();
             } else {
               return ClipRRect(
-                borderRadius: BorderRadius.circular(25),
+                borderRadius: BorderRadius.circular(widget.isHomeScreen ? 25 :75),
                 child: Image.memory(
                   img,
                   fit: BoxFit.cover,
-                  height: 50,
-                  width: 50,
+                  height: widget.isHomeScreen ? 50 : 150 ,
+                  width: widget.isHomeScreen ?  50 : 150 ,
                 ),
               );
             }
@@ -51,6 +52,6 @@ class _ProfilePhotoState extends State<ProfilePhoto> {
   }
 
   Text _showInitials(){
-    return Text(widget.name![0], style: TextStyle(fontSize:22),);
+    return Text(widget.name![0], style: TextStyle(fontSize:widget.isHomeScreen ? 22 : 50),);
   }
 }

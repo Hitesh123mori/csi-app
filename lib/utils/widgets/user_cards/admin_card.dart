@@ -15,10 +15,9 @@ class AdminCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return InkWell(
-
-      onLongPress: () {
+      onLongPress: (currentUser.isSuperuser ?? false) ?() {
         bottomSheet(context);
-      },
+      } : (){},
       child: Card(
         elevation: 0,
         color: AppColors.theme['secondaryColor'],
@@ -87,9 +86,9 @@ class AdminCard extends StatelessWidget {
                       bool succ = await UserControl.makeSuperuser(appUser.userID, currentUser.userID);
                       if(succ){
                         HelperFunctions.showToast("${appUser.name} has been promoted to superuser");
-                        await NotificationApi.sendPushNotification(appUser, "You has been promoted to superuser", currentUser);
+                        await NotificationApi.sendPushNotification(appUser, "You has been promoted to superuse,\n Note : Please Restart Application for getting super user's controlr", currentUser);
 
-                        String encodedMessage = HelperFunctions.stringToBase64("You has been promoted to superuser");
+                        String encodedMessage = HelperFunctions.stringToBase64("You has been promoted to superuser,\n Note : Please Restart Application for getting super user's control");
 
                         Announcement announcement  = Announcement(
                             message: encodedMessage,
@@ -137,10 +136,10 @@ class AdminCard extends StatelessWidget {
                   onTap: () async {
                     bool succ = await UserControl.removeAdmin(appUser.userID);
                     if(succ){
-                      HelperFunctions.showToast("${appUser.name} has been removed from admin");
-                      await NotificationApi.sendPushNotification(appUser, "You has been removed from admin", currentUser);
+                      HelperFunctions.showToast("${appUser.name} removed from admin team");
+                      await NotificationApi.sendPushNotification(appUser, "Admin Removal Notice: ${appUser.name}  has been removed from the team. Thank you for your contributions. Wishing you all the best in your future endeavors.", currentUser);
 
-                      String encodedMessage = HelperFunctions.stringToBase64("You has been removed from admin");
+                      String encodedMessage = HelperFunctions.stringToBase64("Admin Removal Notice: ${appUser.name}  has been removed from the team. Thank you for your contributions. Wishing you all the best in your future endeavors.");
 
                       Announcement announcement  = Announcement(
                           message: encodedMessage,

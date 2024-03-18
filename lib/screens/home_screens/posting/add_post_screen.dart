@@ -24,7 +24,9 @@ import 'package:provider/provider.dart';
 import 'package:syncfusion_flutter_pdfviewer/pdfviewer.dart';
 
 import '../../../apis/StorageAPIs/StorageAPI.dart';
+import '../../../apis/notification_apis/notifications_api.dart';
 import '../../../main.dart';
+import '../../../models/notification_model/Announcement.dart';
 import '../../../side_transition_effects/TopToBottom.dart';
 import '../../../utils/shimmer_effects/post_screen_shimmer_effect.dart';
 import '../../../utils/widgets/dialog_box.dart';
@@ -522,6 +524,22 @@ class _AddPostScreenState extends State<AddPostScreen> {
       await StorageAPI.uploadPostImg(postProvider.post!.postId, await element.readAsBytes());
     });
     PostAPI.postUpload(postProvider.post!);
+
+
+    String encodedMessage = HelperFunctions.stringToBase64("🚀 New Post Added! Check it out now");
+
+
+    Announcement announcement  = Announcement(
+        message: encodedMessage,
+        fromUserId: appUserProvider.user?.userID,
+        toUserId: "ALL",
+        time: DateTime.now().millisecondsSinceEpoch.toString(),
+        fromUserName: appUserProvider.user?.name
+    );
+
+    await NotificationApi.sendMassNotificationToAllUsers("🚀 New Post Added! Check it out now") ;
+    await NotificationApi.storeNotification(announcement,false) ;
+
     postProvider.post = null;
     Navigator.push(context, RightToLeft(HomeScreen()));
   }

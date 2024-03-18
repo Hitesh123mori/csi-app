@@ -34,7 +34,8 @@ class _PostsScreenState extends State<PostsScreen> {
           );
         return Scaffold(
             backgroundColor: AppColors.theme['backgroundColor'],
-            floatingActionButton: (appUserProvider.user?.isAdmin ?? false) || (appUserProvider.user?.isSuperuser ?? false)
+            floatingActionButton:
+            (appUserProvider.user?.isAdmin ?? false) || (appUserProvider.user?.isSuperuser ?? false)
                 ? FloatingActionButton(
                     onPressed: () {
                       Navigator.push(context, BottomToTop(AddPostScreen()));

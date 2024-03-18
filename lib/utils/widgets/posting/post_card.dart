@@ -133,7 +133,7 @@ class _PostCardState extends State<PostCard> {
       ),
       leading: Padding(
         padding: const EdgeInsets.only(left: 8.0),
-        child:  ProfilePhoto(url: postCreator.profilePhotoUrl, name: postCreator.name, radius: 20,),
+        child:  ProfilePhoto(url: postCreator.profilePhotoUrl, name: postCreator.name, radius: 20, isHomeScreen: true,),
       ),
       contentPadding: EdgeInsets.only(left: 1),
       trailing: postCreator.userID == appUserId

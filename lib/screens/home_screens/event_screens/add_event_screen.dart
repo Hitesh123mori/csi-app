@@ -474,14 +474,14 @@ class _AddEventScreenState extends State<AddEventScreen> {
                       });
 
                       Announcement announcement  = Announcement(
-                        message: "New event ${_nameController.text}",
+                        message: "${_nameController.text} Alert! Join us for an exciting competition. Stay updated and be part of the action!",
                         fromUserId: appUserProvider.user?.userID,
                         toUserId: "ALL",
                         time: DateTime.now().millisecondsSinceEpoch.toString(),
                         fromUserName: appUserProvider.user?.name,
                       );
 
-                      await NotificationApi.sendMassNotificationToAllUsers("${_nameController.text} Added") ;
+                      await NotificationApi.sendMassNotificationToAllUsers("${_nameController.text} Alert! Join us for an exciting competition. Stay updated and be part of the action!") ;
                       await NotificationApi.storeNotification(announcement,false) ;
 
                       await EventStore.storeEvent(

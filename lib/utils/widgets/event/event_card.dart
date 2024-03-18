@@ -19,7 +19,7 @@ class _EventCardState extends State<EventCard> {
   @override
   Widget build(BuildContext context) {
     return Container(
-      height: 155,
+      height: 170,
       child: Card(
         elevation: 1,
         color: AppColors.theme["secondaryBgColor"],
