@@ -5,7 +5,7 @@ import 'package:csi_app/side_transition_effects/bottom_top.dart';
 import 'package:csi_app/utils/shimmer_effects/event_card_shimmer_effect.dart';
 import 'package:flutter/material.dart';
 
-import '../../../apis/FireStoreAPIs/event_store.dart';
+import '../../../apis/FireStoreAPIs/EventAPIs.dart';
 import '../../../utils/colors.dart';
 import '../../../utils/widgets/event/event_card.dart';
 
@@ -40,7 +40,7 @@ class _UpcomingEventsState extends State<UpcomingEvents> {
             child: Column(
               children: [
                 StreamBuilder<QuerySnapshot>(
-                  stream: EventStore.getAllEvents(),
+                  stream: EventAPIs.getAllEvents(),
                   builder: (context, snapshot) {
                     if (snapshot.hasData) {
                       final List<DocumentSnapshot> documents =
@@ -61,6 +61,7 @@ class _UpcomingEventsState extends State<UpcomingEvents> {
                           itemBuilder: (context, index) {
                             return EventCard(
                               csiEvent: csiEvents[index],
+                              // parentContext: context,
                             );
 
                           },
