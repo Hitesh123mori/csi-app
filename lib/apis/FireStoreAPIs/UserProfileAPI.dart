@@ -21,6 +21,7 @@ class UserProfile {
       AppUser appUser = AppUser(
         userID: user.uid,
         name: name,
+          notificationCount : 0 ,
         profilePhotoUrl: user.photoURL.toString(),
         email: user.email,
         nuRoll: user.email.toString().replaceAll("@nirmauni.ac.in", ""),
@@ -55,13 +56,44 @@ class UserProfile {
   static Future<bool> updateUserProfile(String? userId, Map<String, dynamic> fields) async {
     return await _collectionRef.doc("$userId").update(fields)
         .then((value) {
-          log("#updated");
+          log("#updated donne");
           return true;
         })
         .onError((error, stackTrace) {
           log("#update-e: $error, $stackTrace");
           return false;
         });
+  }
+
+  static Future<void> updateAllUsersField(String fieldToUpdate, bool isDecrease) async {
+    print("Start updating all users");
+
+    try {
+      // Step 1: Fetch all users
+      QuerySnapshot usersSnapshot = await FirebaseFirestore.instance.collection('appUser').get();
+      print("Fetched ${usersSnapshot.docs.length} users");
+
+      // Step 2: Create a batch
+      WriteBatch batch = FirebaseFirestore.instance.batch();
+
+      // Step 3: Iterate through each user and update the field
+      usersSnapshot.docs.forEach((doc) {
+        DocumentReference userRef = FirebaseFirestore.instance.collection('appUser').doc(doc.id);
+        print("Stage demo");
+        num currentValue = doc.get(fieldToUpdate) ?? 0;
+        print("#count ${currentValue}");
+        num updatedValue = isDecrease ? currentValue - 1 : currentValue + 1;
+        batch.update(userRef, {fieldToUpdate: updatedValue});
+        print("Stage final");
+      });
+      print("Updates applied to batch");
+
+      // Step 4: Commit the batch
+      await batch.commit();
+      print('All users field updated successfully.');
+    } catch (error) {
+      print('Error updating field for all users: $error');
+    }
   }
 }
 

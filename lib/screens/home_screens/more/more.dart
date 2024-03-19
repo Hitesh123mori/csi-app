@@ -76,18 +76,6 @@ class _MoreScreenState extends State<MoreScreen> {
                     color: AppColors.theme['primaryColor'],
                   ),
                 ),
-                Moremenuitems(
-                  text: 'Contributers',
-                  onTap: () {
-                    HelperFunctions.launchURL(
-                        'https://csi-nirma.vercel.app/board');
-                  },
-                  icon: Icon(
-                    Icons.people_rounded,
-                    size: 25,
-                    color: AppColors.theme['primaryColor'],
-                  ),
-                ),
               ],
             ),
 

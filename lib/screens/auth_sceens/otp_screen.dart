@@ -9,6 +9,7 @@ import 'package:csi_app/side_transition_effects/right_left.dart';
 import 'package:csi_app/utils/colors.dart';
 import 'package:csi_app/utils/widgets/buttons/auth_button.dart';
 import 'package:csi_app/utils/widgets/text_feilds/auth_text_feild.dart';
+import '../../main.dart';
 import 'login_screen.dart';
 
 import 'dart:developer';
@@ -90,6 +91,7 @@ class _OtpScreenState extends State<OtpScreen> {
 
   @override
   Widget build(BuildContext context) {
+     mq = MediaQuery.of(context).size;
     return GestureDetector(
       onTap: () => FocusScope.of(context).unfocus(),
       child: MaterialApp(
@@ -111,7 +113,7 @@ class _OtpScreenState extends State<OtpScreen> {
               child: SingleChildScrollView(
                 physics: BouncingScrollPhysics(),
                 child: Padding(
-                  padding: const EdgeInsets.only(top: 30),
+                  padding:  EdgeInsets.only(top: mq.height*0.04),
                   child: Column(
                     children: [
                       Center(
