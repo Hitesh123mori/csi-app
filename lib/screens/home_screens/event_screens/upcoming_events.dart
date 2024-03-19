@@ -20,13 +20,16 @@ class UpcomingEvents extends StatefulWidget {
 }
 
 class _UpcomingEventsState extends State<UpcomingEvents> {
-  bool _isFirst = false;
+  bool _toLoad = false;
   Duration? duration;
 
   @override
-  Widget build(BuildContext context) {
-    if(_isFirst) _isFirst = false;
+  void initState() {
+    super.initState();
+  }
 
+  @override
+  Widget build(BuildContext context) {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
       home: Scaffold(
@@ -47,19 +50,26 @@ class _UpcomingEventsState extends State<UpcomingEvents> {
             padding: const EdgeInsets.symmetric(horizontal: 10.0, vertical: 15),
             child: Column(
               children: [
-                duration != null ? FlipClockPlus.reverseCountdown(
-                  duration: duration!,
-                  digitColor: AppColors.theme["secondaryColor"],
-                  backgroundColor: AppColors.theme["primaryColor"],
-                  digitSize: 40.0,
-                  centerGapSpace: 0.2,
-                  width: MediaQuery.of(context).size.width * 0.08,
-                  height: 50,
-                  borderRadius: const BorderRadius.all(Radius.circular(3.0)),
-                  onDone: () {
-                    print('onDone');
-                  },
-                ):Container(),
+                duration != null
+                    ? FlipClockPlus.reverseCountdown(
+                        duration: duration!,
+                        digitColor: AppColors.theme["secondaryColor"],
+                        backgroundColor: AppColors.theme["primaryColor"],
+                        digitSize: MediaQuery.of(context).size.width * 0.09,
+                        // centerGapSpace: 0.2,
+                        width: MediaQuery.of(context).size.width * 0.08,
+                        height: 50,
+                        borderRadius: const BorderRadius.all(Radius.circular(3.0)),
+                        // spacing: EdgeInsets.all(1),
+                        separator: Text(":",
+                          style: TextStyle(
+                              height: MediaQuery.of(context).size.height*0.0015, fontSize: 35, color: AppColors.theme["primaryColor"], fontWeight: FontWeight.bold),
+                        ),
+                        onDone: () {
+                          print('onDone');
+                        },
+                      )
+                    : Container(),
                 StreamBuilder<QuerySnapshot>(
                   stream: EventAPIs.getAllEvents(),
                   builder: (context, snapshot) {
@@ -74,10 +84,10 @@ class _UpcomingEventsState extends State<UpcomingEvents> {
                         csiEvents.sort((a, b) => b.compareTo(a));
                         duration = DateTime.fromMillisecondsSinceEpoch(int.parse(csiEvents.first.startDate ?? "0")).difference(DateTime.now());
                         print("# $duration");
-                        if(_isFirst){
-                          setState(() {
-                          });
-                        }
+                        WidgetsBinding.instance.addPostFrameCallback((_) {
+                          // Call your method here after the build is complete
+                          setState(() {});
+                        });
                         return Column(
                           children: [
                             ListView.builder(
