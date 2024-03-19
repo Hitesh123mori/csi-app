@@ -54,7 +54,7 @@ class HelperFunctions{
     return RichText(
         text: TextSpan(
           children: children,
-          style: TextStyle(color: AppColors.theme['tertiaryColor'], fontSize: 15),
+          style: TextStyle(color: AppColors.theme['tertiaryColor'], fontSize: 15,),
         ));
   }
 

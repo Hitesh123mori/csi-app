@@ -14,7 +14,7 @@ class UsersCardShimmerEffect extends StatelessWidget {
         backgroundColor: AppColors.theme['backgroundColor'],
         body: SizedBox(
           child: ListView.builder(
-            itemCount: 1,
+            itemCount: 10,
             itemBuilder: (context, index) {
               return ListTile(
                 isThreeLine: true,

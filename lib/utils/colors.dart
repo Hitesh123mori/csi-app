@@ -10,7 +10,7 @@ hexStringToColors(String hexColor){
 }
 
 
-class AppColors {
+class  AppColors {
   static Map theme = themes["theme1"];
 
   static Map themes = {

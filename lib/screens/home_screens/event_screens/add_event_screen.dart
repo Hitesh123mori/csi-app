@@ -37,6 +37,7 @@ class _AddEventScreenState extends State<AddEventScreen> {
   bool _isFirst = true;
   bool _isLoading = false;
 
+
   @override
   void initState() {
     super.initState();
@@ -62,6 +63,7 @@ class _AddEventScreenState extends State<AddEventScreen> {
       HelperFunctions.showToast("Start date cannot be after end date");
     }
   }
+
 
   @override
   void dispose() {
@@ -505,62 +507,16 @@ class _AddEventScreenState extends State<AddEventScreen> {
                                   _isLoading = true;
                                 });
 
-                                Announcement announcement = Announcement(
-                                  message: "Update in event ${_nameController.text}",
-                                  fromUserId: appUserProvider.user?.userID,
-                                  toUserId: "ALL",
-                                  time: DateTime.now().millisecondsSinceEpoch.toString(),
-                                  fromUserName: appUserProvider.user?.name,
-                                );
+                      Announcement announcement  = Announcement(
+                        message: "New event ${_nameController.text}",
+                        fromUserId: appUserProvider.user?.userID,
+                        toUserId: "ALL",
+                        time: DateTime.now().millisecondsSinceEpoch.toString(),
+                        fromUserName: appUserProvider.user?.name,
+                      );
 
-                                await NotificationApi.sendMassNotificationToAllUsers("${_nameController.text} updated");
-                                await NotificationApi.storeNotification(announcement, false);
-
-                                CSIEvent event = CSIEvent(
-                                    eventName: _nameController.text,
-                                    registerUrl: _registerUrlController.text,
-                                    startTime: ((_startTime!.hour * 3600 + _startTime!.minute * 60) * 1000).toString(),
-                                    endTime: ((_endTime!.hour * 3600 + _endTime!.minute * 60) * 1000).toString(),
-                                    startDate: _startDate!.millisecondsSinceEpoch.toString(),
-                                    endDate: _endDate!.millisecondsSinceEpoch.toString(),
-                                    notificationDuration: _notificationHour.toString(),
-                                    participantsCount: "0");
-
-                                event.eventId = csiEventProvider.event?.eventId;
-
-                                await EventAPIs.updateEvent(event).then((_) {
-                                  setState(() {
-                                    _isLoading = false;
-                                  });
-                                  HelperFunctions.showToast("Event updated");
-                                  csiEventProvider.event = null;
-                                  csiEventProvider.forEditing = false;
-                                  Navigator.pop(context);
-                                });
-                              } else {
-                                print("Name: ${_nameController.text}");
-                                print("Register URL: ${_registerUrlController.text}");
-                                print("Start Date: $_startDate (${_startDate?.millisecondsSinceEpoch})");
-                                print("End Date: $_endDate (${_endDate?.millisecondsSinceEpoch})");
-                                print(
-                                    "Start Time: $_startTime (${_startTime != null ? (_startTime!.hour * 3600 + _startTime!.minute * 60) * 1000 : null})");
-                                print("End Time: $_endTime (${_endTime != null ? (_endTime!.hour * 3600 + _endTime!.minute * 60) * 1000 : null})");
-                                print("NotifyHour :${_notificationHour.toString()}");
-
-                                setState(() {
-                                  _isLoading = true;
-                                });
-
-                                Announcement announcement = Announcement(
-                                  message: "New event ${_nameController.text}",
-                                  fromUserId: appUserProvider.user?.userID,
-                                  toUserId: "ALL",
-                                  time: DateTime.now().millisecondsSinceEpoch.toString(),
-                                  fromUserName: appUserProvider.user?.name,
-                                );
-
-                                await NotificationApi.sendMassNotificationToAllUsers("${_nameController.text} Added");
-                                await NotificationApi.storeNotification(announcement, false);
+                      await NotificationApi.sendMassNotificationToAllUsers("${_nameController.text} Alert! Join us for an exciting competition. Stay updated and be part of the action!") ;
+                      await NotificationApi.storeNotification(announcement,false) ;
 
                                 CSIEvent event = CSIEvent(
                                     eventName: _nameController.text,

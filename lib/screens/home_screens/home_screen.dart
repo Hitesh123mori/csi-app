@@ -1,5 +1,6 @@
 import 'dart:developer';
 
+import 'package:csi_app/models/post_model/post.dart';
 import 'package:csi_app/providers/CurrentUser.dart';
 import 'package:csi_app/screens/home_screens/more/more.dart';
 import 'package:csi_app/screens/user_profile/codeforces_view.dart';
@@ -36,6 +37,9 @@ class _HomeScreenState extends State<HomeScreen> {
 
   final FocusNode _focusNode = FocusNode();
   bool _isFirst = true;
+
+
+
 
 
   @override
@@ -113,7 +117,7 @@ class _HomeScreenState extends State<HomeScreen> {
                   Navigator.push(context, LeftToRight(UserProfileScreen()));
                 }
               },
-              child: ProfilePhoto(url: appUserProvider.user?.profilePhotoUrl, name: appUserProvider.user?.name, radius: 40,)
+              child: ProfilePhoto(url: appUserProvider.user?.profilePhotoUrl, name: appUserProvider.user?.name, radius: 40, isHomeScreen: true,)
             ),
           ),
           actions: [

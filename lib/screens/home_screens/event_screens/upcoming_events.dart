@@ -4,6 +4,7 @@ import 'package:csi_app/screens/home_screens/event_screens/add_event_screen.dart
 import 'package:csi_app/side_transition_effects/bottom_top.dart';
 import 'package:csi_app/utils/shimmer_effects/event_card_shimmer_effect.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
 import '../../../apis/FireStoreAPIs/EventAPIs.dart';
 import '../../../utils/colors.dart';

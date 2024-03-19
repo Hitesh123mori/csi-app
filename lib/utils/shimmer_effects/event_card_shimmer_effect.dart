@@ -11,7 +11,7 @@ class EventCardShimmerEffect extends StatelessWidget {
     return SizedBox(
       height: mq.height,
       child: ListView.builder(
-        itemCount: 1,
+        itemCount: 10,
         itemBuilder: (context, index) {
           return Padding(
             padding: const EdgeInsets.symmetric(horizontal: 5.0, vertical: 5),

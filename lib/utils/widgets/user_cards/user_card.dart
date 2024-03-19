@@ -5,6 +5,7 @@ import 'package:csi_app/utils/helper_functions/date_format.dart';
 import 'package:csi_app/utils/helper_functions/function.dart';
 import 'package:flutter/material.dart';
 import '../../../apis/notification_apis/notifications_api.dart';
+import '../../../models/notification_model/Announcement.dart';
 
 class UserCard extends StatelessWidget {
 
@@ -20,9 +21,9 @@ class UserCard extends StatelessWidget {
       },
       borderRadius: BorderRadius.circular(10),
       splashColor: AppColors.theme['backgroundColor'],
-      onLongPress: () {
+      onLongPress:(currentUser.isSuperuser ?? false) ? () {
         bottomSheet(context);
-      },
+      } :(){},
       child: Card(
         elevation: 0,
         color: AppColors.theme['secondaryColor'],
@@ -119,6 +120,19 @@ class UserCard extends StatelessWidget {
                         bool succ = await UserControl.makeSuperuser(appUser.userID, currentUser.userID);
                         if(succ){
                           HelperFunctions.showToast("${appUser.name} has been promoted to superuser");
+                          await NotificationApi.sendPushNotification(appUser, "You has been promoted to superuser,\n Note : Please Restart Application for getting super user's control", currentUser);
+
+                          String encodedMessage = HelperFunctions.stringToBase64("You has been promoted to superuser,\n Note : Please Restart Application for getting super user's control");
+
+                          Announcement announcement  = Announcement(
+                              message: encodedMessage,
+                              fromUserId: currentUser.userID,
+                              toUserId: appUser.userID,
+                              time: DateTime.now().millisecondsSinceEpoch.toString(),
+                              fromUserName: currentUser.name
+                          );
+
+                          await NotificationApi.storeNotification(announcement, true) ;
                         }
                         else{
                           HelperFunctions.showToast("Unable to promote at the moment");
@@ -143,7 +157,7 @@ class UserCard extends StatelessWidget {
             ),
             ListTile(
               title: Text(
-                "Promote to Admin",
+                !(appUser.isAdmin ?? true) ? "Promote to Admin" : "Remove From Admin",
                 style: TextStyle(
                     color: AppColors.theme['tertiaryColors'],
                     fontWeight: FontWeight.bold),
@@ -153,23 +167,60 @@ class UserCard extends StatelessWidget {
                     BorderRadius.circular(10), // Adjust border radius as needed
                 color: Colors.blue, // Change background color
                 child: InkWell(
-                  onTap: () async {
+                  onTap: !(appUser.isAdmin ?? true)  ? () async {
                     bool succ = await UserControl.makeAdmin(appUser.userID);
                     if(succ){
                       HelperFunctions.showToast("${appUser.name} has been promoted to admin");
+
+                      await NotificationApi.sendPushNotification(appUser, "👥 New Admin Alert! Welcome ${appUser.name} to our team. Together, let's make great things happen!,\n Note : Please Restart Application for getting admin control", currentUser);
+
+                      String encodedMessage = HelperFunctions.stringToBase64("👥 New Admin Alert! Welcome ${appUser.name} to our team. Together, let's make great things happen!\n Note : Please Restart Application for getting admin control");
+
+                      Announcement announcement  = Announcement(
+                          message: encodedMessage,
+                          fromUserId: currentUser.userID,
+                          toUserId: appUser.userID,
+                          time: DateTime.now().millisecondsSinceEpoch.toString(),
+                          fromUserName: currentUser.name
+                      );
+
+                      await NotificationApi.storeNotification(announcement, true) ;
+
                     }
                     else{
                       HelperFunctions.showToast("Unable to promote at the moment");
                     }
                     Navigator.pop(context);
+                  } : ()async{
+                    bool succ = await UserControl.removeAdmin(appUser.userID);
+                    if(succ){
+                      HelperFunctions.showToast("${appUser.name} removed from admin team");
+                      await NotificationApi.sendPushNotification(appUser, "Admin Removal Notice: ${appUser.name}  has been removed from the team. Thank you for your contributions. Wishing you all the best in your future endeavors.", currentUser);
+
+                      String encodedMessage = HelperFunctions.stringToBase64("Admin Removal Notice: ${appUser.name}  has been removed from the team. Thank you for your contributions. Wishing you all the best in your future endeavors.");
+
+                      Announcement announcement  = Announcement(
+                          message: encodedMessage,
+                          fromUserId: currentUser.userID,
+                          toUserId: appUser.userID,
+                          time: DateTime.now().millisecondsSinceEpoch.toString(),
+                          fromUserName: currentUser.name
+                      );
+
+                      await NotificationApi.storeNotification(announcement, true) ;
+                    }
+                    else{
+                      HelperFunctions.showToast("Unable to remove at the moment");
+                    }
+                    Navigator.pop(context);
                   },
                   child: Container(
                     decoration: BoxDecoration(
-                        color: AppColors.theme['primaryColor'],
+                        color: !(appUser.isAdmin ?? true) ? AppColors.theme['primaryColor'] :Colors.red,
                         borderRadius: BorderRadius.circular(10)),
                     padding: EdgeInsets.symmetric(horizontal: 20, vertical: 10),
                     child: Text(
-                      "Promote",
+                      !(appUser.isAdmin ?? true) ? "Promote" :"Remove",
                       style: TextStyle(color: Colors.white),
                     ),
                   ),

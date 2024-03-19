@@ -14,7 +14,7 @@ class NotificationCardShimmerEffect extends StatelessWidget {
         backgroundColor: AppColors.theme['backgroundColor'],
         body: SizedBox(
           child: ListView.builder(
-            itemCount: 1,
+            itemCount: 10,
             itemBuilder: (context, index) {
               return Padding(
                 padding: const EdgeInsets.symmetric(vertical: 5.0),
@@ -27,7 +27,7 @@ class NotificationCardShimmerEffect extends StatelessWidget {
                       highlightColor: Colors.grey.shade200,
                       child: Container(
                         height: 20,
-                        width: mq.width * 0.6,
+                        width: mq.width * 0.5,
                         decoration: BoxDecoration(
                           color: AppColors.theme['backgroundColor'],
                           borderRadius: BorderRadius.circular(20),
@@ -38,7 +38,7 @@ class NotificationCardShimmerEffect extends StatelessWidget {
                       baseColor: Colors.grey.shade300,
                       highlightColor: Colors.grey.shade200,
                       child: Padding(
-                        padding:  EdgeInsets.only(right: mq.width * 0.7),
+                        padding:  EdgeInsets.only(right: mq.width * 0.4),
                         child: Container(
                           height: 15,
                           width: mq.width * 0.4,
@@ -50,6 +50,16 @@ class NotificationCardShimmerEffect extends StatelessWidget {
                         ),
                       ),
                     ),
+                    leading:SizedBox(
+                      child: Shimmer.fromColors(
+                        baseColor: Colors.grey.shade300,
+                        highlightColor: Colors.grey.shade200,
+                        child: CircleAvatar(
+                          backgroundColor: AppColors.theme['secondaryColor'],
+                        ),
+                      ),
+                    ),
+
                   ),
                 ),
               );

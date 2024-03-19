@@ -66,14 +66,15 @@ class _AnnouncementScreenState extends State<AnnouncementScreen> {
           actions: [
             Padding(
               padding: EdgeInsets.symmetric(horizontal: !_isLoading ? 7.0 : 20),
-              //todo add inkwell and store description and userId
               child: InkWell(
                 onTap: ()async{
                   setState(() {
                     _isLoading = true;
                   });
+                  String encodedMessage = HelperFunctions.stringToBase64(_textController.text);
+
                   Announcement announcement  = Announcement(
-                    message: _textController.text,
+                    message: encodedMessage,
                     fromUserId: appUserProvider.user?.userID,
                     toUserId: "ALL",
                     time: DateTime.now().millisecondsSinceEpoch.toString(),
