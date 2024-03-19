@@ -8,7 +8,7 @@ class EventAPIs {
   static final _collectionRef = FirebaseAPIs.firestore.collection("events");
 
   static Future<dynamic> addEvent(CSIEvent event) async {
-    
+    print("#ee");
     return await _collectionRef
         .doc(event.eventId)
         .set(event.toJson())
