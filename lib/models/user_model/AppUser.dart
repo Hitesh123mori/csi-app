@@ -15,6 +15,7 @@ class AppUser {
       this.isActive, 
       this.notificationToken,
       this.createdAt,
+      this.notificationCount,
   });
 
   AppUser.fromJson(dynamic json) {
@@ -22,6 +23,7 @@ class AppUser {
     name = json['name'];
     about = json['about'];
     email = json['email'];
+    notificationCount = json['notificationCount'] ;
     nuRoll = json['nu_roll'];
     csiRoll = json['csi_roll'];
     cfId = json['cf_id'];
@@ -50,11 +52,13 @@ class AppUser {
   bool? isActive;
   String? notificationToken;
   String? createdAt;
+  num? notificationCount;
 
   Map<String, dynamic> toJson() {
     final map = <String, dynamic>{};
     map['userID'] = userID;
     map['name'] = name;
+    map['notificationCount']  = notificationCount;
     map['about']  = about ;
     map['email'] = email;
     map['nu_roll'] = nuRoll;

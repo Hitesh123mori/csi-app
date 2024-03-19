@@ -1,4 +1,5 @@
 import 'package:csi_app/apis/FireStoreAPIs/UserControl.dart';
+import 'package:csi_app/apis/FireStoreAPIs/UserProfileAPI.dart';
 import 'package:csi_app/models/user_model/AppUser.dart';
 import 'package:csi_app/utils/colors.dart';
 import 'package:csi_app/utils/helper_functions/date_format.dart';
@@ -7,12 +8,17 @@ import 'package:flutter/material.dart';
 import '../../../apis/notification_apis/notifications_api.dart';
 import '../../../models/notification_model/Announcement.dart';
 
-class UserCard extends StatelessWidget {
+class UserCard extends StatefulWidget {
 
   final AppUser appUser ;
   final AppUser currentUser ;
   const UserCard({Key? key, required this.appUser, required this.currentUser});
 
+  @override
+  State<UserCard> createState() => _UserCardState();
+}
+
+class _UserCardState extends State<UserCard> {
   @override
   Widget build(BuildContext context) {
     return InkWell(
@@ -21,7 +27,7 @@ class UserCard extends StatelessWidget {
       },
       borderRadius: BorderRadius.circular(10),
       splashColor: AppColors.theme['backgroundColor'],
-      onLongPress:(currentUser.isSuperuser ?? false) ? () {
+      onLongPress:(widget.currentUser.isSuperuser ?? false) ? () {
         bottomSheet(context);
       } :(){},
       child: Card(
@@ -31,7 +37,7 @@ class UserCard extends StatelessWidget {
           leading: CircleAvatar(
             radius: 25,
             child: Text(
-              HelperFunctions.getInitials(appUser.name ?? ""),
+              HelperFunctions.getInitials(widget.appUser.name ?? ""),
               style: TextStyle(
                   fontSize: 18,
                   color: AppColors.theme['secondaryColor'],
@@ -39,11 +45,11 @@ class UserCard extends StatelessWidget {
             ),
             backgroundColor: AppColors.theme["primaryColor"],
           ),
-          title: Text(appUser.name ?? ""),
-          subtitle: Text("Joined on : ${MyDateUtil.getFormattedTime(context: context, time: appUser.createdAt ?? "")}"),
+          title: Text(widget.appUser.name ?? ""),
+          subtitle: Text("Joined on : ${MyDateUtil.getFormattedTime(context: context, time: widget.appUser.createdAt ?? "")}"),
 
           // if user admin then display this card
-          trailing: (appUser.isAdmin ?? false) ? Row(
+          trailing: (widget.appUser.isAdmin ?? false) ? Row(
             mainAxisSize: MainAxisSize.min,
             children: [
               Container(
@@ -85,7 +91,7 @@ class UserCard extends StatelessWidget {
             ),
             CircleAvatar(
               radius: 60,
-              child:Text(HelperFunctions.getInitials(appUser.name ?? "A"), style: TextStyle(
+              child:Text(HelperFunctions.getInitials(widget.appUser.name ?? "A"), style: TextStyle(
                   color: AppColors.theme['secondaryColor'],
                   fontWeight: FontWeight.bold,fontSize: 40)),
               backgroundColor: AppColors.theme['primaryColor'],
@@ -95,7 +101,7 @@ class UserCard extends StatelessWidget {
             ),
             Center(
               child: Text(
-                "${appUser.name}",
+                "${widget.appUser.name}",
                 style: TextStyle(
                     color: AppColors.theme['tertiaryColors'],
                     fontWeight: FontWeight.bold,fontSize: 25),
@@ -117,19 +123,19 @@ class UserCard extends StatelessWidget {
                   color: Colors.blue,
                   child: InkWell(
                     onTap: () async {
-                        bool succ = await UserControl.makeSuperuser(appUser.userID, currentUser.userID);
+                        bool succ = await UserControl.makeSuperuser(widget.appUser.userID, widget.currentUser.userID);
                         if(succ){
-                          HelperFunctions.showToast("${appUser.name} has been promoted to superuser");
-                          await NotificationApi.sendPushNotification(appUser, "You has been promoted to superuser,\n Note : Please Restart Application for getting super user's control", currentUser);
+                          HelperFunctions.showToast("${widget.appUser.name} has been promoted to superuser");
+                          await NotificationApi.sendPushNotification(widget.appUser, "You has been promoted to superuser,\n Note : Please Restart Application for getting super user's control", widget.currentUser);
 
                           String encodedMessage = HelperFunctions.stringToBase64("You has been promoted to superuser,\n Note : Please Restart Application for getting super user's control");
 
                           Announcement announcement  = Announcement(
                               message: encodedMessage,
-                              fromUserId: currentUser.userID,
-                              toUserId: appUser.userID,
+                              fromUserId: widget.currentUser.userID,
+                              toUserId: widget.appUser.userID,
                               time: DateTime.now().millisecondsSinceEpoch.toString(),
-                              fromUserName: currentUser.name
+                              fromUserName: widget.currentUser.name
                           );
 
                           await NotificationApi.storeNotification(announcement, true) ;
@@ -157,7 +163,7 @@ class UserCard extends StatelessWidget {
             ),
             ListTile(
               title: Text(
-                !(appUser.isAdmin ?? true) ? "Promote to Admin" : "Remove From Admin",
+                !(widget.appUser.isAdmin ?? true) ? "Promote to Admin" : "Remove From Admin",
                 style: TextStyle(
                     color: AppColors.theme['tertiaryColors'],
                     fontWeight: FontWeight.bold),
@@ -167,21 +173,21 @@ class UserCard extends StatelessWidget {
                     BorderRadius.circular(10), // Adjust border radius as needed
                 color: Colors.blue, // Change background color
                 child: InkWell(
-                  onTap: !(appUser.isAdmin ?? true)  ? () async {
-                    bool succ = await UserControl.makeAdmin(appUser.userID);
+                  onTap: !(widget.appUser.isAdmin ?? true)  ? () async {
+                    bool succ = await UserControl.makeAdmin(widget.appUser.userID);
                     if(succ){
-                      HelperFunctions.showToast("${appUser.name} has been promoted to admin");
+                      HelperFunctions.showToast("${widget.appUser.name} has been promoted to admin");
 
-                      await NotificationApi.sendPushNotification(appUser, "👥 New Admin Alert! Welcome ${appUser.name} to our team. Together, let's make great things happen!,\n Note : Please Restart Application for getting admin control", currentUser);
+                      await NotificationApi.sendPushNotification(widget.appUser, "👥 New Admin Alert! Welcome ${widget.appUser.name} to our team. Together, let's make great things happen!,\n Note : Please Restart Application for getting admin control", widget.currentUser);
 
-                      String encodedMessage = HelperFunctions.stringToBase64("👥 New Admin Alert! Welcome ${appUser.name} to our team. Together, let's make great things happen!\n Note : Please Restart Application for getting admin control");
+                      String encodedMessage = HelperFunctions.stringToBase64("👥 New Admin Alert! Welcome ${widget.appUser.name} to our team. Together, let's make great things happen!\n Note : Please Restart Application for getting admin control");
 
                       Announcement announcement  = Announcement(
                           message: encodedMessage,
-                          fromUserId: currentUser.userID,
-                          toUserId: appUser.userID,
+                          fromUserId: widget.currentUser.userID,
+                          toUserId: widget.appUser.userID,
                           time: DateTime.now().millisecondsSinceEpoch.toString(),
-                          fromUserName: currentUser.name
+                          fromUserName: widget.currentUser.name
                       );
 
                       await NotificationApi.storeNotification(announcement, true) ;
@@ -192,22 +198,29 @@ class UserCard extends StatelessWidget {
                     }
                     Navigator.pop(context);
                   } : ()async{
-                    bool succ = await UserControl.removeAdmin(appUser.userID);
+                    bool succ = await UserControl.removeAdmin(widget.appUser.userID);
                     if(succ){
-                      HelperFunctions.showToast("${appUser.name} removed from admin team");
-                      await NotificationApi.sendPushNotification(appUser, "Admin Removal Notice: ${appUser.name}  has been removed from the team. Thank you for your contributions. Wishing you all the best in your future endeavors.", currentUser);
+                      HelperFunctions.showToast("${widget.appUser.name} removed from admin team");
+                      await NotificationApi.sendPushNotification(widget.appUser, "Admin Removal Notice: ${widget.appUser.name}  has been removed from the team. Thank you for your contributions. Wishing you all the best in your future endeavors.", widget.currentUser);
 
-                      String encodedMessage = HelperFunctions.stringToBase64("Admin Removal Notice: ${appUser.name}  has been removed from the team. Thank you for your contributions. Wishing you all the best in your future endeavors.");
+                      String encodedMessage = HelperFunctions.stringToBase64("Admin Removal Notice: ${widget.appUser.name}  has been removed from the team. Thank you for your contributions. Wishing you all the best in your future endeavors.");
 
                       Announcement announcement  = Announcement(
                           message: encodedMessage,
-                          fromUserId: currentUser.userID,
-                          toUserId: appUser.userID,
+                          fromUserId: widget.currentUser.userID,
+                          toUserId: widget.appUser.userID,
                           time: DateTime.now().millisecondsSinceEpoch.toString(),
-                          fromUserName: currentUser.name
+                          fromUserName: widget.currentUser.name
                       );
 
                       await NotificationApi.storeNotification(announcement, true) ;
+
+                      widget.currentUser.notificationCount = widget.currentUser.notificationCount ?? 0 + 1 ;
+                      Map<String, dynamic> fields = {"notificationCount":widget.currentUser.notificationCount};
+                      // await UserProfile.updateUserProfile(widget.appUser.userID, fields) ;
+                      // setState(() {
+                      //
+                      // });
                     }
                     else{
                       HelperFunctions.showToast("Unable to remove at the moment");
@@ -216,11 +229,11 @@ class UserCard extends StatelessWidget {
                   },
                   child: Container(
                     decoration: BoxDecoration(
-                        color: !(appUser.isAdmin ?? true) ? AppColors.theme['primaryColor'] :Colors.red,
+                        color: !(widget.appUser.isAdmin ?? true) ? AppColors.theme['primaryColor'] :Colors.red,
                         borderRadius: BorderRadius.circular(10)),
                     padding: EdgeInsets.symmetric(horizontal: 20, vertical: 10),
                     child: Text(
-                      !(appUser.isAdmin ?? true) ? "Promote" :"Remove",
+                      !(widget.appUser.isAdmin ?? true) ? "Promote" :"Remove",
                       style: TextStyle(color: Colors.white),
                     ),
                   ),
@@ -235,5 +248,4 @@ class UserCard extends StatelessWidget {
       },
     );
   }
-
 }

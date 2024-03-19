@@ -78,7 +78,7 @@ dependencies:
   mailer: ^6.1.0
   otp: ^3.1.4
   uuid: ^4.3.3
-
+  badges: ^3.1.2
   pinput: ^4.0.0
 
   flip_panel_plus: ^1.0.0+3

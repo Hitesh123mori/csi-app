@@ -11,6 +11,8 @@ import 'package:csi_app/utils/widgets/buttons/auth_button.dart';
 import 'package:csi_app/utils/widgets/text_feilds/auth_text_feild.dart';
 
 import 'dart:developer';
+
+import '../../main.dart';
 class LoginScreen extends StatefulWidget {
   const LoginScreen({Key? key}) : super(key: key);
 
@@ -68,6 +70,7 @@ class _LoginScreenState extends State<LoginScreen> {
 
   @override
   Widget build(BuildContext context) {
+    mq = MediaQuery.of(context).size;
     return Consumer<AppUserProvider>(
       builder: (context, appUserProvider, child) {
         return GestureDetector(
@@ -93,7 +96,7 @@ class _LoginScreenState extends State<LoginScreen> {
                   child: SingleChildScrollView(
                     physics: BouncingScrollPhysics(),
                     child: Padding(
-                      padding: const EdgeInsets.only(top: 30),
+                      padding:  EdgeInsets.only(top:mq.height*0.04),
                       child: Column(
                         children: [
                           Center(

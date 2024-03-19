@@ -114,7 +114,6 @@ class _AllAdminsState extends State<AllAdmins> {
                   builder: (context, snapshot) {
                     if (snapshot.hasData) {
                       final List<DocumentSnapshot> documents = snapshot.data!.docs;
-
                         users = documents
                             .map((doc) => AppUser.fromJson(doc.data() as Map<String, dynamic>))
                             .toList();
