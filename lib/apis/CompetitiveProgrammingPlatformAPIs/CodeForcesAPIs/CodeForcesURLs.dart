@@ -17,7 +17,7 @@ class CodeForcesURLs{
     return 'https://codeforces.com/api/user.status?handle=$username&from=1&count=100000';
   }
 
-  static Future<String> contestStanding({required int id, bool asManger=true, int from=1, int count=20, bool showUnofficial=false}){
+  static Future<String> contestStanding({required int id, bool asManger=true, int from=1, int count=20, bool showUnofficial=true}){
     return _cfAuth.genURL("https://codeforces.com/api/contest.standings?contestId=${id.toString()}&asManager=${asManger.toString()}&from=${from.toString()}&count=${count.toString()}&showUnofficial=${showUnofficial.toString()}");
   }
 
@@ -29,8 +29,8 @@ void main () async {
 
   http.Response res = await http.get(Uri.parse(uri));
   
-  log("res-status: ${res.statusCode}");
-  log("res: ${res.body}");
+  print("res-status: ${res.statusCode}");
+  print("res: ${res.body}");
 
   
 }

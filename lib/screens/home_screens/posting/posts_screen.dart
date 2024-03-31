@@ -87,15 +87,10 @@ class _PostsScreenState extends State<PostsScreen> {
                         });
                         posts.sort((a, b) => b.compareTo(a));
 
-                        return ListView.builder(
-                          physics: BouncingScrollPhysics(),
-                          shrinkWrap: true,
-                          itemCount: posts.length,
-                          itemBuilder: (context, index) {
-                            return PostCard(
-                              post: posts[index],
-                            );
-                          },
+                        return SingleChildScrollView(
+                          child: Column(
+                            children: List<PostCard>.generate(posts.length, (index) => PostCard(post: posts[index])),
+                          ),
                         );
                       }
                     } else if (snap.hasError) {

@@ -50,6 +50,6 @@ class CSIEvent {
     return data;
   }
   int compareTo (CSIEvent other){
-    return int.parse(this.startDate??"0") - int.parse(other.endDate??"0");
+    return int.parse(this.startDate??"0") - int.parse(other.startDate??"0");
   }
 }
