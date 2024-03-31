@@ -32,135 +32,159 @@ class _CommentCardState extends State<CommentCard> {
     return Consumer<AppUserProvider>(builder: (context, appUserProvider, child) {
       return Padding(
         padding: const EdgeInsets.symmetric(vertical: 5, horizontal: 5),
-        child: Material(
-          elevation: 1,
-          borderRadius: BorderRadius.circular(10),
-          child: Container(
-            width: mq.width * 1,
-            decoration: BoxDecoration(
-              color: AppColors.theme['secondaryColor'],
-              borderRadius: BorderRadius.circular(10),
-            ),
-            child: StreamBuilder(
-              stream: PostUserProfile.getPostCreator(widget.postComment.userId ?? "").asStream(),
-              builder: (context, snapshot) {
-                if (snapshot.hasData) {
-                  PostCreator commentCreator = PostCreator.fromJson(snapshot.data);
-                  return Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      ListTile(
-                        contentPadding: EdgeInsets.only(left: 8),
-                        // dense: true,
-                        leading: CircleAvatar(
-                          backgroundColor: AppColors.theme['secondaryBgColor'],
-                          child: Center(
-                            child: Text(
-                              commentCreator.name?[0] ?? "",
-                              style: TextStyle(color: AppColors.theme['tertiaryColor'], fontWeight: FontWeight.bold,fontSize: 18),
-                            ),
-                          ),
-                        ),
-                        title: Text(
-                          commentCreator.name ?? "",
-                          style: TextStyle(color: AppColors.theme['tertiaryColor'], fontWeight: FontWeight.bold),
-                        ),
-                        subtitle: Text(
-                          commentCreator.about ?? "",
-                          style: TextStyle(color: AppColors.theme['tertiaryColor'], fontWeight: FontWeight.w500),
-                        ),
-                        trailing: Padding(
-                          padding: EdgeInsets.only(right: MediaQuery.of(context).size.width*0.05),
-                          child: widget.postComment.userId == widget.postCreatorId
-                              ? Container(
-                                decoration: BoxDecoration(
-                                  color: AppColors.theme['primaryColor'],
-                                  borderRadius: BorderRadius.circular(4),
-                                ),
-                                padding: EdgeInsets.symmetric(horizontal: 5, vertical: 2),
-                                child: Text(
-                                  "Creator",
-                                  style: TextStyle(
-                                    color: AppColors.theme['secondaryColor'],
-                                    fontSize: 12,
-                                  ),
-                                ),
-                              )
-                              : Container(),
-                        ),
-                      ),
-                      Padding(
-                        padding: const EdgeInsets.symmetric(horizontal: 20.0, vertical: 10),
-                        child: Text(
-                          widget.postComment.message?.trim() ?? "",
-                          style: TextStyle(color: AppColors.theme['tertiaryColor'], fontWeight: FontWeight.w500),
-                        ),
-                      ),
-                      Padding(
-                        padding: const EdgeInsets.symmetric(horizontal: 20.0, vertical: 10),
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        child: Container(
+          width: mq.width * 1,
+          decoration: BoxDecoration(
+            color: AppColors.theme['secondaryColor'],
+            borderRadius: BorderRadius.circular(10),
+          ),
+          child: StreamBuilder(
+            stream: PostUserProfile.getPostCreator(widget.postComment.userId ?? "").asStream(),
+            builder: (context, snapshot) {
+              if (snapshot.hasData) {
+                PostCreator commentCreator = PostCreator.fromJson(snapshot.data);
+                return Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      children: [
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.start,
                           children: [
                             Padding(
                               padding: const EdgeInsets.all(8.0),
-                              child: LikeButton(
-                                likeCount: widget.postComment.like?.length ?? 0,
-                                isLiked: widget.postComment.like?[appUserProvider.user?.userID] ?? false,
-                                likeBuilder: (bool isLiked) {
-                                  return isLiked
-                                      ? Icon(
-                                          Icons.thumb_up,
-                                          color: AppColors.theme["primaryColor"],
-                                        )
-                                      : Icon(
-                                          Icons.thumb_up_alt_outlined,
-                                          color: AppColors.theme["primaryColor"],
-                                        );
-                                },
-                                bubblesColor: BubblesColor(
-                                  dotPrimaryColor: AppColors.theme["primaryColor"],
-                                  dotSecondaryColor: AppColors.theme["secondaryBgColor"],
+                              child: CircleAvatar(
+                                backgroundColor: AppColors.theme['secondaryBgColor'],
+                                child: Center(
+                                  child: Text(
+                                    commentCreator.name?[0] ?? "",
+                                    style: TextStyle(color: AppColors.theme['tertiaryColor'], fontWeight: FontWeight.bold, fontSize: 18),
+                                  ),
                                 ),
-                                circleColor: CircleColor(start: AppColors.theme["primaryColor"], end: AppColors.theme["secondaryBgColor"]),
-                                onTap: (bool isLiked) async {
-                                  PostAPI.onCommentLikeButtonTap(
-                                          widget.postId, widget.postComment.commentId ?? "", appUserProvider.user?.userID ?? "", isLiked)
-                                      .then((value) {
-                                    _isSuccLike = true;
-
-                                    if (isLiked)
-                                      widget.postComment.like?.remove(appUserProvider.user?.userID ?? "noUser");
-                                    else {
-                                      if (widget.postComment.like == null) widget.postComment.like = {};
-                                      widget.postComment.like?[appUserProvider.user?.userID ?? "noUser"] = true;
-                                    }
-
-                                    setState(() {});
-                                  }).onError((error, stackTrace) {
-                                    _isSuccLike = false;
-                                  });
-
-                                  return _isSuccLike ? !isLiked : isLiked;
-                                },
                               ),
                             ),
-                            Text(
-                              MyDateUtil.getMessageTime(
-                                  context: context,
-                                  time: widget.postComment.createdTime ?? ""), // Use the null-aware operator (??) to provide a fallback value
+
+                            Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [
+                                Text(
+                                  commentCreator.name ?? "",
+                                  style: TextStyle(color: AppColors.theme['tertiaryColor'], fontWeight: FontWeight.bold),
+                                ),
+                                Text(
+                                  commentCreator.about ?? "",
+                                  style: TextStyle(color: AppColors.theme['tertiaryColor'], fontWeight: FontWeight.w500),
+                                ),
+                              ],
                             ),
                           ],
                         ),
-                      )
-                    ],
-                  );
-                } else if (snapshot.hasError) {
-                  return _buildErrorCard(context);
-                } else {
-                  return CommentShimmerEffect();
-                }
-              },
-            ),
+
+
+                        Padding(
+                          padding: EdgeInsets.only(right: MediaQuery.of(context).size.width * 0.05),
+                          child: widget.postComment.userId == widget.postCreatorId
+                              ? Container(
+                                  decoration: BoxDecoration(
+                                    color: AppColors.theme['primaryColor'],
+                                    borderRadius: BorderRadius.circular(4),
+                                  ),
+                                  padding: EdgeInsets.symmetric(horizontal: 5, vertical: 2),
+                                  child: Text(
+                                    "Creator",
+                                    style: TextStyle(
+                                      color: AppColors.theme['secondaryColor'],
+                                      fontSize: 12,
+                                    ),
+                                  ),
+                                )
+                              : null,
+                        ),
+                      ],
+                    ),
+
+                    // comment message
+                    Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 20.0, vertical: 5),
+                      // child: Text(
+                      //   widget.postComment.message?.trim() ?? "",
+                      //   style: TextStyle(color: AppColors.theme['tertiaryColor'], fontWeight: FontWeight.w500),
+                      // ),
+                      child: HelperFunctions.buildContent(widget.postComment.message?.trim() ?? ""),
+                    ),
+
+                    // like and Datetime row
+                    Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 20.0, vertical: 5),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          
+                          // like button
+                          Padding(
+                            padding: const EdgeInsets.all(8.0),
+                            child: LikeButton(
+                              likeCount: widget.postComment.like?.length ?? 0,
+                              isLiked: widget.postComment.like?[appUserProvider.user?.userID] ?? false,
+                              likeBuilder: (bool isLiked) {
+                                return isLiked
+                                    ? Icon(
+                                        Icons.thumb_up,
+                                        color: AppColors.theme["primaryColor"],
+                                      )
+                                    : Icon(
+                                        Icons.thumb_up_alt_outlined,
+                                        color: AppColors.theme["primaryColor"],
+                                      );
+                              },
+                              bubblesColor: BubblesColor(
+                                dotPrimaryColor: AppColors.theme["primaryColor"],
+                                dotSecondaryColor: AppColors.theme["secondaryBgColor"],
+                              ),
+                              circleColor: CircleColor(start: AppColors.theme["primaryColor"], end: AppColors.theme["secondaryBgColor"]),
+                              onTap: (bool isLiked) async {
+                                PostAPI.onCommentLikeButtonTap(
+                                        widget.postId, widget.postComment.commentId ?? "", appUserProvider.user?.userID ?? "", isLiked)
+                                    .then((value) {
+                                  _isSuccLike = true;
+
+                                  if (isLiked)
+                                    widget.postComment.like?.remove(appUserProvider.user?.userID ?? "noUser");
+                                  else {
+                                    if (widget.postComment.like == null) widget.postComment.like = {};
+                                    widget.postComment.like?[appUserProvider.user?.userID ?? "noUser"] = true;
+                                  }
+
+                                  setState(() {});
+                                }).onError((error, stackTrace) {
+                                  _isSuccLike = false;
+                                });
+
+                                return _isSuccLike ? !isLiked : isLiked;
+                              },
+                            ),
+                          ),
+
+                          // DateTime
+                          Text(
+                            MyDateUtil.getMessageTime(
+                                context: context,
+                                time: widget.postComment.createdTime ?? ""),
+                          ),
+                        ],
+                      ),
+                    )
+                  ],
+                );
+              } else if (snapshot.hasError) {
+                return _buildErrorCard(context);
+              } else {
+                return CommentShimmerEffect();
+              }
+            },
           ),
         ),
       );
