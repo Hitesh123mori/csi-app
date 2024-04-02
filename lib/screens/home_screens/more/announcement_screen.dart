@@ -5,6 +5,7 @@ import 'package:csi_app/utils/helper_functions/function.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
+import '../../../apis/FireStoreAPIs/UserProfileAPI.dart';
 import '../../../apis/notification_apis/notifications_api.dart';
 import '../../../models/notification_model/Announcement.dart';
 
@@ -66,24 +67,30 @@ class _AnnouncementScreenState extends State<AnnouncementScreen> {
           actions: [
             Padding(
               padding: EdgeInsets.symmetric(horizontal: !_isLoading ? 7.0 : 20),
-              //todo add inkwell and store description and userId
               child: InkWell(
                 onTap: ()async{
                   setState(() {
                     _isLoading = true;
                   });
+                  String encodedMessage = HelperFunctions.stringToBase64(_textController.text);
+
                   Announcement announcement  = Announcement(
-                    message: _textController.text,
+                    message: encodedMessage,
                     fromUserId: appUserProvider.user?.userID,
                     toUserId: "ALL",
                     time: DateTime.now().millisecondsSinceEpoch.toString(),
                     fromUserName: appUserProvider.user?.name
                   );
                   await NotificationApi.sendMassNotificationToAllUsers(_textController.text) ;
+                  await UserProfile.updateAllUsersField("notificationCount",false) ;
                   await NotificationApi.storeNotification(announcement,false) ;
+                  setState(() {
+
+                  });
                   setState(() {
                     _isLoading = false;
                   });
+
                   _textController.text = "";
                   HelperFunctions.showToast("Message sent") ;
                 },

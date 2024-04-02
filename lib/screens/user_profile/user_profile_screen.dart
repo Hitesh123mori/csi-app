@@ -91,9 +91,9 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
                       leading: CircleAvatar(
                         radius: 25,
                         child: Text(
-                          HelperFunctions.getInitials(appUserProvider.user?.name ?? ""),
+                        appUserProvider.user?.name?[0] ?? "",
                           style: TextStyle(
-                              fontSize: 18,
+                              fontSize: 22,
                               color: AppColors.theme['secondaryColor'],
                               fontWeight: FontWeight.bold),
                         ),

@@ -15,6 +15,7 @@ import 'package:csi_app/side_transition_effects/bottom_top.dart';
 import 'package:csi_app/side_transition_effects/right_left.dart';
 import 'package:csi_app/utils/colors.dart';
 import 'package:csi_app/utils/helper_functions/function.dart';
+import 'package:csi_app/utils/shimmer_effects/image_shimmer_effect.dart';
 import 'package:csi_app/utils/widgets/posting/image_frame.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_polls/flutter_polls.dart';
@@ -23,7 +24,9 @@ import 'package:provider/provider.dart';
 import 'package:syncfusion_flutter_pdfviewer/pdfviewer.dart';
 
 import '../../../apis/StorageAPIs/StorageAPI.dart';
+import '../../../apis/notification_apis/notifications_api.dart';
 import '../../../main.dart';
+import '../../../models/notification_model/Announcement.dart';
 import '../../../side_transition_effects/TopToBottom.dart';
 import '../../../utils/shimmer_effects/post_screen_shimmer_effect.dart';
 import '../../../utils/widgets/dialog_box.dart';
@@ -387,7 +390,7 @@ class _AddPostScreenState extends State<AddPostScreen> {
               ],
             );
           } else {
-            return CircularProgressIndicator(color: AppColors.theme['primaryColor']);
+            return ImageShimmerEffect();
           }
         },
       ),
@@ -521,6 +524,22 @@ class _AddPostScreenState extends State<AddPostScreen> {
       await StorageAPI.uploadPostImg(postProvider.post!.postId, await element.readAsBytes());
     });
     PostAPI.postUpload(postProvider.post!);
+
+
+    String encodedMessage = HelperFunctions.stringToBase64("🚀 New Post Added! Check it out now");
+
+
+    Announcement announcement  = Announcement(
+        message: encodedMessage,
+        fromUserId: appUserProvider.user?.userID,
+        toUserId: "ALL",
+        time: DateTime.now().millisecondsSinceEpoch.toString(),
+        fromUserName: appUserProvider.user?.name
+    );
+
+    await NotificationApi.sendMassNotificationToAllUsers("🚀 New Post Added! Check it out now") ;
+    await NotificationApi.storeNotification(announcement,false) ;
+
     postProvider.post = null;
     Navigator.push(context, RightToLeft(HomeScreen()));
   }

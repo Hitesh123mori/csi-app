@@ -9,6 +9,8 @@ import 'package:csi_app/utils/widgets/buttons/auth_button.dart';
 import 'package:csi_app/utils/widgets/text_feilds/auth_text_feild.dart';
 
 import 'dart:developer';
+
+import '../../main.dart';
 class RegisterScreen extends StatefulWidget {
   String email;
   String password;
@@ -85,6 +87,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
 
   @override
   Widget build(BuildContext context) {
+    mq = MediaQuery.of(context).size ;
     return GestureDetector(
       onTap: () => FocusScope.of(context).unfocus(),
       child: MaterialApp(
@@ -106,7 +109,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
               child: SingleChildScrollView(
                 physics: BouncingScrollPhysics(),
                 child: Padding(
-                  padding: const EdgeInsets.only(top: 50.0),
+                  padding:  EdgeInsets.only(top: mq.height*0.04),
                   child: Column(
                     children: [
                       Center(

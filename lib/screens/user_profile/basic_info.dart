@@ -78,7 +78,7 @@ class _BasicInfoState extends State<BasicInfo> {
                       child: Stack(
                         alignment: AlignmentDirectional.bottomEnd,
                         children: [
-                          ProfilePhoto(url: appUserProvider.user?.profilePhotoUrl, name: appUserProvider.user?.name, radius: 70,),
+                          ProfilePhoto(url: appUserProvider.user?.profilePhotoUrl, name: appUserProvider.user?.name, radius: 70, isHomeScreen: false,),
                           InkWell(
                             radius: 10,
                             onTap: () async {

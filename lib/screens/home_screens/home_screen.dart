@@ -1,5 +1,6 @@
 import 'dart:developer';
-
+import 'package:badges/badges.dart' as badges;
+import 'package:csi_app/models/post_model/post.dart';
 import 'package:csi_app/providers/CurrentUser.dart';
 import 'package:csi_app/screens/home_screens/more/more.dart';
 import 'package:csi_app/screens/user_profile/codeforces_view.dart';
@@ -36,6 +37,9 @@ class _HomeScreenState extends State<HomeScreen> {
 
   final FocusNode _focusNode = FocusNode();
   bool _isFirst = true;
+
+
+
 
 
   @override
@@ -113,20 +117,26 @@ class _HomeScreenState extends State<HomeScreen> {
                   Navigator.push(context, LeftToRight(UserProfileScreen()));
                 }
               },
-              child: ProfilePhoto(url: appUserProvider.user?.profilePhotoUrl, name: appUserProvider.user?.name, radius: 40,)
+              child: ProfilePhoto(url: appUserProvider.user?.profilePhotoUrl, name: appUserProvider.user?.name, radius: 40, isHomeScreen: true,)
             ),
           ),
           actions: [
             Padding(
                 padding: const EdgeInsets.only(right: 8.0),
                 child: IconButton(
-                  icon: Icon(
+                  icon:!(appUserProvider.user?.notificationCount == 0)  ? badges.Badge(
+                    badgeContent: Text("${appUserProvider.user?.notificationCount}",style: TextStyle(color: AppColors.theme['secondaryColor']),),
+                    child: Icon(
+                      Icons.notifications_active_outlined,
+                      size: 25,
+                      color: AppColors.theme['tertiaryColor'],
+                    ),
+                  ) :Icon(
                     Icons.notifications_active_outlined,
                     size: 25,
                     color: AppColors.theme['tertiaryColor'],
                   ),
                   onPressed: () {
-                    // NotificationApi.getNotification(appUserProvider.user?.userID ?? "");
                     Navigator.push(context, RightToLeft(Notifications()));
                   },
                 ))

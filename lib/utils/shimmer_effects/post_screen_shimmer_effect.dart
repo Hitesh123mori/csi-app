@@ -9,9 +9,9 @@ class PostShimmerEffect extends StatelessWidget {
   Widget build(BuildContext context) {
     final mq = MediaQuery.of(context).size;
     return SizedBox(
-      height: mq.height,
+      height: 400,
       child: ListView.builder(
-        itemCount: 4,
+        itemCount: 1,
         itemBuilder: (context, index) {
           return Padding(
             padding: const EdgeInsets.symmetric(horizontal: 5.0, vertical: 5),

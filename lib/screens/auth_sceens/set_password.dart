@@ -2,6 +2,7 @@ import 'package:csi_app/screens/auth_sceens/register_screen.dart';
 import 'package:csi_app/side_transition_effects/left_right.dart';
 import 'package:flutter/material.dart';
 
+import '../../main.dart';
 import '../../utils/colors.dart';
 import '../../utils/widgets/buttons/auth_button.dart';
 import '../../utils/widgets/text_feilds/auth_text_feild.dart';
@@ -62,6 +63,7 @@ class _SetPasswordState extends State<SetPassword> {
 
   @override
   Widget build(BuildContext context) {
+    mq  = MediaQuery.of(context).size ;
     return GestureDetector(
       onTap: () => FocusScope.of(context).unfocus(),
       child: MaterialApp(
@@ -83,7 +85,7 @@ class _SetPasswordState extends State<SetPassword> {
               child: SingleChildScrollView(
                 physics: BouncingScrollPhysics(),
                 child: Padding(
-                  padding: const EdgeInsets.only(top: 30.0),
+                  padding:  EdgeInsets.only(top:mq.height*0.04),
                   child: Column(
                     children: [
                       Center(
